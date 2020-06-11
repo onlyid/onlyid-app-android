@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.ConnectException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -19,7 +18,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class HttpUtils {
+public class HttpUtil {
     static final String BASE_URL;
     static OkHttpClient httpClient = new OkHttpClient();
     static Handler handler = new Handler();
@@ -46,7 +45,7 @@ public class HttpUtils {
     static void post(HttpUrl url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
                 .url(url)
-                .post(RequestBody.create(MediaType.get("application/json; charset=utf-8"), obj.toString()))
+                .post(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
                 .build();
         enqueue(request, myCallback);
     }
@@ -54,7 +53,7 @@ public class HttpUtils {
     static void put(HttpUrl url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
                 .url(url)
-                .put(RequestBody.create(MediaType.get("application/json; charset=utf-8"), obj.toString()))
+                .put(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
                 .build();
         enqueue(request, myCallback);
     }
@@ -64,9 +63,8 @@ public class HttpUtils {
             @Override
             public void onFailure(final Call call, final IOException e) {
                 e.printStackTrace();
-                String msg = e instanceof ConnectException ? "网络连接不可用，请稍后重试" : e.getMessage();
-
-                handler.post(() -> Toast.makeText(MyApplication.context, msg, Toast.LENGTH_SHORT).show());
+                handler.post(() -> Toast.makeText(
+                        MyApplication.context, "网络连接不可用，请稍后重试", Toast.LENGTH_LONG).show());
             }
 
             @Override
@@ -75,7 +73,14 @@ public class HttpUtils {
                 final String s = body.string();
 
                 if (response.isSuccessful()) {
-                    handler.post(() -> myCallback.onSuccess(call, s));
+                    handler.post(() -> {
+                        try {
+                            myCallback.onSuccess(call, s);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(MyApplication.context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } else {
                     String msg;
                     if (response.code() == 401) {
@@ -94,7 +99,7 @@ public class HttpUtils {
                     }
 
                     String msg1 = msg;
-                    handler.post(() -> Toast.makeText(MyApplication.context, msg1, Toast.LENGTH_SHORT).show());
+                    handler.post(() -> Toast.makeText(MyApplication.context, msg1, Toast.LENGTH_LONG).show());
                 }
                 response.close();
             }
@@ -102,6 +107,6 @@ public class HttpUtils {
     }
 
     interface MyCallback {
-        void onSuccess(Call call, String s);
+        void onSuccess(Call call, String s) throws Exception;
     }
 }
