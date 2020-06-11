@@ -28,21 +28,21 @@ public class HttpUtil {
         else BASE_URL = "https://www.onlyid.net/api/app/";
     }
 
-    static HttpUrl.Builder urlBuilder() {
+    public static HttpUrl.Builder urlBuilder() {
         return HttpUrl.get(BASE_URL).newBuilder();
     }
 
-    static void get(HttpUrl url, MyCallback myCallback) {
+    public static void get(HttpUrl url, MyCallback myCallback) {
         Request request = new Request.Builder().url(url).build();
         enqueue(request, myCallback);
     }
 
-    static void delete(HttpUrl url, MyCallback myCallback) {
+    public static void delete(HttpUrl url, MyCallback myCallback) {
         Request request = new Request.Builder().url(url).delete().build();
         enqueue(request, myCallback);
     }
 
-    static void post(HttpUrl url, JSONObject obj, MyCallback myCallback) {
+    public static void post(HttpUrl url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
                 .url(url)
                 .post(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
@@ -50,7 +50,7 @@ public class HttpUtil {
         enqueue(request, myCallback);
     }
 
-    static void put(HttpUrl url, JSONObject obj, MyCallback myCallback) {
+    public static void put(HttpUrl url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
                 .url(url)
                 .put(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
@@ -58,7 +58,7 @@ public class HttpUtil {
         enqueue(request, myCallback);
     }
 
-    static void enqueue(Request request, final MyCallback myCallback) {
+    public static void enqueue(Request request, final MyCallback myCallback) {
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
@@ -72,23 +72,17 @@ public class HttpUtil {
                 ResponseBody body = response.body();
                 final String s = body.string();
 
-                if (response.isSuccessful()) {
-                    handler.post(() -> {
+                handler.post(() -> {
+                    if (response.isSuccessful()) {
                         try {
                             myCallback.onSuccess(call, s);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(MyApplication.context, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    });
-                } else {
-                    String msg;
-                    if (response.code() == 401) {
-//                            Intent intent = new Intent(activity, LoginActivity.class);
-//                            activity.startActivity(intent);
-//                            activity.finish();
-                        msg = "登录已失效";
                     } else {
+                        if (myCallback.onResponseFailure(call, response.code(), s)) return;
+
+                        String msg;
                         try {
                             JSONObject obj = new JSONObject(s);
                             msg = obj.getString("error");
@@ -96,17 +90,20 @@ public class HttpUtil {
                             e.printStackTrace();
                             msg = "请求失败，状态码：" + response.code();
                         }
+                        String msg1 = msg;
+                        Toast.makeText(MyApplication.context, msg1, Toast.LENGTH_LONG).show();
                     }
-
-                    String msg1 = msg;
-                    handler.post(() -> Toast.makeText(MyApplication.context, msg1, Toast.LENGTH_LONG).show());
-                }
-                response.close();
+                    response.close();
+                });
             }
         });
     }
 
-    interface MyCallback {
+    public interface MyCallback {
+        default boolean onResponseFailure(Call call, int code, String s) {
+            return false;
+        }
+
         void onSuccess(Call call, String s) throws Exception;
     }
 }

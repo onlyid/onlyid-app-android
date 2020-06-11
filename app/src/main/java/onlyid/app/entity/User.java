@@ -2,11 +2,12 @@ package onlyid.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import onlyid.app.Constants;
 
-public class User {
+public class User implements Serializable {
     public enum Gender {
         MALE, FEMALE, OTHER
     }
