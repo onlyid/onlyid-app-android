@@ -3,13 +3,19 @@ package onlyid.app;
 import android.os.Handler;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,41 +25,80 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class HttpUtil {
+    static final String TAG = "HttpUtil";
     static final String BASE_URL;
-    static OkHttpClient httpClient = new OkHttpClient();
+    static final String COOKIE = "cookie";
+    static OkHttpClient httpClient;
     static Handler handler = new Handler();
+    static Cookie cookie;
 
     static {
         if (BuildConfig.DEBUG) BASE_URL = "http://192.168.0.146:8000/api/app/";
         else BASE_URL = "https://www.onlyid.net/api/app/";
+
+        String s = Utils.preferences.getString(COOKIE, null);
+        if (s != null) {
+            try {
+                JSONObject obj = new JSONObject(s);
+                cookie = new Cookie.Builder()
+                        .name("JSESSIONID")
+                        .value(obj.getString("value"))
+                        .domain(obj.getString("domain"))
+                        .build();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        httpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
+            @Override
+            public void saveFromResponse(@NonNull HttpUrl url, @NonNull List<Cookie> cookies) {
+                for (Cookie cookie : cookies) {
+                    if (!"JSESSIONID".equals(cookie.name())) continue;
+
+                    HttpUtil.cookie = cookie;
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("value", cookie.value());
+                        obj.put("domain", cookie.domain());
+                        Utils.preferences.edit().putString(COOKIE, obj.toString()).apply();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @NonNull @Override
+            public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
+                List<Cookie> list = new ArrayList<>();
+                if (cookie != null) list.add(cookie);
+                return list;
+            }
+        }).build();
     }
 
-    public static HttpUrl.Builder urlBuilder() {
-        return HttpUrl.get(BASE_URL).newBuilder();
-    }
-
-    public static void get(HttpUrl url, MyCallback myCallback) {
-        Request request = new Request.Builder().url(url).build();
+    public static void get(String url, MyCallback myCallback) {
+        Request request = new Request.Builder().url(BASE_URL + url).build();
         enqueue(request, myCallback);
     }
 
-    public static void delete(HttpUrl url, MyCallback myCallback) {
-        Request request = new Request.Builder().url(url).delete().build();
+    public static void delete(String url, MyCallback myCallback) {
+        Request request = new Request.Builder().url(BASE_URL + url).delete().build();
         enqueue(request, myCallback);
     }
 
-    public static void post(HttpUrl url, JSONObject obj, MyCallback myCallback) {
+    public static void post(String url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
-                .url(url)
-                .post(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
+                .url(BASE_URL + url)
+                .post(RequestBody.create(MediaType.get("application/json; charset=utf-8"), obj.toString()))
                 .build();
         enqueue(request, myCallback);
     }
 
-    public static void put(HttpUrl url, JSONObject obj, MyCallback myCallback) {
+    public static void put(String url, JSONObject obj, MyCallback myCallback) {
         Request request = new Request.Builder()
-                .url(url)
-                .put(RequestBody.create(obj.toString(), MediaType.get("application/json; charset=utf-8")))
+                .url(BASE_URL + url)
+                .put(RequestBody.create(MediaType.get("application/json; charset=utf-8"), obj.toString()))
                 .build();
         enqueue(request, myCallback);
     }
@@ -61,14 +106,14 @@ public class HttpUtil {
     public static void enqueue(Request request, final MyCallback myCallback) {
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(final Call call, final IOException e) {
+            public void onFailure(@NonNull final Call call, @NonNull final IOException e) {
                 e.printStackTrace();
                 handler.post(() -> Toast.makeText(
                         MyApplication.context, "网络连接不可用，请稍后重试", Toast.LENGTH_LONG).show());
             }
 
             @Override
-            public void onResponse(final Call call, final Response response) throws IOException {
+            public void onResponse(@NonNull final Call call, @NonNull final Response response) throws IOException {
                 ResponseBody body = response.body();
                 final String s = body.string();
 

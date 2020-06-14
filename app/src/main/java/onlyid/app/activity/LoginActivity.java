@@ -14,18 +14,44 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Call;
+import onlyid.app.BuildConfig;
+import onlyid.app.Constants;
+import onlyid.app.HttpUtil;
 import onlyid.app.R;
+import onlyid.app.Utils;
+import onlyid.app.entity.User;
 
 public class LoginActivity extends Activity {
-    private static final String TAG = "LoginActivity";
-    static final String MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=onlyid.app";
+    static final String TAG = "LoginActivity";
+    static final String MY_URL;
+
+    static {
+        if (BuildConfig.DEBUG)
+            MY_URL = "http://192.168.0.146:3000/oauth?client-id=8bfc826f39954d54b0e583c4f4edd3c7&package-name=onlyid.app";
+        else
+            MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=onlyid.app";
+    }
 
     ProgressBar progressBar;
 
     class JsInterface {
         @JavascriptInterface
         public void onCode(final String code, final String state) {
-            Log.d(TAG, "onCode: " + code);
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("code", code);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HttpUtil.post("login", obj, (Call c, String s) -> {
+                User user = Utils.objectMapper.readValue(s, User.class);
+                Utils.preferences.edit().putString(Constants.USER, s).apply();
+                Log.d(TAG, "登录成功" + user);
+            });
         }
 
         @JavascriptInterface

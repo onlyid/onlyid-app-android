@@ -1,5 +1,7 @@
 package onlyid.app.entity;
 
+import androidx.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
