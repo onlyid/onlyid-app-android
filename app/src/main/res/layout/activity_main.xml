@@ -1,13 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello redmi 9"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="@style/MainButton"
+            android:drawableTop="@drawable/ic_baseline_account_circle_24"
+            android:onClick="userInfo"
+            android:text="@string/user_info" />
+
+        <Button
+            style="@style/MainButton"
+            android:drawableTop="@drawable/ic_baseline_filter_center_focus_24"
+            android:onClick="scanLogin"
+            android:text="@string/scan_login" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="@style/MainButton"
+            android:drawableTop="@drawable/ic_baseline_devices_24"
+            android:onClick="devices"
+            android:text="@string/devices" />
+
+        <Button
+            style="@style/MainButton"
+            android:drawableTop="@drawable/ic_baseline_apps_24"
+            android:onClick="apps"
+            android:text="@string/apps" />
+    </LinearLayout>
 
 </LinearLayout>

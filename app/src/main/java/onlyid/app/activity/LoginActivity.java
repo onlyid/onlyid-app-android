@@ -1,9 +1,8 @@
 package onlyid.app.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -14,6 +13,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,9 +25,8 @@ import onlyid.app.Constants;
 import onlyid.app.HttpUtil;
 import onlyid.app.R;
 import onlyid.app.Utils;
-import onlyid.app.entity.User;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
     static final String TAG = "LoginActivity";
     static final String MY_URL;
 
@@ -48,15 +49,17 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
             HttpUtil.post("login", obj, (Call c, String s) -> {
-                User user = Utils.objectMapper.readValue(s, User.class);
                 Utils.preferences.edit().putString(Constants.USER, s).apply();
-                Log.d(TAG, "登录成功" + user);
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             });
         }
 
         @JavascriptInterface
         public void setTitle(final String title) {
-            runOnUiThread(() -> getActionBar().setTitle(title));
+            runOnUiThread(() -> getSupportActionBar().setTitle(title));
         }
     }
 
@@ -66,8 +69,11 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         progressBar = findViewById(R.id.progress_bar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         initWebView();
+
+        setSupportActionBar(toolbar);
     }
 
     void initWebView() {

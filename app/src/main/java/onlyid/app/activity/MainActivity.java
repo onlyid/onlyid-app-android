@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -16,13 +20,17 @@ import onlyid.app.R;
 import onlyid.app.Utils;
 import onlyid.app.entity.User;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
 
         this.refreshUserInfo();
     }
@@ -68,5 +76,25 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void userInfo(View v) {
+        Intent intent = new Intent(this, UserActivity.class);
+        startActivity(intent);
+    }
+
+    public void scanLogin(View v) {
+        Intent intent = new Intent(this, ScanActivity.class);
+        startActivity(intent);
+    }
+
+    public void devices(View v) {
+        Intent intent = new Intent(this, DevicesActivity.class);
+        startActivity(intent);
+    }
+
+    public void apps(View v) {
+        Intent intent = new Intent(this, AppsActivity.class);
+        startActivity(intent);
     }
 }
