@@ -1,4 +1,4 @@
-package onlyid.app.activity;
+package onlyid.app.device_manage;
 
 import androidx.appcompat.app.AppCompatActivity;
 

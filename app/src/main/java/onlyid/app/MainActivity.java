@@ -1,9 +1,7 @@
-package onlyid.app.activity;
+package onlyid.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,12 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import okhttp3.Call;
-import onlyid.app.Constants;
-import onlyid.app.HttpUtil;
-import onlyid.app.MyApplication;
-import onlyid.app.R;
-import onlyid.app.Utils;
+import onlyid.app.app_manage.AppsActivity;
+import onlyid.app.device_manage.DevicesActivity;
+import onlyid.app.scan_login.ScanActivity;
 import onlyid.app.entity.User;
+import onlyid.app.user_info.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
@@ -39,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
         User user = null;
         try {
             String s = Utils.preferences.getString(Constants.USER, null);
-            if (s != null) {
-                user = Utils.objectMapper.readValue(s, User.class);
-            }
+            if (s != null) user = Utils.objectMapper.readValue(s, User.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -53,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         HttpUtil.get("user", new HttpUtil.MyCallback() {
             @Override
-            public void onSuccess(Call call, String s) throws Exception {
-                User user = Utils.objectMapper.readValue(s, User.class);
-                Log.d(TAG, "refreshUserInfo: " + Utils.objectMapper.writeValueAsString(user));
+            public void onSuccess(Call call, String s) {
+                Utils.preferences.edit().putString(Constants.USER, s).apply();
             }
 
             @Override

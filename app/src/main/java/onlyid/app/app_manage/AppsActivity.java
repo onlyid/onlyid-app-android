@@ -1,4 +1,4 @@
-package onlyid.app.activity;
+package onlyid.app.app_manage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import onlyid.app.R;
 
-public class UserActivity extends AppCompatActivity {
+public class AppsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_apps);
     }
 }

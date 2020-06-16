@@ -1,15 +1,12 @@
 package onlyid.app.entity;
 
-import androidx.annotation.NonNull;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import onlyid.app.Constants;
 
-public class User implements Serializable {
+public class User {
     public enum Gender {
         MALE, FEMALE, OTHER
     }

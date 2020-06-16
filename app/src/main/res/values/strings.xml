@@ -4,4 +4,5 @@
     <string name="scan_login">扫码登录</string>
     <string name="devices">设备管理</string>
     <string name="apps">应用管理</string>
+    <string name="avatar">头像</string>
 </resources>

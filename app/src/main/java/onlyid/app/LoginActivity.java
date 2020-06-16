@@ -1,5 +1,6 @@
-package onlyid.app.activity;
+package onlyid.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -20,11 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.Call;
-import onlyid.app.BuildConfig;
-import onlyid.app.Constants;
-import onlyid.app.HttpUtil;
-import onlyid.app.R;
-import onlyid.app.Utils;
 
 public class LoginActivity extends AppCompatActivity {
     static final String TAG = "LoginActivity";
@@ -59,7 +56,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void setTitle(final String title) {
-            runOnUiThread(() -> getSupportActionBar().setTitle(title));
+            runOnUiThread(() -> {
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) actionBar.setTitle(title);
+            });
         }
     }
 
@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     void initWebView() {
         WebView webView = findViewById(R.id.web_view);
 
