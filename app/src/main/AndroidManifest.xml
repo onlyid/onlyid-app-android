@@ -14,6 +14,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".user_info.EditActivity" />
+        <activity android:name=".user_info.AvatarActivity" />
         <activity android:name=".app_manage.AppsActivity" />
         <activity android:name=".device_manage.DevicesActivity" />
         <activity android:name=".scan_login.ScanActivity" />

@@ -17,34 +17,91 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
+        style="@style/UserItem"
         android:paddingTop="10dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:onClick="avatar">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/avatar"
-            android:textSize="18sp" />
+            style="@style/UserItemText"
+            android:text="@string/avatar" />
 
         <ImageView
-            android:id="@+id/image_view"
+            android:id="@+id/avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/avatar" />
 
+        <include layout="@layout/arrow_right" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/bg" />
+    <include layout="@layout/list_divider" />
 
+    <LinearLayout
+        style="@style/UserItem"
+        android:onClick="nickname">
+
+        <TextView
+            style="@style/UserItemText"
+            android:text="@string/nickname" />
+
+        <TextView
+            android:id="@+id/nickname"
+            style="@style/UserItemText1" />
+
+        <include layout="@layout/arrow_right" />
+    </LinearLayout>
+
+    <include layout="@layout/list_divider" />
+
+    <LinearLayout
+        style="@style/UserItem"
+        android:onClick="mobile">
+
+        <TextView
+            style="@style/UserItemText"
+            android:text="@string/mobile" />
+
+        <TextView
+            android:id="@+id/mobile"
+            style="@style/UserItemText1" />
+
+        <include layout="@layout/arrow_right" />
+    </LinearLayout>
+
+    <include layout="@layout/list_divider" />
+
+    <LinearLayout
+        style="@style/UserItem"
+        android:onClick="email">
+
+        <TextView
+            style="@style/UserItemText"
+            android:text="@string/email" />
+
+        <TextView
+            android:id="@+id/email"
+            style="@style/UserItemText1" />
+
+        <include layout="@layout/arrow_right" />
+    </LinearLayout>
+
+    <include layout="@layout/list_divider" />
+
+    <LinearLayout
+        style="@style/UserItem"
+        android:onClick="gender">
+
+        <TextView
+            style="@style/UserItemText"
+            android:text="@string/gender" />
+
+        <TextView
+            android:id="@+id/gender"
+            style="@style/UserItemText1" />
+
+        <include layout="@layout/arrow_right" />
+    </LinearLayout>
+
+    <include layout="@layout/list_divider" />
 </LinearLayout>
