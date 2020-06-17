@@ -14,9 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,10 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void setTitle(final String title) {
-            runOnUiThread(() -> {
-                ActionBar actionBar = getSupportActionBar();
-                if (actionBar != null) actionBar.setTitle(title);
-            });
+            runOnUiThread(() -> getSupportActionBar().setTitle(title));
         }
     }
 
@@ -69,11 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         progressBar = findViewById(R.id.progress_bar);
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
         initWebView();
-
-        setSupportActionBar(toolbar);
     }
 
     @SuppressLint("SetJavaScriptEnabled")

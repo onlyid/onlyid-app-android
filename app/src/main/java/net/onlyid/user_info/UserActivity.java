@@ -1,16 +1,15 @@
 package net.onlyid.user_info;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,22 +28,17 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         ImageView avatar = findViewById(R.id.avatar);
         TextView nickname = findViewById(R.id.nickname);
         TextView mobile = findViewById(R.id.mobile);
         TextView email = findViewById(R.id.email);
         TextView gender = findViewById(R.id.gender);
 
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String s = Utils.preferences.getString(Constants.USER, null);
         try {
-            if (s != null) user = Utils.objectMapper.readValue(s, User.class);
+            user = Utils.objectMapper.readValue(s, User.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

@@ -14,18 +14,32 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".user_info.EditActivity" />
-        <activity android:name=".user_info.AvatarActivity" />
-        <activity android:name=".app_manage.AppsActivity" />
-        <activity android:name=".device_manage.DevicesActivity" />
-        <activity android:name=".scan_login.ScanActivity" />
+        <activity
+            android:name=".user_info.EditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user_info.AvatarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app_manage.AppsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".device_manage.DevicesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".scan_login.ScanActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".user_info.UserActivity"
-            android:label="个人信息" />
+            android:label="个人信息"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:label="登录" />
-        <activity android:name=".MainActivity">
+            android:label="登录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

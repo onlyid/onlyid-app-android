@@ -6,16 +6,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import okhttp3.Call;
 import net.onlyid.app_manage.AppsActivity;
 import net.onlyid.device_manage.DevicesActivity;
-import net.onlyid.scan_login.ScanActivity;
 import net.onlyid.entity.User;
+import net.onlyid.scan_login.ScanActivity;
 import net.onlyid.user_info.UserActivity;
+
+import okhttp3.Call;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
@@ -24,10 +24,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
 
         this.refreshUserInfo();
     }

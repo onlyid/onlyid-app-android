@@ -1,12 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="user_info">个人信息</string>
-    <string name="scan_login">扫码登录</string>
-    <string name="devices">设备管理</string>
-    <string name="apps">应用管理</string>
-    <string name="avatar">头像</string>
-    <string name="nickname">昵称</string>
-    <string name="mobile">手机号</string>
-    <string name="email">邮箱</string>
-    <string name="gender">性别</string>
 </resources>
