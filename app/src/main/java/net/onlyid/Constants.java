@@ -1,4 +1,4 @@
-package onlyid.app;
+package net.onlyid;
 
 public class Constants {
     public static final String USER = "user";

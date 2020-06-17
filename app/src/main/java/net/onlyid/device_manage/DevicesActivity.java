@@ -1,16 +1,16 @@
-package onlyid.app.scan_login;
+package net.onlyid.device_manage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import onlyid.app.R;
+import net.onlyid.R;
 
-public class ScanActivity extends AppCompatActivity {
+public class DevicesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_devices);
     }
 }

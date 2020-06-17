@@ -1,4 +1,4 @@
-package onlyid.app.user_info;
+package net.onlyid.user_info;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,10 +15,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import onlyid.app.Constants;
-import onlyid.app.R;
-import onlyid.app.Utils;
-import onlyid.app.entity.User;
+import net.onlyid.Constants;
+import net.onlyid.R;
+import net.onlyid.Utils;
+import net.onlyid.entity.User;
 
 public class UserActivity extends AppCompatActivity {
     static final String TAG = "UserActivity";

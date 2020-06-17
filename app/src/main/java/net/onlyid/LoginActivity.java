@@ -1,4 +1,4 @@
-package onlyid.app;
+package net.onlyid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -29,9 +29,9 @@ public class LoginActivity extends AppCompatActivity {
 
     static {
         if (BuildConfig.DEBUG)
-            MY_URL = "http://192.168.0.146:3000/oauth?client-id=8bfc826f39954d54b0e583c4f4edd3c7&package-name=onlyid.app";
+            MY_URL = "http://192.168.0.146:3000/oauth?client-id=8bfc826f39954d54b0e583c4f4edd3c7&package-name=net.onlyid";
         else
-            MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=onlyid.app";
+            MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=net.onlyid";
     }
 
     ProgressBar progressBar;

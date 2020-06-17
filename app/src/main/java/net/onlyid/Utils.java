@@ -1,4 +1,4 @@
-package onlyid.app;
+package net.onlyid;
 
 import android.content.SharedPreferences;
 

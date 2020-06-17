@@ -1,4 +1,4 @@
-package onlyid.app;
+package net.onlyid;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import okhttp3.Call;
-import onlyid.app.app_manage.AppsActivity;
-import onlyid.app.device_manage.DevicesActivity;
-import onlyid.app.scan_login.ScanActivity;
-import onlyid.app.entity.User;
-import onlyid.app.user_info.UserActivity;
+import net.onlyid.app_manage.AppsActivity;
+import net.onlyid.device_manage.DevicesActivity;
+import net.onlyid.scan_login.ScanActivity;
+import net.onlyid.entity.User;
+import net.onlyid.user_info.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";

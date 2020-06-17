@@ -1,4 +1,4 @@
-package onlyid.app.entity;
+package net.onlyid.entity;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-import onlyid.app.Constants;
+import net.onlyid.Constants;
 
 public class User {
     public enum Gender {

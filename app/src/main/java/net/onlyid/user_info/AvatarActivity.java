@@ -1,10 +1,10 @@
-package onlyid.app.user_info;
+package net.onlyid.user_info;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import onlyid.app.R;
+import net.onlyid.R;
 
 public class AvatarActivity extends AppCompatActivity {
 
