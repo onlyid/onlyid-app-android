@@ -33,8 +33,8 @@ public class HttpUtil {
     static Cookie cookie;
 
     static {
-        if (BuildConfig.DEBUG) BASE_URL = "http://192.168.0.146:8000/api/app/";
-        else BASE_URL = "https://www.onlyid.net/api/app/";
+        if (BuildConfig.DEBUG) BASE_URL = "http://192.168.0.132:8000/api/";
+        else BASE_URL = "https://www.onlyid.net/api/";
 
         String s = Utils.preferences.getString(COOKIE, null);
         if (s != null) {
@@ -68,7 +68,8 @@ public class HttpUtil {
                 }
             }
 
-            @NonNull @Override
+            @NonNull
+            @Override
             public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
                 List<Cookie> list = new ArrayList<>();
                 if (cookie != null) list.add(cookie);
@@ -91,6 +92,14 @@ public class HttpUtil {
         Request request = new Request.Builder()
                 .url(BASE_URL + url)
                 .post(RequestBody.create(MediaType.get("application/json; charset=utf-8"), obj.toString()))
+                .build();
+        enqueue(request, myCallback);
+    }
+
+    public static void post(String url, RequestBody requestBody, MyCallback myCallback) {
+        Request request = new Request.Builder()
+                .url(BASE_URL + url)
+                .post(requestBody)
                 .build();
         enqueue(request, myCallback);
     }
@@ -145,10 +154,10 @@ public class HttpUtil {
     }
 
     public interface MyCallback {
-        default boolean onResponseFailure(Call call, int code, String s) {
+        default boolean onResponseFailure(Call c, int code, String s) {
             return false;
         }
 
-        void onSuccess(Call call, String s) throws Exception;
+        void onSuccess(Call c, String s) throws Exception;
     }
 }

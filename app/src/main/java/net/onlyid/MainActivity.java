@@ -9,11 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import net.onlyid.app_manage.AppsActivity;
-import net.onlyid.device_manage.DevicesActivity;
+import net.onlyid.authorized_app.AuthorizedAppActivity;
 import net.onlyid.entity.User;
-import net.onlyid.scan_login.ScanActivity;
-import net.onlyid.user_info.UserActivity;
+import net.onlyid.scan_login.ScanLoginActivity;
+import net.onlyid.trusted_device.TrustedDeviceActivity;
+import net.onlyid.user_info.UserInfoActivity;
 
 import okhttp3.Call;
 
@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        HttpUtil.get("user", new HttpUtil.MyCallback() {
+        HttpUtil.get("app/user", new HttpUtil.MyCallback() {
             @Override
-            public void onSuccess(Call call, String s) {
+            public void onSuccess(Call c, String s) {
                 Utils.preferences.edit().putString(Constants.USER, s).apply();
             }
 
             @Override
-            public boolean onResponseFailure(Call call, int code, String s) {
+            public boolean onResponseFailure(Call c, int code, String s) {
                 if (code == 401) {
                     login();
 
@@ -69,22 +69,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userInfo(View v) {
-        Intent intent = new Intent(this, UserActivity.class);
+        Intent intent = new Intent(this, UserInfoActivity.class);
         startActivity(intent);
     }
 
     public void scanLogin(View v) {
-        Intent intent = new Intent(this, ScanActivity.class);
+        Intent intent = new Intent(this, ScanLoginActivity.class);
         startActivity(intent);
     }
 
-    public void devices(View v) {
-        Intent intent = new Intent(this, DevicesActivity.class);
+    public void trustedDevice(View v) {
+        Intent intent = new Intent(this, TrustedDeviceActivity.class);
         startActivity(intent);
     }
 
-    public void apps(View v) {
-        Intent intent = new Intent(this, AppsActivity.class);
+    public void authorizedApp(View v) {
+        Intent intent = new Intent(this, AuthorizedAppActivity.class);
         startActivity(intent);
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".user_info.UserActivity"
+    tools:context=".user_info.UserInfoActivity"
     tools:ignore="HardcodedText">
 
     <LinearLayout
@@ -21,7 +21,7 @@
             android:id="@+id/avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:contentDescription="头像" />
+            android:contentDescription="avatar" />
 
         <include layout="@layout/arrow_right" />
     </LinearLayout>

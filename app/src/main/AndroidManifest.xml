@@ -15,22 +15,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".user_info.EditActivity"
+            android:name=".user_info.UserEditActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_info.AvatarActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".app_manage.AppsActivity"
+            android:name=".authorized_app.AuthorizedAppActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".device_manage.DevicesActivity"
+            android:name=".trusted_device.TrustedDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scan_login.ScanActivity"
+            android:name=".scan_login.ScanLoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.UserActivity"
+            android:name=".user_info.UserInfoActivity"
             android:label="个人信息"
             android:screenOrientation="portrait" />
         <activity
@@ -46,6 +46,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>
