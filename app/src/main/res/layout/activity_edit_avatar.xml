@@ -4,14 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg"
-    tools:context=".user_info.AvatarActivity"
+    tools:context=".user_info.EditAvatarActivity"
     tools:ignore="HardcodedText">
 
-    <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_centerInParent="true"
-        android:contentDescription="avatar" />
-
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

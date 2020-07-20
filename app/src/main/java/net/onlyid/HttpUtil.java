@@ -30,25 +30,10 @@ public class HttpUtil {
     static final String COOKIE = "cookie";
     static OkHttpClient httpClient;
     static Handler handler = new Handler();
-    static Cookie cookie;
 
     static {
         if (BuildConfig.DEBUG) BASE_URL = "http://192.168.0.132:8000/api/";
         else BASE_URL = "https://www.onlyid.net/api/";
-
-        String s = Utils.preferences.getString(COOKIE, null);
-        if (s != null) {
-            try {
-                JSONObject obj = new JSONObject(s);
-                cookie = new Cookie.Builder()
-                        .name("JSESSIONID")
-                        .value(obj.getString("value"))
-                        .domain(obj.getString("domain"))
-                        .build();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
 
         httpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {
             @Override
@@ -56,12 +41,11 @@ public class HttpUtil {
                 for (Cookie cookie : cookies) {
                     if (!"JSESSIONID".equals(cookie.name())) continue;
 
-                    HttpUtil.cookie = cookie;
-                    JSONObject obj = new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
                     try {
-                        obj.put("value", cookie.value());
-                        obj.put("domain", cookie.domain());
-                        Utils.preferences.edit().putString(COOKIE, obj.toString()).apply();
+                        jsonObject.put("value", cookie.value());
+                        jsonObject.put("domain", cookie.domain());
+                        Utils.sharedPreferences.edit().putString(COOKIE, jsonObject.toString()).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -72,7 +56,20 @@ public class HttpUtil {
             @Override
             public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
                 List<Cookie> list = new ArrayList<>();
-                if (cookie != null) list.add(cookie);
+                String cookieString = Utils.sharedPreferences.getString(COOKIE, null);
+                if (cookieString != null) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(cookieString);
+                        Cookie cookie = new Cookie.Builder()
+                                .name("JSESSIONID")
+                                .value(jsonObject.getString("value"))
+                                .domain(jsonObject.getString("domain"))
+                                .build();
+                        list.add(cookie);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 return list;
             }
         }).build();
@@ -117,14 +114,17 @@ public class HttpUtil {
             @Override
             public void onFailure(@NonNull final Call call, @NonNull final IOException e) {
                 e.printStackTrace();
-                handler.post(() -> Toast.makeText(
-                        MyApplication.context, "网络连接不可用，请稍后重试", Toast.LENGTH_LONG).show());
+                handler.post(() -> {
+                    if (Utils.loadingDialog != null) Utils.loadingDialog.dismiss();
+
+                    Utils.showToast("网络连接不可用，请稍后重试", Toast.LENGTH_LONG);
+                });
             }
 
             @Override
             public void onResponse(@NonNull final Call call, @NonNull final Response response) throws IOException {
                 ResponseBody body = response.body();
-                final String s = body.string();
+                String s = body.string();
 
                 handler.post(() -> {
                     if (response.isSuccessful()) {
@@ -136,16 +136,17 @@ public class HttpUtil {
                     } else {
                         if (myCallback.onResponseFailure(call, response.code(), s)) return;
 
+                        if (Utils.loadingDialog != null) Utils.loadingDialog.dismiss();
+
                         String msg;
                         try {
-                            JSONObject obj = new JSONObject(s);
-                            msg = obj.getString("error");
+                            JSONObject jsonObject = new JSONObject(s);
+                            msg = jsonObject.getString("error");
                         } catch (JSONException e) {
                             e.printStackTrace();
                             msg = "请求失败，状态码：" + response.code();
                         }
-                        String msg1 = msg;
-                        Toast.makeText(MyApplication.context, msg1, Toast.LENGTH_LONG).show();
+                        Utils.showToast(msg, Toast.LENGTH_LONG);
                     }
                     response.close();
                 });

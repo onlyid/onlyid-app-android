@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".user_info.EditBasicActivity"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/tip_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textSize="@dimen/text2" />
+
+    <EditText
+        android:id="@+id/nickname_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:maxLength="50"
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/gender_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/male"
+            style="@style/GenderRadioButton"
+            android:text="男" />
+
+        <RadioButton
+            android:id="@+id/female"
+            style="@style/GenderRadioButton"
+            android:text="女" />
+
+        <RadioButton
+            android:id="@+id/other"
+            style="@style/GenderRadioButton"
+            android:text="其他" />
+    </RadioGroup>
+
+</LinearLayout>

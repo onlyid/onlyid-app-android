@@ -2,42 +2,36 @@ package net.onlyid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import net.onlyid.authorized_app.AuthorizedAppActivity;
-import net.onlyid.entity.User;
+import net.onlyid.authorized_apps.AuthorizedAppsActivity;
+import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.scan_login.ScanLoginActivity;
-import net.onlyid.trusted_device.TrustedDeviceActivity;
+import net.onlyid.trusted_devices.TrustedDevicesActivity;
 import net.onlyid.user_info.UserInfoActivity;
 
 import okhttp3.Call;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        this.refreshUserInfo();
+        refreshUserInfo();
     }
 
     void refreshUserInfo() {
-        User user = null;
-        try {
-            String s = Utils.preferences.getString(Constants.USER, null);
-            if (s != null) user = Utils.objectMapper.readValue(s, User.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        if (user == null) {
+        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        if (TextUtils.isEmpty(userString)) {
             login();
             return;
         }
@@ -45,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         HttpUtil.get("app/user", new HttpUtil.MyCallback() {
             @Override
             public void onSuccess(Call c, String s) {
-                Utils.preferences.edit().putString(Constants.USER, s).apply();
+                Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
             }
 
             @Override
@@ -53,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 if (code == 401) {
                     login();
 
-                    Toast.makeText(MyApplication.context, "登录已失效", Toast.LENGTH_LONG).show();
+                    Utils.showToast("登录已失效", Toast.LENGTH_SHORT);
                     return true;
                 }
 
@@ -78,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void trustedDevice(View v) {
-        Intent intent = new Intent(this, TrustedDeviceActivity.class);
+    public void trustedDevices(View v) {
+        Intent intent = new Intent(this, TrustedDevicesActivity.class);
         startActivity(intent);
     }
 
-    public void authorizedApp(View v) {
-        Intent intent = new Intent(this, AuthorizedAppActivity.class);
+    public void authorizedApps(View v) {
+        Intent intent = new Intent(this, AuthorizedAppsActivity.class);
         startActivity(intent);
     }
 }

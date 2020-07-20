@@ -5,11 +5,6 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="android:textViewStyle">@style/MyTextView</item>
-    </style>
-
-    <style name="MyTextView" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/text_color</item>
     </style>
 
     <style name="MainButton" parent="Widget.AppCompat.Button">
@@ -24,7 +19,7 @@
         <item name="android:layout_marginRight">5dp</item>
     </style>
 
-    <style name="UserItem">
+    <style name="UserInfoItem">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -35,17 +30,35 @@
         <item name="android:paddingRight">20dp</item>
     </style>
 
-    <style name="UserItemText">
+    <style name="UserInfoItemLabel">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text3</item>
+        <item name="android:textColor">@color/text_color</item>
     </style>
 
-    <style name="UserItemText1">
+    <style name="UserInfoItemText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/gray</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text3</item>
+    </style>
+
+    <style name="LoadingDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/gray</item>
+        <item name="android:background">@color/bg</item>
+        <item name="android:textSize">@dimen/text2</item>
+    </style>
+
+    <style name="MyAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textSize">@dimen/text1</item>
+    </style>
+
+    <style name="GenderRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/text3</item>
     </style>
 </resources>

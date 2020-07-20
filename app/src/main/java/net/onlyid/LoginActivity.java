@@ -12,11 +12,12 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import net.onlyid.databinding.ActivityLoginBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,10 +27,8 @@ import okhttp3.Call;
 public class LoginActivity extends AppCompatActivity {
     static final String TAG = "LoginActivity";
     static final String MY_URL;
-
+    ActivityLoginBinding binding;
     ValueCallback<Uri[]> filePathCallback;
-    WebView webView;
-    ProgressBar progressBar;
 
     static {
         if (BuildConfig.DEBUG)
@@ -41,15 +40,14 @@ public class LoginActivity extends AppCompatActivity {
     class JsInterface {
         @JavascriptInterface
         public void onCode(final String code, final String state) {
-            JSONObject obj = new JSONObject();
+            JSONObject jsonObject = new JSONObject();
             try {
-                obj.put("code", code);
+                jsonObject.put("code", code);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            HttpUtil.post("app/login", obj, (Call c, String s) -> {
-                Utils.preferences.edit().putString(Constants.USER, s).apply();
-
+            HttpUtil.post("app/login", jsonObject, (Call c, String s) -> {
+                Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -65,22 +63,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        progressBar = findViewById(R.id.progress_bar);
-        webView = findViewById(R.id.web_view);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initWebView();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     void initWebView() {
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient() {
+        binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.getSettings().setDomStorageEnabled(true);
+        binding.webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                progressBar.setProgress(newProgress);
+                binding.progressBar.setProgress(newProgress);
             }
 
             @Override
@@ -93,33 +89,33 @@ public class LoginActivity extends AppCompatActivity {
                 return true;
             }
         });
-        webView.setWebViewClient(new WebViewClient() {
+        binding.webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Log.e(TAG, "onReceivedError: " + description);
-                Toast.makeText(LoginActivity.this, "打开登录页失败，请稍后重试", Toast.LENGTH_LONG).show();
+                Utils.showToast("打开登录页失败，请稍后重试", Toast.LENGTH_LONG);
                 finish();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.VISIBLE);
             }
         });
-        webView.addJavascriptInterface(new JsInterface(), "android");
+        binding.webView.addJavascriptInterface(new JsInterface(), "android");
 
-        webView.loadUrl(MY_URL);
+        binding.webView.loadUrl(MY_URL);
     }
 
     @Override
     public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
+        if (binding.webView.canGoBack()) {
+            binding.webView.goBack();
         } else {
             super.onBackPressed();
         }

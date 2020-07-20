@@ -8,17 +8,17 @@
     tools:ignore="HardcodedText">
 
     <LinearLayout
-        style="@style/UserItem"
+        style="@style/UserInfoItem"
         android:onClick="avatar"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
         <TextView
-            style="@style/UserItemText"
+            style="@style/UserInfoItemLabel"
             android:text="头像" />
 
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/avatar_image_view"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="avatar" />
@@ -29,16 +29,16 @@
     <include layout="@layout/list_divider" />
 
     <LinearLayout
-        style="@style/UserItem"
+        style="@style/UserInfoItem"
         android:onClick="nickname">
 
         <TextView
-            style="@style/UserItemText"
+            style="@style/UserInfoItemLabel"
             android:text="昵称" />
 
         <TextView
-            android:id="@+id/nickname"
-            style="@style/UserItemText1" />
+            android:id="@+id/nickname_text_view"
+            style="@style/UserInfoItemText" />
 
         <include layout="@layout/arrow_right" />
     </LinearLayout>
@@ -46,16 +46,16 @@
     <include layout="@layout/list_divider" />
 
     <LinearLayout
-        style="@style/UserItem"
+        style="@style/UserInfoItem"
         android:onClick="mobile">
 
         <TextView
-            style="@style/UserItemText"
+            style="@style/UserInfoItemLabel"
             android:text="手机号" />
 
         <TextView
-            android:id="@+id/mobile"
-            style="@style/UserItemText1" />
+            android:id="@+id/mobile_text_view"
+            style="@style/UserInfoItemText" />
 
         <include layout="@layout/arrow_right" />
     </LinearLayout>
@@ -63,16 +63,16 @@
     <include layout="@layout/list_divider" />
 
     <LinearLayout
-        style="@style/UserItem"
+        style="@style/UserInfoItem"
         android:onClick="email">
 
         <TextView
-            style="@style/UserItemText"
+            style="@style/UserInfoItemLabel"
             android:text="邮箱" />
 
         <TextView
-            android:id="@+id/email"
-            style="@style/UserItemText1" />
+            android:id="@+id/email_text_view"
+            style="@style/UserInfoItemText" />
 
         <include layout="@layout/arrow_right" />
     </LinearLayout>
@@ -80,16 +80,34 @@
     <include layout="@layout/list_divider" />
 
     <LinearLayout
-        style="@style/UserItem"
+        style="@style/UserInfoItem"
         android:onClick="gender">
 
         <TextView
-            style="@style/UserItemText"
+            style="@style/UserInfoItemLabel"
             android:text="性别" />
 
         <TextView
-            android:id="@+id/gender"
-            style="@style/UserItemText1" />
+            android:id="@+id/gender_text_view"
+            style="@style/UserInfoItemText" />
+
+        <include layout="@layout/arrow_right" />
+    </LinearLayout>
+
+    <include layout="@layout/list_divider" />
+
+    <LinearLayout
+        style="@style/UserInfoItem"
+        android:onClick="password">
+
+        <TextView
+            style="@style/UserInfoItemLabel"
+            android:text="密码" />
+
+        <TextView
+            style="@style/UserInfoItemText"
+            android:text="● ● ● ● ● ●"
+            android:textSize="8sp" />
 
         <include layout="@layout/arrow_right" />
     </LinearLayout>

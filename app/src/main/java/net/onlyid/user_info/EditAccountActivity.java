@@ -1,0 +1,165 @@
+package net.onlyid.user_info;
+
+import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.PatternsCompat;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import net.onlyid.Constants;
+import net.onlyid.HttpUtil;
+import net.onlyid.R;
+import net.onlyid.Utils;
+import net.onlyid.databinding.ActivityEditAccountBinding;
+import net.onlyid.entity.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class EditAccountActivity extends AppCompatActivity {
+    static final String TAG = "EditAccountActivity";
+    ActivityEditAccountBinding binding;
+    String type;
+    ActionBar actionBar;
+    User user;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityEditAccountBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        init();
+    }
+
+    void init() {
+        binding.otpEditText1.getRecipient = () -> {
+            String account = binding.accountEditText.getText().toString();
+            return validateAccount(account) ? account : null;
+        };
+
+        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        try {
+            user = Utils.objectMapper.readValue(userString, User.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        type = getIntent().getStringExtra(UserInfoActivity.TYPE);
+        switch (type) {
+            case "mobile":
+                if (TextUtils.isEmpty(user.mobile)) {
+                    binding.tipTextView.setText("绑定手机号后，下次登录可使用手机号。");
+                    binding.accountEditText.setHint("手机号");
+                }
+                else {
+                    binding.tipTextView.setText("当前手机号是 " + user.mobile + "，更换手机号后，下次登录可使用新手机号。");
+                    binding.accountEditText.setHint("新手机号");
+                }
+                binding.accountEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                actionBar.setTitle("修改手机号");
+                break;
+            case "email":
+                if (TextUtils.isEmpty(user.email)) {
+                    binding.tipTextView.setText("绑定邮箱后，下次登录可使用邮箱。");
+                    binding.accountEditText.setHint("邮箱");
+                }
+                else {
+                    binding.tipTextView.setText("当前邮箱是 " + user.email + "，更换邮箱后，下次登录可使用新邮箱。");
+                    binding.accountEditText.setHint("新邮箱");
+                }
+                binding.accountEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                actionBar.setTitle("修改邮箱");
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.check_save, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.save:
+                submit();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    void submit() {
+        String account = binding.accountEditText.getText().toString();
+        if (!validateAccount(account)) return;
+
+        String otp = binding.otpEditText1.getOtp();
+        if (!validateOtp(otp)) return;
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("type", type);
+            jsonObject.put("otp", otp);
+            jsonObject.put("accountName", account);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Utils.showLoadingDialog(this);
+        HttpUtil.put("app/user/account", jsonObject, (c, s) -> {
+            Utils.loadingDialog.dismiss();
+            Utils.showToast("已保存", Toast.LENGTH_SHORT);
+            finish();
+        });
+    }
+
+    boolean validateOtp(String otp) {
+        if (TextUtils.isEmpty(otp)) {
+            Utils.showAlertDialog(this, "验证码不能为空");
+            return false;
+        }
+
+        return true;
+    }
+
+    boolean validateAccount(String account) {
+        if ("mobile".equals(type)) {
+            if (TextUtils.isEmpty(account)) {
+                Utils.showAlertDialog(this, "新手机号不能为空");
+                return false;
+            }
+
+            if (!Utils.isMobile(account)) {
+                Utils.showAlertDialog(this, "手机号格式不正确");
+                return false;
+            }
+        } else {
+            if (TextUtils.isEmpty(account)) {
+                Utils.showAlertDialog(this, "新邮箱不能为空");
+                return false;
+            }
+
+            if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches()) {
+                Utils.showAlertDialog(this, "邮箱格式不正确");
+                return false;
+            }
+        }
+
+        return true;
+    }
+}

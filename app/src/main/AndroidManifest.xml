@@ -15,16 +15,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".user_info.UserEditActivity"
+            android:name=".user_info.EditPasswordActivity"
+            android:label="修改密码"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.AvatarActivity"
+            android:name=".user_info.EditAccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".authorized_app.AuthorizedAppActivity"
+            android:name=".user_info.EditBasicActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".trusted_device.TrustedDeviceActivity"
+            android:name=".user_info.EditAvatarActivity"
+            android:label="修改头像"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authorized_apps.AuthorizedAppsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".trusted_devices.TrustedDevicesActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"
@@ -60,7 +68,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
-
 </manifest>
