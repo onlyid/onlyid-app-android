@@ -1,9 +1,10 @@
 package net.onlyid;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -57,4 +58,28 @@ public class Utils {
         Matcher m = p.matcher(s);
         return m.matches();
     }
+
+    public static int getStatusBarHeight(Context context) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(new int[]{
+                android.R.attr.windowFullscreen
+        });
+        boolean windowFullscreen = typedArray.getBoolean(0, false);
+        typedArray.recycle();
+
+        if (windowFullscreen) {
+            return 0;
+        }
+
+        int height = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return height;
+    }
+
+    public static int dp2px(Context context, float dpValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    }
+
 }

@@ -37,6 +37,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"
+            android:label="扫码登录"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_info.UserInfoActivity"
