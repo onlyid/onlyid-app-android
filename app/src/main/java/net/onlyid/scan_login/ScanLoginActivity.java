@@ -1,14 +1,18 @@
 package net.onlyid.scan_login;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Vibrator;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.app.ActivityCompat;
@@ -24,6 +28,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
+import net.onlyid.R;
 import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
 
@@ -42,6 +47,7 @@ public class ScanLoginActivity extends AppCompatActivity {
     ActivityScanLoginBinding binding;
     MultiFormatReader multiFormatReader;
     ExecutorService executorService;
+    ProcessCameraProvider cameraProvider;
 
     {
         multiFormatReader = new MultiFormatReader();
@@ -58,6 +64,8 @@ public class ScanLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityScanLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         for (String permission : PERMISSIONS) {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, permission)) {
@@ -91,27 +99,9 @@ public class ScanLoginActivity extends AppCompatActivity {
                 preview.setSurfaceProvider(binding.viewFinder.createSurfaceProvider());
 
                 ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().build();
-                imageAnalysis.setAnalyzer(executorService, (image) -> {
-                    ByteBuffer byteBuffer = image.getPlanes()[0].getBuffer();
-                    byte[] data = new byte[byteBuffer.remaining()];
-                    byteBuffer.get(data);
+                imageAnalysis.setAnalyzer(executorService, analyzer);
 
-                    PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, image.getWidth(),
-                            image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), false);
-                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                    try {
-                        Result result = multiFormatReader.decode(bitmap);
-                        String s = result.getText();
-                        Log.d(TAG, "result: " + s);
-                    } catch (NotFoundException e) {
-                        // do nothing
-                    } finally {
-                        multiFormatReader.reset();
-                        image.close();
-                    }
-                });
-
-                ProcessCameraProvider cameraProvider = future.get();
+                cameraProvider = future.get();
                 cameraProvider.unbindAll();
                 cameraProvider.bindToLifecycle(
                         this, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis);
@@ -121,10 +111,54 @@ public class ScanLoginActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    ImageAnalysis.Analyzer analyzer = new ImageAnalysis.Analyzer() {
+        @Override
+        public void analyze(@NonNull ImageProxy image) {
+            ByteBuffer byteBuffer = image.getPlanes()[0].getBuffer();
+            byte[] data = new byte[byteBuffer.remaining()];
+            byteBuffer.get(data);
+
+            PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, image.getWidth(),
+                    image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), false);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            try {
+                Result result = multiFormatReader.decode(bitmap);
+
+                runOnUiThread(cameraProvider::unbindAll);
+
+                MediaPlayer mediaPlayer = MediaPlayer.create(ScanLoginActivity.this, R.raw.beep);
+                mediaPlayer.start();
+                Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                vibrator.vibrate(200);
+
+                Intent intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
+                intent.putExtra("result", result.getText());
+                startActivity(intent);
+                finish();
+            } catch (NotFoundException e) {
+                // do nothing
+            } finally {
+                multiFormatReader.reset();
+                image.close();
+            }
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         executorService.shutdown();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return false;
+        }
     }
 }
