@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,44 +8,142 @@
     tools:context=".scan_login.AuthorizeActivity"
     tools:ignore="HardcodedText">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/authorize_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="这不是唯ID的二维码"
-            android:textColor="@color/text_color"
-            android:textSize="30sp" />
+            android:layout_marginTop="25dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="请注意识别，小心上当受骗"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/icon_image_view"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:riv_corner_radius="5dp" />
+
+                <TextView
+                    android:id="@+id/client_name_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:contentDescription="swap"
+                android:src="@drawable/ic_baseline_swap_horiz_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/avatar_image_view"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:riv_corner_radius="5dp" />
+
+                <TextView
+                    android:id="@+id/nickname_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:onClick="login"
+            android:text="登 录"
             android:textSize="@dimen/text3" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tip_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_button"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text1" />
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:contentDescription="error icon"
-        android:src="@drawable/ic_baseline_error_24" />
+        <Button
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:onClick="reject"
+            android:text="拒 绝"
+            android:textSize="@dimen/text1" />
+    </RelativeLayout>
 
-    <Button
+    <RelativeLayout
+        android:id="@+id/illegal_qr_code"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:onClick="back"
-        android:text="返 回"
-        android:textSize="@dimen/text3" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="这不是唯ID的二维码"
+                android:textColor="@color/text_primary"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="请注意识别，小心上当受骗"
+                android:textSize="@dimen/text3" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="error icon"
+            android:src="@drawable/ic_baseline_error_24" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:onClick="back"
+            android:text="返 回"
+            android:textSize="@dimen/text3" />
+    </RelativeLayout>
+
+</FrameLayout>

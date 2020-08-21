@@ -14,15 +14,22 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text2" />
 
-    <EditText
-        android:id="@+id/account_edit_text"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/account_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:maxLength="50" />
+        android:layout_marginTop="20dp">
 
-    <net.onlyid.user_info.OtpEditText
-        android:id="@+id/otp_edit_text1"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="50" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <net.onlyid.user_info.OtpInput
+        android:id="@+id/otp_input1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
 </LinearLayout>

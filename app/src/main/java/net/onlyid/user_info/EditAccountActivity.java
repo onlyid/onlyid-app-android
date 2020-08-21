@@ -2,7 +2,10 @@ package net.onlyid.user_info;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,8 +47,8 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     void init() {
-        binding.otpEditText1.getRecipient = () -> {
-            String account = binding.accountEditText.getText().toString();
+        binding.otpInput1.getRecipient = () -> {
+            String account = binding.accountInput.getEditText().getText().toString();
             return validateAccount(account) ? account : null;
         };
 
@@ -61,25 +64,31 @@ public class EditAccountActivity extends AppCompatActivity {
             case "mobile":
                 if (TextUtils.isEmpty(user.mobile)) {
                     binding.tipTextView.setText("绑定手机号后，下次登录可使用手机号。");
-                    binding.accountEditText.setHint("手机号");
+                    binding.accountInput.setHint("手机号");
+                } else {
+                    SpannableStringBuilder ssb = new SpannableStringBuilder("当前手机号是 ");
+                    ssb.append(user.mobile);
+                    ssb.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 7, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.append("，更换手机号后，下次登录可使用新手机号。");
+                    binding.tipTextView.setText(ssb);
+                    binding.accountInput.setHint("新手机号");
                 }
-                else {
-                    binding.tipTextView.setText("当前手机号是 " + user.mobile + "，更换手机号后，下次登录可使用新手机号。");
-                    binding.accountEditText.setHint("新手机号");
-                }
-                binding.accountEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+                binding.accountInput.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
                 actionBar.setTitle("修改手机号");
                 break;
             case "email":
                 if (TextUtils.isEmpty(user.email)) {
                     binding.tipTextView.setText("绑定邮箱后，下次登录可使用邮箱。");
-                    binding.accountEditText.setHint("邮箱");
+                    binding.accountInput.setHint("邮箱");
+                } else {
+                    SpannableStringBuilder ssb = new SpannableStringBuilder("当前邮箱是 ");
+                    ssb.append(user.email);
+                    ssb.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 6, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.append("，更换邮箱后，下次登录可使用新邮箱。");
+                    binding.tipTextView.setText(ssb);
+                    binding.accountInput.setHint("新邮箱");
                 }
-                else {
-                    binding.tipTextView.setText("当前邮箱是 " + user.email + "，更换邮箱后，下次登录可使用新邮箱。");
-                    binding.accountEditText.setHint("新邮箱");
-                }
-                binding.accountEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                binding.accountInput.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 actionBar.setTitle("修改邮箱");
                 break;
         }
@@ -106,10 +115,10 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     void submit() {
-        String account = binding.accountEditText.getText().toString();
+        String account = binding.accountInput.getEditText().getText().toString();
         if (!validateAccount(account)) return;
 
-        String otp = binding.otpEditText1.getOtp();
+        String otp = binding.otpInput1.getOtp();
         if (!validateOtp(otp)) return;
 
         JSONObject jsonObject = new JSONObject();

@@ -1,7 +1,10 @@
 package net.onlyid.user_info;
 
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -48,9 +51,11 @@ public class EditPasswordActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(user.mobile)) recipient = user.email;
         else recipient = user.mobile;
 
-        binding.otpEditText1.getRecipient = () -> recipient;
+        binding.otpInput1.getRecipient = () -> recipient;
 
-        binding.tipTextView.setText("将发送验证码到 " + recipient + " 以重设密码。");
+        SpannableString ss = new SpannableString("将发送验证码到 " + recipient + " 以重设密码。");
+        ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 8, 8 + recipient.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        binding.tipTextView.setText(ss);
     }
 
     @Override
@@ -74,13 +79,13 @@ public class EditPasswordActivity extends AppCompatActivity {
     }
 
     void validate() {
-        String otp = binding.otpEditText1.getOtp();
+        String otp = binding.otpInput1.getOtp();
         if (TextUtils.isEmpty(otp)) {
             Utils.showAlertDialog(this, "验证码不能为空");
             return;
         }
 
-        String password = binding.passwordEditText.getText().toString();
+        String password = binding.passwordInput.getEditText().getText().toString();
         if (TextUtils.isEmpty(password)) {
             Utils.showAlertDialog(this, "新密码不能为空");
             return;
@@ -90,7 +95,7 @@ public class EditPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        String password1 = binding.password1EditText.getText().toString();
+        String password1 = binding.password1Input.getEditText().getText().toString();
         if (TextUtils.isEmpty(password1)) {
             Utils.showAlertDialog(this, "重复新密码不能为空");
             return;
@@ -106,8 +111,8 @@ public class EditPasswordActivity extends AppCompatActivity {
     void submit() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("password", binding.passwordEditText.getText().toString());
-            jsonObject.put("otp", binding.otpEditText1.getOtp());
+            jsonObject.put("password", binding.passwordInput.getEditText().getText().toString());
+            jsonObject.put("otp", binding.otpInput1.getOtp());
             jsonObject.put("accountName", recipient);
         } catch (JSONException e) {
             e.printStackTrace();

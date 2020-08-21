@@ -5,24 +5,24 @@ import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
 import net.onlyid.HttpUtil;
 import net.onlyid.Utils;
-import net.onlyid.databinding.EditTextOtpBinding;
+import net.onlyid.databinding.InputOtpBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class OtpEditText extends LinearLayout {
+public class OtpInput extends RelativeLayout {
     public GetRecipient getRecipient;
-    EditTextOtpBinding binding;
+    InputOtpBinding binding;
 
-    public OtpEditText(Context context, @Nullable AttributeSet attrs) {
+    public OtpInput(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        binding = EditTextOtpBinding.inflate(LayoutInflater.from(context), this);
+        binding = InputOtpBinding.inflate(LayoutInflater.from(context), this);
 
         binding.sendButton.setOnClickListener((v) -> {
             String recipient = getRecipient.getRecipient();
@@ -57,6 +57,6 @@ public class OtpEditText extends LinearLayout {
     }
 
     public String getOtp() {
-        return binding.otpEditText.getText().toString();
+        return binding.otpInput.getEditText().getText().toString();
     }
 }

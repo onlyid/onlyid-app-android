@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,8 +41,8 @@ public class Utils {
     }
 
     public static void showAlertDialog(Context context, String message) {
-        new AlertDialog.Builder(context, R.style.MyAlertDialog)
-                .setMessage(message)
+        new MaterialAlertDialogBuilder(context, R.style.MyAlertDialog)
+                .setTitle(message)
                 .setPositiveButton("确定", null)
                 .show();
     }

@@ -53,8 +53,8 @@ public class EditBasicActivity extends AppCompatActivity {
         switch (type) {
             case "nickname":
                 binding.tipTextView.setText("起一个好名字，让大家更容易记住你。");
-                binding.nicknameEditText.setVisibility(View.VISIBLE);
-                binding.nicknameEditText.setText(user.nickname);
+                binding.nicknameInput.setVisibility(View.VISIBLE);
+                binding.nicknameInput.getEditText().setText(user.nickname);
                 actionBar.setTitle("修改昵称");
                 break;
             case "gender":
@@ -101,7 +101,7 @@ public class EditBasicActivity extends AppCompatActivity {
     void validate() {
         switch (type) {
             case "nickname":
-                String nickname = binding.nicknameEditText.getText().toString();
+                String nickname = binding.nicknameInput.getEditText().getText().toString();
                 if (TextUtils.isEmpty(nickname)) {
                     Utils.showAlertDialog(this, "昵称不能为空");
                     return;
@@ -125,7 +125,7 @@ public class EditBasicActivity extends AppCompatActivity {
             jsonObject.put("type", type);
             switch (type) {
                 case "nickname":
-                    String nickname = binding.nicknameEditText.getText().toString();
+                    String nickname = binding.nicknameInput.getEditText().getText().toString();
                     jsonObject.put("value", nickname);
                     break;
                 case "gender":
