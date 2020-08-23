@@ -32,7 +32,7 @@ public class HttpUtil {
     static Handler handler = new Handler();
 
     static {
-        if (BuildConfig.DEBUG) BASE_URL = "http://192.168.0.132:8000/api/";
+        if (BuildConfig.DEBUG) BASE_URL = "http://192.168.31.117:8000/api/";
         else BASE_URL = "https://www.onlyid.net/api/";
 
         httpClient = new OkHttpClient.Builder().cookieJar(new CookieJar() {

@@ -19,6 +19,7 @@ import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.User;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AuthorizeActivity extends AppCompatActivity {
@@ -27,6 +28,7 @@ public class AuthorizeActivity extends AppCompatActivity {
     String uid, clientId;
     Client client;
     User user;
+    JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class AuthorizeActivity extends AppCompatActivity {
         String result = getIntent().getStringExtra("result");
         Log.d(TAG, "result: " + result);
         try {
-            JSONObject jsonObject = new JSONObject(result);
+            jsonObject = new JSONObject(result);
             uid = jsonObject.getString("uid");
             clientId = jsonObject.getString("clientId");
             if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(clientId)) {
@@ -88,10 +90,21 @@ public class AuthorizeActivity extends AppCompatActivity {
     }
 
     public void login(View v) {
-
+        handleResult(true);
     }
 
     public void reject(View v) {
+        handleResult(false);
+    }
 
+    void handleResult(boolean result) {
+        try {
+            jsonObject.put("result", result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        HttpUtil.post("oauth/scan-login-result", jsonObject, (c, s) -> {
+            finish();
+        });
     }
 }
