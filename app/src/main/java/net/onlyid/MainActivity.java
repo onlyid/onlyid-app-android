@@ -8,10 +8,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.onlyid.authorized_apps.AuthorizedAppsActivity;
+import net.onlyid.authorized_app.AuthorizedAppActivity;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.scan_login.ScanLoginActivity;
-import net.onlyid.trusted_devices.TrustedDevicesActivity;
+import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
 
 import okhttp3.Call;
@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void trustedDevices(View v) {
-        Intent intent = new Intent(this, TrustedDevicesActivity.class);
+    public void trustedDevice(View v) {
+        Intent intent = new Intent(this, TrustedDeviceActivity.class);
         startActivity(intent);
     }
 
-    public void authorizedApps(View v) {
-        Intent intent = new Intent(this, AuthorizedAppsActivity.class);
+    public void authorizedApp(View v) {
+        Intent intent = new Intent(this, AuthorizedAppActivity.class);
         startActivity(intent);
     }
 }

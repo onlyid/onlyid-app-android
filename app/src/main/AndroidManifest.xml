@@ -35,10 +35,10 @@
             android:label="修改头像"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".authorized_apps.AuthorizedAppsActivity"
+            android:name=".authorized_app.AuthorizedAppActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".trusted_devices.TrustedDevicesActivity"
+            android:name=".trusted_device.TrustedDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"

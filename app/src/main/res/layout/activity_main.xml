@@ -37,13 +37,13 @@
         <Button
             style="@style/MainButton"
             android:drawableTop="@drawable/ic_baseline_devices_24"
-            android:onClick="trustedDevices"
+            android:onClick="trustedDevice"
             android:text="可信设备" />
 
         <Button
             style="@style/MainButton"
             android:drawableTop="@drawable/ic_baseline_apps_24"
-            android:onClick="authorizedApps"
+            android:onClick="authorizedApp"
             android:text="授权应用" />
     </LinearLayout>
 
