@@ -70,6 +70,14 @@
             </LinearLayout>
         </LinearLayout>
 
+        <CheckBox
+            android:id="@+id/check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/login_button"
+            android:text="记住我（保持登录一个月）"
+            android:textSize="@dimen/text2" />
+
         <Button
             android:id="@+id/login_button"
             android:layout_width="match_parent"

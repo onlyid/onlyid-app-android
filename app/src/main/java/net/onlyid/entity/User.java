@@ -36,7 +36,7 @@ public class User {
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     public LocalDateTime createDate;
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
-    public LocalDateTime passwordUpdateDate;
+    public LocalDateTime updatePasswordDate;
     public String description;
     public Integer creator;
 }

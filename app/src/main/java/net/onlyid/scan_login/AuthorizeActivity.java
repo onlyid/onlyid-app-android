@@ -100,6 +100,7 @@ public class AuthorizeActivity extends AppCompatActivity {
     void handleResult(boolean result) {
         try {
             jsonObject.put("result", result);
+            jsonObject.put("keepLoggedIn", binding.checkBox.isChecked());
         } catch (JSONException e) {
             e.printStackTrace();
         }
