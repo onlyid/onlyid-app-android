@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -43,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("code", code);
+                jsonObject.put("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                jsonObject.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
