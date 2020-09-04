@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 jsonObject.put("code", code);
                 jsonObject.put("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 jsonObject.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
+                jsonObject.put("platform", "ANDROID");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -60,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void setTitle(final String title) {
-            runOnUiThread(() -> getSupportActionBar().setTitle(title));
         }
     }
 

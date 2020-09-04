@@ -22,7 +22,7 @@
 
         <Button
             style="@style/MainButton"
-            android:drawableTop="@drawable/ic_baseline_filter_center_focus_24"
+            android:drawableTop="@drawable/ic_qr_code"
             android:onClick="scanLogin"
             android:text="扫码登录" />
     </LinearLayout>

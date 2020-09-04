@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         refreshUserInfo();
+
+        MyApplication.mainActivity = this;
     }
 
     void refreshUserInfo() {

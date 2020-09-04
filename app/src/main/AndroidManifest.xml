@@ -17,6 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".trusted_device.CustomNameActivity"
+            android:label="自定义名称"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".scan_login.AuthorizeActivity"
             android:label="扫码登录"
             android:screenOrientation="portrait" />
@@ -39,6 +43,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".trusted_device.TrustedDeviceActivity"
+            android:label="可信设备"
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"
@@ -50,7 +55,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:label="登录"
+            android:label="登录唯ID"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

@@ -42,7 +42,7 @@ public class Utils {
 
     public static void showAlertDialog(Context context, String message) {
         new MaterialAlertDialogBuilder(context, R.style.MyAlertDialog)
-                .setTitle(message)
+                .setMessage(message)
                 .setPositiveButton("确定", null)
                 .show();
     }
