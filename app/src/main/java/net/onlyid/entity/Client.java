@@ -9,7 +9,18 @@ import java.util.List;
 
 public class Client {
     public enum Type {
-        APP, WEB, OTHER
+        APP, WEB, OTHER;
+
+        public String toLocalizedString() {
+            switch (this) {
+                case APP:
+                    return "APP";
+                case WEB:
+                    return "网站";
+                default:
+                    return "其他";
+            }
+        }
     }
 
     public Integer id;

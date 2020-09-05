@@ -18,10 +18,8 @@ public class User {
                     return "男";
                 case FEMALE:
                     return "女";
-                case OTHER:
-                    return "其他";
                 default:
-                    return null;
+                    return "其他";
             }
         }
     }

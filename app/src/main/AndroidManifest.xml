@@ -40,6 +40,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".authorized_app.AuthorizedAppActivity"
+            android:label="授权应用"
             android:screenOrientation="portrait" />
         <activity
             android:name=".trusted_device.TrustedDeviceActivity"
