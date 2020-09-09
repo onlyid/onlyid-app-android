@@ -17,12 +17,19 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".scan_login.IllegalQrCodeActivity"
+            android:label="非法二维码"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".scan_login.ResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".trusted_device.CustomNameActivity"
             android:label="自定义名称"
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.AuthorizeActivity"
-            android:label="扫码登录"
+            android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_info.EditPasswordActivity"

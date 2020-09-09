@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -28,9 +30,12 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
+import net.onlyid.HttpUtil;
 import net.onlyid.R;
 import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
+
+import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
@@ -131,10 +136,36 @@ public class ScanLoginActivity extends AppCompatActivity {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 vibrator.vibrate(200);
 
-                Intent intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
-                intent.putExtra("result", result.getText());
-                startActivity(intent);
-                finish();
+                Log.d(TAG, "result text: " + result.getText());
+                try {
+                    JSONObject jsonObject = new JSONObject(result.getText());
+                    String uid = jsonObject.getString("uid");
+                    String clientId = jsonObject.getString("clientId");
+                    if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(clientId)) {
+                        throw new Exception("uid或clientId为空");
+                    }
+
+                    HttpUtil.get("app/user-client-links/" + clientId + "/check", (c, s) -> {
+                        Intent intent;
+                        JSONObject jsonObject1 = new JSONObject(s);
+                        if (jsonObject1.getBoolean("linked")) {
+                            intent = new Intent(ScanLoginActivity.this, ResultActivity.class);
+                            intent.putExtra("result", true);
+                        } else {
+                            intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
+                        }
+                        intent.putExtra("client", jsonObject1.getString("client"));
+                        intent.putExtra("uid", uid);
+                        startActivity(intent);
+                        finish();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Intent intent = new Intent(ScanLoginActivity.this, IllegalQrCodeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             } catch (NotFoundException e) {
                 // do nothing
             } finally {

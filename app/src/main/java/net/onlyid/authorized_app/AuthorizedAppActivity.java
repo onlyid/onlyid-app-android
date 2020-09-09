@@ -138,7 +138,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
     void onDialogItemClick(int which, int position) {
         Client client = userClientLinkList.get(position).client;
         Utils.showLoadingDialog(this);
-        HttpUtil.delete("app/user-clients/" + client.id, (c, s) -> {
+        HttpUtil.delete("app/user-client-links/" + client.id, (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已取消授权", Toast.LENGTH_SHORT);
             initData();
