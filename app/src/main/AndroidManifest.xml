@@ -30,7 +30,8 @@
             android:label="非法二维码"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scan_login.ResultActivity"
+            android:name=".scan_login.SuccessActivity"
+            android:label="登录成功"
             android:screenOrientation="portrait" />
         <activity
             android:name=".trusted_device.CustomNameActivity"

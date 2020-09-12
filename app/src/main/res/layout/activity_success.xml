@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".scan_login.ResultActivity"
+    tools:context=".scan_login.SuccessActivity"
     tools:ignore="HardcodedText">
 
     <LinearLayout

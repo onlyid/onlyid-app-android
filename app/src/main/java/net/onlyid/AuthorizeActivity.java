@@ -1,6 +1,5 @@
 package net.onlyid;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,7 @@ import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
 import net.onlyid.entity.User;
-import net.onlyid.scan_login.ResultActivity;
+import net.onlyid.scan_login.ScanLoginActivity;
 
 public class AuthorizeActivity extends AppCompatActivity {
     static final String TAG = AuthorizeActivity.class.getSimpleName();
@@ -35,11 +34,10 @@ public class AuthorizeActivity extends AppCompatActivity {
     }
 
     void init() {
+        client = (Client) getIntent().getSerializableExtra("client");
         String userString = Utils.sharedPreferences.getString(Constants.USER, null);
-        String clientString = getIntent().getStringExtra("client");
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
-            client = Utils.objectMapper.readValue(clientString, Client.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -64,21 +62,17 @@ public class AuthorizeActivity extends AppCompatActivity {
     }
 
     public void login(View v) {
-        goResult(true);
+        handleResult(true);
     }
 
     public void reject(View v) {
-        goResult(false);
+        handleResult(false);
     }
 
-    void goResult(boolean result) {
+    void handleResult(boolean result) {
         if (Client.Type.WEB.equals(client.type)) {
-            Intent intent = new Intent(this, ResultActivity.class);
-            intent.putExtra("result", result);
-            intent.putExtra("client", getIntent().getStringExtra("client"));
-            intent.putExtra("uid", getIntent().getStringExtra("uid"));
-            startActivity(intent);
-            finish();
+            String uid = getIntent().getStringExtra("uid");
+            ScanLoginActivity.callback(this, uid, client, result);
         } else {
             OAuthConfig config = (OAuthConfig) getIntent().getSerializableExtra("oauthConfig");
             OAuthActivity.callback(this, config, client, result);

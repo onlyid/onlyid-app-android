@@ -71,7 +71,7 @@ public class OAuthActivity extends AppCompatActivity {
                 callback(activity, config, client, true);
             } else {
                 Intent intent = new Intent(activity, AuthorizeActivity.class);
-                intent.putExtra("client", clientString);
+                intent.putExtra("client", client);
                 intent.putExtra("oauthConfig", config);
                 activity.startActivityForResult(intent, REQUEST_OAUTH);
             }

@@ -1,6 +1,7 @@
 package net.onlyid.scan_login;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -35,7 +36,9 @@ import net.onlyid.HttpUtil;
 import net.onlyid.R;
 import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
+import net.onlyid.entity.Client;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
@@ -147,18 +150,21 @@ public class ScanLoginActivity extends AppCompatActivity {
                     }
 
                     HttpUtil.get("app/user-client-links/" + clientId + "/check", (c, s) -> {
-                        Intent intent;
-                        JSONObject jsonObject1 = new JSONObject(s);
-                        if (jsonObject1.getBoolean("linked")) {
-                            intent = new Intent(ScanLoginActivity.this, ResultActivity.class);
-                            intent.putExtra("result", true);
+                        JSONObject respBody = new JSONObject(s);
+                        String clientString = respBody.getString("client");
+                        Client client = Utils.objectMapper.readValue(clientString, Client.class);
+                        if (respBody.getBoolean("linked")) {
+                            callback(ScanLoginActivity.this, uid, client, true);
+                            Intent intent = new Intent(ScanLoginActivity.this, SuccessActivity.class);
+                            intent.putExtra("client", client);
+                            startActivity(intent);
                         } else {
-                            intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
+                            Intent intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
+                            intent.putExtra("client", client);
+                            intent.putExtra("uid", uid);
+                            startActivity(intent);
+                            finish();
                         }
-                        intent.putExtra("client", jsonObject1.getString("client"));
-                        intent.putExtra("uid", uid);
-                        startActivity(intent);
-                        finish();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -192,5 +198,19 @@ public class ScanLoginActivity extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+
+    public static void callback(Activity activity, String uid, Client client, boolean result) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("result", result);
+            jsonObject.put("uid", uid);
+            jsonObject.put("clientId", client.id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        HttpUtil.post("oauth/scan-login-result", jsonObject, (c, s) -> {
+            activity.finish();
+        });
     }
 }

@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import net.onlyid.Constants;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Client {
+public class Client implements Serializable {
     public enum Type {
         APP, WEB, OTHER;
 
