@@ -1,4 +1,4 @@
-package net.onlyid.scan_login;
+package net.onlyid;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import net.onlyid.Constants;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;
+import net.onlyid.entity.OAuthConfig;
 import net.onlyid.entity.User;
+import net.onlyid.scan_login.ResultActivity;
 
 public class AuthorizeActivity extends AppCompatActivity {
     static final String TAG = AuthorizeActivity.class.getSimpleName();
@@ -72,11 +72,16 @@ public class AuthorizeActivity extends AppCompatActivity {
     }
 
     void goResult(boolean result) {
-        Intent intent = new Intent(this, ResultActivity.class);
-        intent.putExtra("result", result);
-        intent.putExtra("client", getIntent().getStringExtra("client"));
-        intent.putExtra("uid", getIntent().getStringExtra("uid"));
-        startActivity(intent);
-        finish();
+        if (Client.Type.WEB.equals(client.type)) {
+            Intent intent = new Intent(this, ResultActivity.class);
+            intent.putExtra("result", result);
+            intent.putExtra("client", getIntent().getStringExtra("client"));
+            intent.putExtra("uid", getIntent().getStringExtra("uid"));
+            startActivity(intent);
+            finish();
+        } else {
+            OAuthConfig config = (OAuthConfig) getIntent().getSerializableExtra("oauthConfig");
+            OAuthActivity.callback(this, config, client, result);
+        }
     }
 }

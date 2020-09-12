@@ -50,11 +50,11 @@ public class ResultActivity extends AppCompatActivity {
         }
         if (result) {
             actionBar.setTitle("登录成功");
-            binding.titleTextView.setText("已登录" + "「" + client.name + "」");
+            binding.titleTextView.setText("已登录「" + client.name + "」");
             binding.resultImageView.setImageResource(R.drawable.ic_baseline_verified_user_24);
         } else {
             actionBar.setTitle("拒绝登录");
-            binding.titleTextView.setText("已拒绝" + "「" + client.name + "」");
+            binding.titleTextView.setText("已拒绝「" + client.name + "」");
             binding.resultImageView.setImageResource(R.drawable.ic_baseline_info_24);
         }
         handleResult(result);

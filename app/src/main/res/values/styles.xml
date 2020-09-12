@@ -73,4 +73,9 @@
         <item name="android:textSize">@dimen/text3</item>
         <item name="android:paddingLeft">15dp</item>
     </style>
+
+    <style name="OAuthActivityTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:background">@color/bg</item>
+    </style>
 </resources>

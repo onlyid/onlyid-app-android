@@ -17,6 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".OAuthActivity"
+            android:exported="true"
+            android:theme="@style/OAuthActivityTheme">
+            <intent-filter>
+                <action android:name="net.onlyid.OAUTH_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".scan_login.IllegalQrCodeActivity"
             android:label="非法二维码"
             android:screenOrientation="portrait" />
@@ -28,7 +37,7 @@
             android:label="自定义名称"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scan_login.AuthorizeActivity"
+            android:name=".AuthorizeActivity"
             android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity

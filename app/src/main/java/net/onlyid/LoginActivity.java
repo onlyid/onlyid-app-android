@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.onlyid.databinding.ActivityLoginBinding;
+import net.onlyid.entity.OAuthConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,9 +54,15 @@ public class LoginActivity extends AppCompatActivity {
             }
             HttpUtil.post("app/login", jsonObject, (Call c, String s) -> {
                 Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                OAuthConfig config = (OAuthConfig) getIntent().getSerializableExtra("oauthConfig");
+                if (config == null) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    OAuthActivity.promptAuthorizeIfNecessary(LoginActivity.this, config);
+                }
             });
         }
 
@@ -129,9 +136,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode != 1) return;
-
-        if (resultCode == RESULT_OK) filePathCallback.onReceiveValue(new Uri[]{data.getData()});
-        else filePathCallback.onReceiveValue(null);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) filePathCallback.onReceiveValue(new Uri[]{data.getData()});
+            else filePathCallback.onReceiveValue(null);
+        } else if (requestCode == OAuthActivity.REQUEST_OAUTH) {
+            setResult(resultCode, data);
+            finish();
+        }
     }
 }
