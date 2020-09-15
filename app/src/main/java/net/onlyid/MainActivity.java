@@ -19,6 +19,7 @@ import okhttp3.Call;
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
     ActivityMainBinding binding;
+    UpdateUtil updateUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         refreshUserInfo();
+
+        updateUtil = new UpdateUtil(this);
+        updateUtil.check();
 
         MyApplication.mainActivity = this;
     }
@@ -82,5 +86,12 @@ public class MainActivity extends AppCompatActivity {
     public void authorizedApp(View v) {
         Intent intent = new Intent(this, AuthorizedAppActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        updateUtil.destroy();
     }
 }
