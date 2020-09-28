@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.onlyid.databinding.ActivityLoginBinding;
 import net.onlyid.entity.OAuthConfig;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,17 +30,10 @@ import org.json.JSONObject;
 import okhttp3.Call;
 
 public class LoginActivity extends AppCompatActivity {
-    static final String TAG = "LoginActivity";
-    static final String MY_URL;
+    static final String TAG = LoginActivity.class.getSimpleName();
+    static final String MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=net.onlyid";
     ActivityLoginBinding binding;
     ValueCallback<Uri[]> filePathCallback;
-
-    static {
-        if (BuildConfig.DEBUG)
-            MY_URL = "http://192.168.31.117:3001/oauth?client-id=8bfc826f39954d54b0e583c4f4edd3c7&package-name=net.onlyid";
-        else
-            MY_URL = "https://www.onlyid.net/oauth?client-id=fc5d31c48bdc4f8aa9766ecb0adc17d2&package-name=net.onlyid";
-    }
 
     class JsInterface {
         @JavascriptInterface
@@ -78,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         initWebView();
+
+        if (BuildConfig.DEBUG) new JsInterface().onCode("ab0d80cb1705426680767c7e129893b0", null);
     }
 
     @SuppressLint("SetJavaScriptEnabled")

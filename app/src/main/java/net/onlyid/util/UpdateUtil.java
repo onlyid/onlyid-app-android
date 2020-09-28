@@ -1,4 +1,4 @@
-package net.onlyid;
+package net.onlyid.util;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -16,6 +16,8 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import net.onlyid.BuildConfig;
+import net.onlyid.R;
 import net.onlyid.databinding.DialogUpdateBinding;
 
 import org.json.JSONArray;
@@ -46,7 +48,7 @@ public class UpdateUtil {
             JSONArray jsonArray = jsonObject.getJSONArray("featureList");
             featureList = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
-                featureList.add((i + 1) + ". " + (String) jsonArray.opt(i));
+                featureList.add((i + 1) + ". " + jsonArray.opt(i));
             }
             showDialogIfNecessary();
         });

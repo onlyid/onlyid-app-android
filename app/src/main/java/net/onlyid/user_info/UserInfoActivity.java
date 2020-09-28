@@ -13,10 +13,10 @@ import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.Constants;
-import net.onlyid.HttpUtil;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityUserInfoBinding;
 import net.onlyid.entity.User;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 public class UserInfoActivity extends AppCompatActivity {
     static final String TAG = "UserInfoActivity";
@@ -60,13 +60,11 @@ public class UserInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return false;
     }
 
     public void avatar(View v) {

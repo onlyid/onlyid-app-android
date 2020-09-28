@@ -32,11 +32,11 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
 import net.onlyid.AuthorizeActivity;
-import net.onlyid.HttpUtil;
 import net.onlyid.R;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
 import net.onlyid.entity.Client;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,7 +105,7 @@ public class ScanLoginActivity extends AppCompatActivity {
         future.addListener(() -> {
             try {
                 Preview preview = new Preview.Builder().build();
-                preview.setSurfaceProvider(binding.viewFinder.createSurfaceProvider());
+                preview.setSurfaceProvider(binding.viewFinder.getSurfaceProvider());
 
                 ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().build();
                 imageAnalysis.setAnalyzer(executorService, analyzer);
@@ -191,13 +191,11 @@ public class ScanLoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return false;
     }
 
     public static void callback(Activity activity, String uid, Client client, boolean result) {

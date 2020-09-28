@@ -13,6 +13,9 @@ import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.UpdateUtil;
+import net.onlyid.util.Utils;
 
 import okhttp3.Call;
 

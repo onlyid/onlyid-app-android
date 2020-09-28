@@ -17,13 +17,13 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.Constants;
-import net.onlyid.HttpUtil;
 import net.onlyid.R;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityAuthorizedAppBinding;
 import net.onlyid.databinding.ItemClientBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.UserClientLink;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

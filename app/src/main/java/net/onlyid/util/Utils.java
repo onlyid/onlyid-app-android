@@ -1,4 +1,4 @@
-package net.onlyid;
+package net.onlyid.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +15,9 @@ import androidx.preference.PreferenceManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import net.onlyid.MyApplication;
+import net.onlyid.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

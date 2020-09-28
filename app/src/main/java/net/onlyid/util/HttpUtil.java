@@ -1,9 +1,11 @@
-package net.onlyid;
+package net.onlyid.util;
 
 import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import net.onlyid.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +27,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class HttpUtil {
-    static final String TAG = "HttpUtil";
+    static final String TAG = HttpUtil.class.getSimpleName();
     static final String BASE_URL;
     static final String COOKIE = "cookie";
     static OkHttpClient httpClient;

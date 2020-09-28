@@ -18,15 +18,15 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.Constants;
-import net.onlyid.HttpUtil;
 import net.onlyid.LoginActivity;
 import net.onlyid.MyApplication;
 import net.onlyid.R;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityTrustedDeviceBinding;
 import net.onlyid.databinding.GroupSessionBinding;
 import net.onlyid.databinding.ItemSessionBinding;
 import net.onlyid.entity.Session;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,6 +174,10 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             }
 
             binding.deviceImageView.setImageResource(drawable);
+            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastActiveDate.format(Constants.MY_FORMATTER));
+            binding.lastActiveLocationTextView.setText("最近活跃地点：" +
+                    (TextUtils.isEmpty(session.lastActiveLocation) ? "-" : session.lastActiveLocation));
+            binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastActiveIp) ? "-" : session.lastActiveIp));
             binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.MY_FORMATTER));
 
             return convertView;
@@ -237,13 +241,11 @@ public class TrustedDeviceActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return false;
     }
 
     void onDialogItemClick(int which, int groupPosition, int childPosition) {

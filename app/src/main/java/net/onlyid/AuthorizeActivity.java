@@ -15,6 +15,7 @@ import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
 import net.onlyid.entity.User;
 import net.onlyid.scan_login.ScanLoginActivity;
+import net.onlyid.util.Utils;
 
 public class AuthorizeActivity extends AppCompatActivity {
     static final String TAG = AuthorizeActivity.class.getSimpleName();
@@ -52,13 +53,11 @@ public class AuthorizeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return false;
     }
 
     public void login(View v) {

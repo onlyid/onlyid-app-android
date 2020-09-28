@@ -22,4 +22,8 @@ public class Session {
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     public LocalDateTime createDate;
     public String customName;
+    public String lastActiveIp;
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
+    public LocalDateTime lastActiveDate;
+    public String lastActiveLocation;
 }

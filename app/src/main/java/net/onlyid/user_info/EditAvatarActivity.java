@@ -28,11 +28,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yalantis.ucrop.UCrop;
 
 import net.onlyid.Constants;
-import net.onlyid.HttpUtil;
 import net.onlyid.R;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityEditAvatarBinding;
 import net.onlyid.entity.User;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 

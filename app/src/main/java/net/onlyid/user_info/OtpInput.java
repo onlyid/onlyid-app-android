@@ -9,9 +9,9 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
-import net.onlyid.HttpUtil;
-import net.onlyid.Utils;
 import net.onlyid.databinding.InputOtpBinding;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

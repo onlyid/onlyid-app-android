@@ -9,10 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.onlyid.HttpUtil;
 import net.onlyid.R;
-import net.onlyid.Utils;
 import net.onlyid.databinding.ActivityCustomNameBinding;
+import net.onlyid.util.HttpUtil;
+import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
