@@ -58,11 +58,7 @@ public class UpdateUtil {
         if (BuildConfig.VERSION_CODE < oldest) {
             new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
                     .setMessage("当前版本已过期，请更新。")
-                    .setPositiveButton("更新", (dialog, which) -> {
-                        downloadPackage();
-                        Utils.showToast("开始下载，请安装新版本后重新进入", Toast.LENGTH_LONG);
-                        activity.finish();
-                    })
+                    .setPositiveButton("更新", (dialog, which) -> downloadPackage())
                     .setNegativeButton("退出", (d, w) -> activity.finish())
                     .setCancelable(false)
                     .show();
@@ -80,10 +76,7 @@ public class UpdateUtil {
             new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
                     .setTitle("有新版本，请更新：")
                     .setView(binding.getRoot())
-                    .setPositiveButton("更新", (dialog, which) -> {
-                        downloadPackage();
-                        Utils.showToast("开始下载...", Toast.LENGTH_SHORT);
-                    })
+                    .setPositiveButton("更新", (dialog, which) -> downloadPackage())
                     .setNegativeButton("取消", (d, w) -> {
                         if (binding.checkBox.isChecked())
                             Utils.sharedPreferences.edit().putInt("silentVersionCode", current).apply();
@@ -93,6 +86,8 @@ public class UpdateUtil {
     }
 
     void downloadPackage() {
+        Utils.showToast("开始下载，下载完成会自动开始安装", Toast.LENGTH_LONG);
+
         File file = new File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), APK_NAME);
         if (file.exists()) file.delete();
 
