@@ -3,6 +3,7 @@ package net.onlyid.authorized_app;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.View;
@@ -20,8 +21,7 @@ import net.onlyid.Constants;
 import net.onlyid.R;
 import net.onlyid.databinding.ActivityAuthorizedAppBinding;
 import net.onlyid.databinding.ItemClientBinding;
-import net.onlyid.entity.Client;
-import net.onlyid.entity.UserClientLink;
+import net.onlyid.entity.Client1;
 import net.onlyid.util.HttpUtil;
 import net.onlyid.util.Utils;
 
@@ -32,23 +32,23 @@ import java.util.stream.Collectors;
 public class AuthorizedAppActivity extends AppCompatActivity {
     static final String TAG = AuthorizedAppActivity.class.getSimpleName();
     ActivityAuthorizedAppBinding binding;
-    List<UserClientLink> userClientLinkList = new ArrayList<>();
+    List<Client1> clientList = new ArrayList<>();
     boolean loading = true;
 
     BaseAdapter adapter = new BaseAdapter() {
         @Override
         public int getCount() {
-            return userClientLinkList.size();
+            return clientList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return userClientLinkList.get(position);
+            return clientList.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return userClientLinkList.get(position).id;
+            return clientList.get(position).id;
         }
 
         @Override
@@ -62,22 +62,22 @@ public class AuthorizedAppActivity extends AppCompatActivity {
                 binding = (ItemClientBinding) convertView.getTag();
             }
 
-            UserClientLink userClientLink = userClientLinkList.get(position);
-            Glide.with(convertView).load(userClientLink.client.iconUrl).into(binding.imageView);
-            String clientName = userClientLink.client.name;
-            String type = "（" + userClientLink.client.type.toLocalizedString() + "）";
-            SpannableString ss = new SpannableString(clientName + type);
+            Client1 client = clientList.get(position);
+            Glide.with(convertView).load(client.iconUrl).into(binding.imageView);
+            String type = "（" + client.type.toLocalizedString() + "）";
+            SpannableString ss = new SpannableString(client.name + type);
             ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray)),
-                    clientName.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new RelativeSizeSpan(0.88f),
-                    clientName.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             binding.nameTextView.setText(ss);
-            binding.createDateTextView.setText("首次登录时间：" + userClientLink.createDate.format(Constants.MY_FORMATTER));
-            if (userClientLink.lastLoginDate == null) {
-                binding.lastLoginDateTextView.setText("最近登录时间：-");
-            } else {
-                binding.lastLoginDateTextView.setText("最近登录时间：" + userClientLink.lastLoginDate.format(Constants.MY_FORMATTER));
-            }
+            binding.createDateTextView.setText("首次登录时间：" + client.firstLoginDate.format(Constants.MY_FORMATTER));
+            binding.lastLoginDateTextView.setText("最近登录时间：" +
+                    (client.lastLoginDate == null ? "-" : client.lastLoginDate.format(Constants.MY_FORMATTER)));
+            binding.lastLoginLocationTextView.setText("最近登录地点：" +
+                    (TextUtils.isEmpty(client.lastLoginLocation) ? "-" : client.lastLoginLocation));
+            binding.lastLoginIpTextView.setText("最近登录IP：" +
+                    (TextUtils.isEmpty(client.lastLoginIp) ? "-" : client.lastLoginIp));
 
             return convertView;
         }
@@ -106,9 +106,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
             if (p < 0) return;
 
             new MaterialAlertDialogBuilder(AuthorizedAppActivity.this, R.style.MyAlertDialog)
-                    .setItems(new String[]{"取消授权"}, (dialog, which) -> {
-                        onDialogItemClick(which, p);
-                    }).show();
+                    .setItems(new String[]{"取消授权"}, (dialog, which) -> onDialogItemClick(which, p)).show();
         });
     }
 
@@ -118,15 +116,15 @@ public class AuthorizedAppActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/user-clients", (c, s) -> {
-            JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, UserClientLink.class);
-            userClientLinkList = Utils.objectMapper.readValue(s, type);
+        HttpUtil.get("app/clients/by-user-link", (c, s) -> {
+            JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Client1.class);
+            clientList = Utils.objectMapper.readValue(s, type);
             // 过滤掉唯ID的应用
-            userClientLinkList = userClientLinkList.stream()
-                    .filter((userClientLink -> !userClientLink.client.name.startsWith("唯ID")))
+            clientList = clientList.stream()
+                    .filter((client -> !client.name.startsWith("唯ID")))
                     .collect(Collectors.toList());
 
-            if (userClientLinkList.isEmpty()) binding.emptyView.getRoot().setVisibility(View.VISIBLE);
+            if (clientList.isEmpty()) binding.emptyView.getRoot().setVisibility(View.VISIBLE);
             else binding.listView.setVisibility(View.VISIBLE);
 
             binding.progressBar.setVisibility(View.GONE);
@@ -136,9 +134,8 @@ public class AuthorizedAppActivity extends AppCompatActivity {
     }
 
     void onDialogItemClick(int which, int position) {
-        Client client = userClientLinkList.get(position).client;
         Utils.showLoadingDialog(this);
-        HttpUtil.delete("app/user-client-links/" + client.id, (c, s) -> {
+        HttpUtil.delete("app/user-client-links/" + clientList.get(position).id, (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已取消授权", Toast.LENGTH_SHORT);
             initData();

@@ -86,7 +86,7 @@ public class UpdateUtil {
     }
 
     void downloadPackage() {
-        Utils.showToast("开始下载，下载完成会自动开始安装", Toast.LENGTH_LONG);
+        Utils.showToast("开始下载，稍后会自动开始安装", Toast.LENGTH_LONG);
 
         File file = new File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), APK_NAME);
         if (file.exists()) file.delete();
