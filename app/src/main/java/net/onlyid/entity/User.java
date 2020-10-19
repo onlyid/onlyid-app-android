@@ -1,12 +1,6 @@
 package net.onlyid.entity;
 
-import androidx.annotation.NonNull;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
-
-import net.onlyid.Constants;
 
 public class User {
     public enum Gender {
@@ -31,9 +25,7 @@ public class User {
     public String mobile;
     public String email;
     public Gender gender;
-    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     public LocalDateTime createDate;
-    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     public LocalDateTime updatePasswordDate;
     public String description;
     public Integer creator;
