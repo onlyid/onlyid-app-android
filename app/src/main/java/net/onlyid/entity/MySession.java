@@ -6,7 +6,7 @@ import net.onlyid.Constants;
 
 import java.time.LocalDateTime;
 
-public class Session {
+public class MySession {
     public enum Platform {
         ANDROID, IOS
     }

@@ -24,11 +24,10 @@ import net.onlyid.R;
 import net.onlyid.databinding.ActivityTrustedDeviceBinding;
 import net.onlyid.databinding.GroupSessionBinding;
 import net.onlyid.databinding.ItemSessionBinding;
-import net.onlyid.entity.Session;
+import net.onlyid.entity.MySession;
 import net.onlyid.util.HttpUtil;
 import net.onlyid.util.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ import java.util.stream.Collectors;
 public class TrustedDeviceActivity extends AppCompatActivity {
     static final String TAG = TrustedDeviceActivity.class.getSimpleName();
     ActivityTrustedDeviceBinding binding;
-    List<Session> browserSessionList = new ArrayList<>();
-    List<Session> deviceSessionList = new ArrayList<>();
+    List<MySession> browserSessionList = new ArrayList<>();
+    List<MySession> deviceSessionList = new ArrayList<>();
     boolean loading = true;
 
     BaseExpandableListAdapter adapter = new BaseExpandableListAdapter() {
@@ -116,7 +115,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
                 binding = (ItemSessionBinding) convertView.getTag();
             }
 
-            Session session;
+            MySession session;
             int drawable;
             if (groupPosition == 0) {
                 session = browserSessionList.get(childPosition);
@@ -157,7 +156,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             } else {
                 session = deviceSessionList.get(childPosition);
 
-                if (session.platform.equals(Session.Platform.ANDROID)) {
+                if (session.platform.equals(MySession.Platform.ANDROID)) {
                     drawable = R.drawable.device_android;
                 } else {
                     drawable = R.drawable.device_apple;
@@ -220,14 +219,14 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/sessions", (c, s) -> {
-            JavaType sessionListType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Session.class);
-            List<Session> sessionList = Utils.objectMapper.readValue(s, sessionListType);
-            browserSessionList = sessionList.stream()
-                    .filter((session) -> !TextUtils.isEmpty(session.userAgent))
+        HttpUtil.get("app/my-sessions", (c, s) -> {
+            JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, MySession.class);
+            List<MySession> mySessionList = Utils.objectMapper.readValue(s, javaType);
+            browserSessionList = mySessionList.stream()
+                    .filter((mySession) -> !TextUtils.isEmpty(mySession.userAgent))
                     .collect(Collectors.toList());
-            deviceSessionList = sessionList.stream()
-                    .filter((session -> !TextUtils.isEmpty(session.deviceId)))
+            deviceSessionList = mySessionList.stream()
+                    .filter((mySession -> !TextUtils.isEmpty(mySession.deviceId)))
                     .collect(Collectors.toList());
 
             binding.expandableListView.setVisibility(View.VISIBLE);
@@ -249,7 +248,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
     }
 
     void onDialogItemClick(int which, int groupPosition, int childPosition) {
-        Session session;
+        MySession session;
         if (groupPosition == 0) session = browserSessionList.get(childPosition);
         else session = deviceSessionList.get(childPosition);
 
@@ -275,14 +274,8 @@ public class TrustedDeviceActivity extends AppCompatActivity {
     }
 
     void invalidateSession(String sessionId, boolean logout) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("sessionId", sessionId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/sessions/invalidate", jsonObject, (c, s) -> {
+        HttpUtil.post("app/my-sessions/" + sessionId + "/invalidate", new JSONObject(), (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已退出登录", Toast.LENGTH_SHORT);
             if (logout) {

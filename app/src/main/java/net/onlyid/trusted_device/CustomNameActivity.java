@@ -51,7 +51,7 @@ public class CustomNameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/sessions/custom-name", jsonObject, (c, s) -> {
+        HttpUtil.post("app/my-sessions/custom-name", jsonObject, (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已保存", Toast.LENGTH_SHORT);
             setResult(RESULT_OK);
