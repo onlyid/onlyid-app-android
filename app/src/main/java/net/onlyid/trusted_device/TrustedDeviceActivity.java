@@ -173,11 +173,11 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             }
 
             binding.deviceImageView.setImageResource(drawable);
-            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastActiveDate.format(Constants.MY_FORMATTER));
+            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastActiveDate.format(Constants.DATE_TIME_FORMATTER));
             binding.lastActiveLocationTextView.setText("最近活跃地点：" +
                     (TextUtils.isEmpty(session.lastActiveLocation) ? "-" : session.lastActiveLocation));
             binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastActiveIp) ? "-" : session.lastActiveIp));
-            binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.MY_FORMATTER));
+            binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.DATE_TIME_FORMATTER));
 
             return convertView;
         }

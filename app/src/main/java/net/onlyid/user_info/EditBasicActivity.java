@@ -20,7 +20,6 @@ import net.onlyid.entity.User;
 import net.onlyid.util.HttpUtil;
 import net.onlyid.util.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EditBasicActivity extends AppCompatActivity {
@@ -57,23 +56,11 @@ public class EditBasicActivity extends AppCompatActivity {
                 binding.nicknameInput.getEditText().setText(user.nickname);
                 actionBar.setTitle("修改昵称");
                 break;
-            case "gender":
-                binding.tipTextView.setText("选择你的性别。");
-                binding.genderRadioGroup.setVisibility(View.VISIBLE);
-                actionBar.setTitle("修改性别");
-                if (user.gender != null) {
-                    switch (user.gender) {
-                        case MALE:
-                            binding.genderRadioGroup.check(R.id.male);
-                            break;
-                        case FEMALE:
-                            binding.genderRadioGroup.check(R.id.female);
-                            break;
-                        case OTHER:
-                            binding.genderRadioGroup.check(R.id.other);
-                            break;
-                    }
-                }
+            case "bio":
+                binding.tipTextView.setText("填写个人简介，让大家了解你。");
+                binding.bioInput.setVisibility(View.VISIBLE);
+                binding.bioInput.getEditText().setText(user.bio);
+                actionBar.setTitle("修改简介");
                 break;
         }
     }
@@ -107,12 +94,8 @@ public class EditBasicActivity extends AppCompatActivity {
                     return;
                 }
                 break;
-            case "gender":
-                int checkedId = binding.genderRadioGroup.getCheckedRadioButtonId();
-                if (checkedId == -1) {
-                    Utils.showAlertDialog(this, "请选择一项");
-                    return;
-                }
+            case "bio":
+                // do nothing
                 break;
         }
 
@@ -120,38 +103,24 @@ public class EditBasicActivity extends AppCompatActivity {
     }
 
     void submit() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("type", type);
-            switch (type) {
-                case "nickname":
-                    String nickname = binding.nicknameInput.getEditText().getText().toString();
-                    jsonObject.put("value", nickname);
-                    break;
-                case "gender":
-                    User.Gender gender;
-                    switch (binding.genderRadioGroup.getCheckedRadioButtonId()) {
-                        case R.id.male:
-                            gender = User.Gender.MALE;
-                            break;
-                        case R.id.female:
-                            gender = User.Gender.FEMALE;
-                            break;
-                        default:
-                            gender = User.Gender.OTHER;
-                            break;
-                    }
-                    jsonObject.put("value", gender.toString());
-                    break;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        switch (type) {
+            case "nickname":
+                user.nickname = binding.nicknameInput.getEditText().getText().toString();
+                break;
+            case "bio":
+                user.bio = binding.bioInput.getEditText().getText().toString();
+                break;
         }
         Utils.showLoadingDialog(this);
-        HttpUtil.put("app/user", jsonObject, (c, s) -> {
-            Utils.loadingDialog.dismiss();
-            Utils.showToast("已保存", Toast.LENGTH_SHORT);
-            finish();
-        });
+        try {
+            JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
+            HttpUtil.put("app/user", jsonObject, (c, s) -> {
+                Utils.loadingDialog.dismiss();
+                Utils.showToast("已保存", Toast.LENGTH_SHORT);
+                finish();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

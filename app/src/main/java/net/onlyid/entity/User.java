@@ -1,5 +1,6 @@
 package net.onlyid.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class User {
@@ -25,8 +26,10 @@ public class User {
     public String mobile;
     public String email;
     public Gender gender;
+    public LocalDate birthday;
+    public String location;
+    public String bio;
     public LocalDateTime createDate;
     public LocalDateTime updatePasswordDate;
-    public String description;
     public Integer creator;
 }
