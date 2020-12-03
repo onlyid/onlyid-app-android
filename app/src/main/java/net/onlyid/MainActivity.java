@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.onlyid.authorized_app.AuthorizedAppActivity;
@@ -14,15 +15,17 @@ import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
 import net.onlyid.util.HttpUtil;
+import net.onlyid.util.PermissionUtil;
 import net.onlyid.util.UpdateUtil;
 import net.onlyid.util.Utils;
 
 import okhttp3.Call;
 
 public class MainActivity extends AppCompatActivity {
-    static final String TAG = "MainActivity";
+    static final String TAG = MainActivity.class.getSimpleName();
     ActivityMainBinding binding;
     UpdateUtil updateUtil;
+    PermissionUtil permissionUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
         updateUtil = new UpdateUtil(this);
         updateUtil.check();
+
+        permissionUtil = new PermissionUtil(this);
+        permissionUtil.check();
 
         MyApplication.mainActivity = this;
     }
@@ -96,5 +102,10 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         updateUtil.destroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionUtil.onRequestPermissionsResult(requestCode, grantResults);
     }
 }

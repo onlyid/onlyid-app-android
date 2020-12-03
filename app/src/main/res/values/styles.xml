@@ -62,6 +62,7 @@
 
     <style name="MyAlertDialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textSize">@dimen/text1</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="MyAlertDialogBodyText" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
