@@ -9,16 +9,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <!-- 高德定位SDK使用 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".MyApplication"
@@ -31,13 +30,20 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="02919836df23adaee129c306e78d83f5" />
+
         <service android:name="com.amap.api.location.APSService" />
+
+        <activity
+            android:name=".user_info.EditLocationActivity"
+            android:label="选择地区"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".OAuthActivity"
             android:exported="true"
             android:theme="@style/OAuthActivityTheme">
             <intent-filter>
                 <action android:name="net.onlyid.OAUTH_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

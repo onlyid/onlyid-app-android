@@ -161,7 +161,8 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     public void location(View v) {
-
+        Intent intent = new Intent(this, EditLocationActivity.class);
+        startActivity(intent);
     }
 
     public void bio(View v) {
