@@ -47,7 +47,7 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     void init() {
-        binding.otpInput1.getRecipient = () -> {
+        binding.otpInput1.getParams = () -> {
             String account = binding.accountInput.getEditText().getText().toString();
             return validateAccount(account) ? account : null;
         };
@@ -74,6 +74,7 @@ public class EditAccountActivity extends AppCompatActivity {
                     binding.accountInput.setHint("新手机号");
                 }
                 binding.accountInput.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+                binding.otpInput1.updateField = "手机号";
                 actionBar.setTitle("修改手机号");
                 break;
             case "email":
@@ -89,6 +90,7 @@ public class EditAccountActivity extends AppCompatActivity {
                     binding.accountInput.setHint("新邮箱");
                 }
                 binding.accountInput.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                binding.otpInput1.updateField = "邮箱";
                 actionBar.setTitle("修改邮箱");
                 break;
         }

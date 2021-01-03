@@ -17,7 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OtpInput extends RelativeLayout {
-    public GetRecipient getRecipient;
+    public GetParams getParams;
+    public String updateField;
     InputOtpBinding binding;
 
     public OtpInput(Context context, @Nullable AttributeSet attrs) {
@@ -25,12 +26,13 @@ public class OtpInput extends RelativeLayout {
         binding = InputOtpBinding.inflate(LayoutInflater.from(context), this);
 
         binding.sendButton.setOnClickListener((v) -> {
-            String recipient = getRecipient.getRecipient();
+            String recipient = getParams.recipient();
             if (TextUtils.isEmpty(recipient)) return;
 
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("recipient", recipient);
+                jsonObject.put("updateField", updateField);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -52,8 +54,8 @@ public class OtpInput extends RelativeLayout {
         });
     }
 
-    public interface GetRecipient {
-        String getRecipient();
+    public interface GetParams {
+        String recipient();
     }
 
     public String getOtp() {

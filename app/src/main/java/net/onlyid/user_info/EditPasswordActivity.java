@@ -51,7 +51,8 @@ public class EditPasswordActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(user.mobile)) recipient = user.email;
         else recipient = user.mobile;
 
-        binding.otpInput1.getRecipient = () -> recipient;
+        binding.otpInput1.getParams = () -> recipient;
+        binding.otpInput1.updateField = "密码";
 
         SpannableString ss = new SpannableString("将发送验证码到 " + recipient + " 以重设密码。");
         ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 8, 8 + recipient.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
