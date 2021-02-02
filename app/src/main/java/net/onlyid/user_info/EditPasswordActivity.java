@@ -114,7 +114,7 @@ public class EditPasswordActivity extends AppCompatActivity {
         try {
             jsonObject.put("password", binding.passwordInput.getEditText().getText().toString());
             jsonObject.put("otp", binding.otpInput1.getOtp());
-            jsonObject.put("accountName", recipient);
+            jsonObject.put("account", recipient);
         } catch (JSONException e) {
             e.printStackTrace();
         }

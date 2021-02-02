@@ -127,7 +127,7 @@ public class EditAccountActivity extends AppCompatActivity {
         try {
             jsonObject.put("type", type);
             jsonObject.put("otp", otp);
-            jsonObject.put("accountName", account);
+            jsonObject.put("account", account);
         } catch (JSONException e) {
             e.printStackTrace();
         }
