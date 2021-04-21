@@ -1,6 +1,7 @@
 package net.onlyid.user_info;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -69,7 +70,11 @@ public class EditLocationActivity extends AppCompatActivity {
     }
 
     void submit(String location) {
-        user.location = location;
+        if (!TextUtils.isEmpty(location)) {
+            String[] arr = location.split(" ");
+            user.province = arr[0];
+            user.city = arr[1];
+        }
 
         Utils.showLoadingDialog(this);
         try {

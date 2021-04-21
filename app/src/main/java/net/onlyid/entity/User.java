@@ -19,17 +19,16 @@ public class User {
         }
     }
 
-    public Integer id;
-    public String uid;
+    public String id;
     public String avatarUrl;
     public String nickname;
     public String mobile;
     public String email;
     public Gender gender;
-    public LocalDate birthday;
-    public String location;
+    public LocalDate birthDate;
+    public String province;
+    public String city;
     public String bio;
     public LocalDateTime createDate;
     public LocalDateTime updatePasswordDate;
-    public Integer creator;
 }

@@ -41,7 +41,7 @@ public class UpdateUtil {
     }
 
     public void check() {
-        HttpUtil.get("android-version", (c, s) -> {
+        HttpUtil.get("app/android-version", (c, s) -> {
             JSONObject jsonObject = new JSONObject(s);
             current = jsonObject.getInt("current");
             oldest = jsonObject.getInt("oldest");

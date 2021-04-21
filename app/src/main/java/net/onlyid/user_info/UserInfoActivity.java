@@ -55,8 +55,8 @@ public class UserInfoActivity extends AppCompatActivity {
             binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
             binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
             binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
-            binding.birthdayTextView.setText(user.birthday == null ? "点击设置" : user.birthday.format(Constants.DATE_FORMATTER));
-            binding.locationTextView.setText(TextUtils.isEmpty(user.location) ? "点击设置" : TextUtils.join("-", user.location.split(" ")));
+            binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(Constants.DATE_FORMATTER));
+            binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
             binding.bioTextView.setText(TextUtils.isEmpty(user.bio) ? "点击设置" : user.bio);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -145,13 +145,13 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     public void birthday(View v) {
-        LocalDate localDate = user.birthday == null ? LocalDate.now() : user.birthday;
+        LocalDate localDate = user.birthDate == null ? LocalDate.now() : user.birthDate;
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.MyDatePickerDialog,  (view, year, month, dayOfMonth) -> {
-            user.birthday = LocalDate.of(year, month + 1, dayOfMonth);
+            user.birthDate = LocalDate.of(year, month + 1, dayOfMonth);
             submit();
         }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());
         datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "暂不设置", (dialog, which) -> {
-            user.birthday = null;
+            user.birthDate = null;
             submit();
         });
         LocalDateTime min = LocalDateTime.of(1900, 1, 1, 0, 0);

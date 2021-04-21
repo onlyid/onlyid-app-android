@@ -50,7 +50,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            return clientList.get(position).id;
+            return position;
         }
 
         @Override

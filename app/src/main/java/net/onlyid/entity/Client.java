@@ -20,12 +20,11 @@ public class Client implements Serializable {
         }
     }
 
-    public Integer id;
-    public String uid;
+    public String id;
     public String iconUrl;
     public String name;
     public Type type;
-    public Integer tenant;
+    public String tenant;
     public List<String> redirectUris;
     public LocalDateTime createDate;
     public String description;

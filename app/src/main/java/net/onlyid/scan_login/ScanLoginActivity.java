@@ -207,7 +207,7 @@ public class ScanLoginActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        HttpUtil.post("oauth/scan-login-result", jsonObject, (c, s) -> {
+        HttpUtil.post("app/scan-login", jsonObject, (c, s) -> {
             activity.finish();
         });
     }
