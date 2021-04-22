@@ -73,13 +73,13 @@ public class AuthorizedAppActivity extends AppCompatActivity {
             ss.setSpan(new RelativeSizeSpan(0.88f),
                     client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             binding.nameTextView.setText(ss);
-            binding.createDateTextView.setText("首次登录时间：" + client.firstLoginDate.format(Constants.DATE_TIME_FORMATTER));
+            binding.createDateTextView.setText("首次登录时间：" + client.firstDate.format(Constants.DATE_TIME_FORMATTER));
             binding.lastLoginDateTextView.setText("最近登录时间：" +
-                    (client.lastLoginDate == null ? "-" : client.lastLoginDate.format(Constants.DATE_TIME_FORMATTER)));
+                    (client.lastDate == null ? "-" : client.lastDate.format(Constants.DATE_TIME_FORMATTER)));
             binding.lastLoginLocationTextView.setText("最近登录地点：" +
-                    (TextUtils.isEmpty(client.lastLoginLocation) ? "-" : client.lastLoginLocation));
+                    (TextUtils.isEmpty(client.lastLocation) ? "-" : client.lastLocation));
             binding.lastLoginIpTextView.setText("最近登录IP：" +
-                    (TextUtils.isEmpty(client.lastLoginIp) ? "-" : client.lastLoginIp));
+                    (TextUtils.isEmpty(client.lastIp) ? "-" : client.lastIp));
 
             return convertView;
         }
@@ -118,7 +118,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/clients/by-user-link", (c, s) -> {
+        HttpUtil.get("app/clients/by-user", (c, s) -> {
             JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Client1.class);
             clientList = Utils.objectMapper.readValue(s, type);
             // 过滤掉唯ID的应用

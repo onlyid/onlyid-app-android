@@ -1,9 +1,12 @@
 package net.onlyid.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Client implements Serializable {
     public enum Type {
         APP, WEB, OTHER;

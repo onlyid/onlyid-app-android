@@ -8,7 +8,7 @@ public class MySession {
     }
 
     public String sessionId;
-    public Integer userId;
+    public String userId;
     public LocalDateTime expireDate;
     public String deviceName;
     public String deviceId;
