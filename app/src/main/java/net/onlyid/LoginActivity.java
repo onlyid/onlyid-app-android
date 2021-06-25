@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                 jsonObject.put("code", code);
                 jsonObject.put("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 jsonObject.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
-                jsonObject.put("platform", "ANDROID");
+                jsonObject.put("type", "ANDROID");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

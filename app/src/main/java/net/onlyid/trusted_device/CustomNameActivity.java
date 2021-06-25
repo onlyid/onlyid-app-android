@@ -46,12 +46,12 @@ public class CustomNameActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("sessionId", sessionId);
-            jsonObject.put("customName", customName);
+            jsonObject.put("deviceName", customName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/my-sessions/custom-name", jsonObject, (c, s) -> {
+        HttpUtil.post("app/devices/rename", jsonObject, (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已保存", Toast.LENGTH_SHORT);
             setResult(RESULT_OK);

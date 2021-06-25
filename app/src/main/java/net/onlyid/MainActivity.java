@@ -19,6 +19,8 @@ import net.onlyid.util.PermissionUtil;
 import net.onlyid.util.UpdateUtil;
 import net.onlyid.util.Utils;
 
+import org.json.JSONObject;
+
 import okhttp3.Call;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Call c, String s) {
                 Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
+                updateSessionAndDeviceLink();
             }
 
             @Override
@@ -67,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+    }
+
+    void updateSessionAndDeviceLink() {
+        HttpUtil.put("app/session-and-device-link", new JSONObject(), new HttpUtil.MyCallback() {
+            @Override
+            public void onSuccess(Call c, String s) {
+            }
+
+            @Override
+            public boolean onResponseFailure(Call c, int code, String s) {
+                return true;
             }
         });
     }

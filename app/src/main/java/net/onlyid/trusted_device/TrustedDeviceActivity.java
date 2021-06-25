@@ -24,7 +24,7 @@ import net.onlyid.R;
 import net.onlyid.databinding.ActivityTrustedDeviceBinding;
 import net.onlyid.databinding.GroupSessionBinding;
 import net.onlyid.databinding.ItemSessionBinding;
-import net.onlyid.entity.MySession;
+import net.onlyid.entity.Device;
 import net.onlyid.util.HttpUtil;
 import net.onlyid.util.Utils;
 
@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 public class TrustedDeviceActivity extends AppCompatActivity {
     static final String TAG = TrustedDeviceActivity.class.getSimpleName();
     ActivityTrustedDeviceBinding binding;
-    List<MySession> browserSessionList = new ArrayList<>();
-    List<MySession> deviceSessionList = new ArrayList<>();
+    List<Device> browserSessionList = new ArrayList<>();
+    List<Device> deviceSessionList = new ArrayList<>();
     boolean loading = true;
 
     BaseExpandableListAdapter adapter = new BaseExpandableListAdapter() {
@@ -93,11 +93,11 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             }
 
             if (groupPosition == 0) {
-                binding.textView.setText("保持登录的浏览器");
+                binding.textView.setText("我的浏览器");
                 if (browserSessionList.isEmpty()) binding.emptyView.setVisibility(View.VISIBLE);
                 else binding.emptyView.setVisibility(View.GONE);
             } else {
-                binding.textView.setText("保持登录的手机");
+                binding.textView.setText("我的手机");
                 binding.emptyView.setVisibility(View.GONE);
             }
 
@@ -115,7 +115,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
                 binding = (ItemSessionBinding) convertView.getTag();
             }
 
-            MySession session;
+            Device session;
             int drawable;
             if (groupPosition == 0) {
                 session = browserSessionList.get(childPosition);
@@ -148,22 +148,22 @@ public class TrustedDeviceActivity extends AppCompatActivity {
                     drawable = R.drawable.browser_unkown;
                 }
 
-                if (!TextUtils.isEmpty(session.customName)) {
-                    binding.deviceTextView.setText(session.customName);
+                if (!TextUtils.isEmpty(session.userDeviceName)) {
+                    binding.deviceTextView.setText(session.userDeviceName);
                 } else {
                     binding.deviceTextView.setText(osName + " 上的 " + browserName);
                 }
             } else {
                 session = deviceSessionList.get(childPosition);
 
-                if (session.platform.equals(MySession.Platform.ANDROID)) {
+                if (session.type.equals(Device.Type.ANDROID)) {
                     drawable = R.drawable.device_android;
                 } else {
                     drawable = R.drawable.device_apple;
                 }
 
                 String text;
-                if (!TextUtils.isEmpty(session.customName)) text = session.customName;
+                if (!TextUtils.isEmpty(session.userDeviceName)) text = session.userDeviceName;
                 else text = session.deviceName;
 
                 if (Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).equals(session.deviceId))
@@ -173,10 +173,10 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             }
 
             binding.deviceImageView.setImageResource(drawable);
-            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastActiveDate.format(Constants.DATE_TIME_FORMATTER));
+            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastDate.format(Constants.DATE_TIME_FORMATTER));
             binding.lastActiveLocationTextView.setText("最近活跃地点：" +
-                    (TextUtils.isEmpty(session.lastActiveLocation) ? "-" : session.lastActiveLocation));
-            binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastActiveIp) ? "-" : session.lastActiveIp));
+                    (TextUtils.isEmpty(session.lastLocation) ? "-" : session.lastLocation));
+            binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastIp) ? "-" : session.lastIp));
             binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.DATE_TIME_FORMATTER));
 
             return convertView;
@@ -219,14 +219,14 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/my-sessions", (c, s) -> {
-            JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, MySession.class);
-            List<MySession> mySessionList = Utils.objectMapper.readValue(s, javaType);
-            browserSessionList = mySessionList.stream()
-                    .filter((mySession) -> !TextUtils.isEmpty(mySession.userAgent))
+        HttpUtil.get("app/devices/by-user", (c, s) -> {
+            JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Device.class);
+            List<Device> list = Utils.objectMapper.readValue(s, javaType);
+            browserSessionList = list.stream()
+                    .filter((device) -> !TextUtils.isEmpty(device.userAgent))
                     .collect(Collectors.toList());
-            deviceSessionList = mySessionList.stream()
-                    .filter((mySession -> !TextUtils.isEmpty(mySession.deviceId)))
+            deviceSessionList = list.stream()
+                    .filter((device -> !TextUtils.isEmpty(device.deviceId)))
                     .collect(Collectors.toList());
 
             binding.expandableListView.setVisibility(View.VISIBLE);
@@ -248,14 +248,14 @@ public class TrustedDeviceActivity extends AppCompatActivity {
     }
 
     void onDialogItemClick(int which, int groupPosition, int childPosition) {
-        MySession session;
+        Device session;
         if (groupPosition == 0) session = browserSessionList.get(childPosition);
         else session = deviceSessionList.get(childPosition);
 
         if (which == 0) {
             Intent intent = new Intent(TrustedDeviceActivity.this, CustomNameActivity.class);
             intent.putExtra("sessionId", session.sessionId);
-            intent.putExtra("customName", session.customName);
+            intent.putExtra("customName", session.userDeviceName);
             startActivityForResult(intent, 1);
         } else {
             // 退出当前设备，二次确认
@@ -275,7 +275,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
 
     void invalidateSession(String sessionId, boolean logout) {
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/my-sessions/" + sessionId + "/invalidate", new JSONObject(), (c, s) -> {
+        HttpUtil.post("app/devices/" + sessionId + "/logout", new JSONObject(), (c, s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已退出登录", Toast.LENGTH_SHORT);
             if (logout) {
