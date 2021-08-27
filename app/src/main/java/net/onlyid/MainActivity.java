@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     }
-                }, 1000, 1000);
+                }, 1000, 5000);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
