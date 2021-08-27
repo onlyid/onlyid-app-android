@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.otpTextView.setText(otp.code);
                 Glide.with(this).load(otp.clientIconUrl).into(binding.iconImageView);
                 binding.otpProgressBar.setProgress(100);
-                long duration = Duration.between(LocalDateTime.now(), otp.expireDate).toMillis();
+                long duration = Duration.between(otp.createDate, otp.expireDate).toMillis();
 
                 // 更新有效期进度条
                 CountDownTimer countDownTimer = new CountDownTimer(duration, 100) {
