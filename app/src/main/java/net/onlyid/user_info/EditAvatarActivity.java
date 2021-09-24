@@ -169,7 +169,7 @@ public class EditAvatarActivity extends AppCompatActivity {
                     .addFormDataPart("file", null, RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
             Utils.showLoadingDialog(this);
-            HttpUtil.post("img", requestBody, (c, s) -> {
+            HttpUtil.post("app/image", requestBody, (c, s) -> {
                 HttpUtil.put("app/user/avatar", new JSONObject(s), (c1, s1) -> {
                     Utils.loadingDialog.dismiss();
                     Utils.showToast("已保存", Toast.LENGTH_SHORT);
