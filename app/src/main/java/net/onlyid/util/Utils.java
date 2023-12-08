@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
@@ -36,9 +34,6 @@ public class Utils {
 
     public static void showToast(String message, int duration) {
         Toast toast = Toast.makeText(MyApplication.context, message, duration);
-        ViewGroup viewGroup = (ViewGroup) toast.getView();
-        TextView textView = (TextView) viewGroup.getChildAt(0);
-        textView.setTextSize(15);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
