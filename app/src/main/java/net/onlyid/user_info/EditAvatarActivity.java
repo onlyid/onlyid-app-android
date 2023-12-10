@@ -1,6 +1,8 @@
 package net.onlyid.user_info;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -46,6 +50,10 @@ import okhttp3.RequestBody;
 
 public class EditAvatarActivity extends AppCompatActivity {
     static final String TAG = "AvatarActivity";
+    static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+    };
+
     ActivityEditAvatarBinding binding;
     Uri captureUri;
 
@@ -139,11 +147,32 @@ public class EditAvatarActivity extends AppCompatActivity {
     }
 
     void capture() {
+        for (String permission : PERMISSIONS) {
+            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, permission)) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS, 1);
+                return;
+            }
+        }
+
         File file = new File(getExternalCacheDir(), "avatar");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         captureUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
         startActivityForResult(intent, 2);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != 1) return;
+
+        for (int result : grantResults) {
+            if (PackageManager.PERMISSION_GRANTED != result) {
+                Utils.showAlertDialog(this, "你禁止了相机权限，拍照功能不可用");
+                return;
+            }
+        }
+
+        capture();
     }
 
     void crop(Uri uri) {
