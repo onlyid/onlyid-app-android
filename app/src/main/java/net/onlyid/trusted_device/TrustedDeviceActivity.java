@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 public class TrustedDeviceActivity extends AppCompatActivity {
     static final String TAG = TrustedDeviceActivity.class.getSimpleName();
     ActivityTrustedDeviceBinding binding;
-    List<Device> browserSessionList = new ArrayList<>();
     List<Device> deviceSessionList = new ArrayList<>();
     boolean loading = true;
 
@@ -45,25 +44,22 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         @Override
         public int getGroupCount() {
             if (loading) return 0;
-            else return 2;
+            else return 1;
         }
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            if (groupPosition == 0) return browserSessionList.size();
-            else return deviceSessionList.size();
+            return deviceSessionList.size();
         }
 
         @Override
         public Object getGroup(int groupPosition) {
-            if (groupPosition == 0) return browserSessionList;
-            else return deviceSessionList;
+            return deviceSessionList;
         }
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            if (groupPosition == 0) return browserSessionList.get(childPosition);
-            else return deviceSessionList.get(childPosition);
+            return deviceSessionList.get(childPosition);
         }
 
         @Override
@@ -92,14 +88,8 @@ public class TrustedDeviceActivity extends AppCompatActivity {
                 binding = (GroupSessionBinding) convertView.getTag();
             }
 
-            if (groupPosition == 0) {
-                binding.textView.setText("我的浏览器");
-                if (browserSessionList.isEmpty()) binding.emptyView.setVisibility(View.VISIBLE);
-                else binding.emptyView.setVisibility(View.GONE);
-            } else {
-                binding.textView.setText("我的手机");
-                binding.emptyView.setVisibility(View.GONE);
-            }
+            binding.textView.setText("我的手机");
+            binding.emptyView.setVisibility(View.GONE);
 
             return convertView;
         }
@@ -117,60 +107,22 @@ public class TrustedDeviceActivity extends AppCompatActivity {
 
             Device session;
             int drawable;
-            if (groupPosition == 0) {
-                session = browserSessionList.get(childPosition);
+            session = deviceSessionList.get(childPosition);
 
-                String osName, browserName;
-                if (session.userAgent.contains("Windows")) osName = "Windows";
-                else if (session.userAgent.contains("Mac OS X")) osName = "macOS";
-                else if (session.userAgent.contains("Android")) osName = "Android";
-                else if (session.userAgent.contains("iPhone OS")) osName = "iOS";
-                else if (session.userAgent.contains("Linux")) osName = "Linux";
-                else osName = "未知系统";
-
-                if (session.userAgent.contains("Edg")) {
-                    browserName = "Edge";
-                    drawable = R.drawable.browser_edge;
-                } else if (session.userAgent.contains("Chrome")) {
-                    browserName = "Chrome";
-                    drawable = R.drawable.browser_chrome;
-                } else if (session.userAgent.contains("Safari")) {
-                    browserName = "Safari";
-                    drawable = R.drawable.browser_safari;
-                } else if (session.userAgent.contains("Firefox")) {
-                    browserName = "Firefox";
-                    drawable = R.drawable.browser_firefox;
-                } else if (session.userAgent.contains("Trident")) {
-                    browserName = "Internet Explorer";
-                    drawable = R.drawable.browser_explorer;
-                } else {
-                    browserName = "未知浏览器";
-                    drawable = R.drawable.browser_unkown;
-                }
-
-                if (!TextUtils.isEmpty(session.userDeviceName)) {
-                    binding.deviceTextView.setText(session.userDeviceName);
-                } else {
-                    binding.deviceTextView.setText(osName + " 上的 " + browserName);
-                }
+            if (session.type.equals(Device.Type.ANDROID)) {
+                drawable = R.drawable.device_android;
             } else {
-                session = deviceSessionList.get(childPosition);
-
-                if (session.type.equals(Device.Type.ANDROID)) {
-                    drawable = R.drawable.device_android;
-                } else {
-                    drawable = R.drawable.device_apple;
-                }
-
-                String text;
-                if (!TextUtils.isEmpty(session.userDeviceName)) text = session.userDeviceName;
-                else text = session.deviceName;
-
-                if (Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).equals(session.deviceId))
-                    text += "（本机）";
-
-                binding.deviceTextView.setText(text);
+                drawable = R.drawable.device_apple;
             }
+
+            String text;
+            if (!TextUtils.isEmpty(session.userDeviceName)) text = session.userDeviceName;
+            else text = session.deviceName;
+
+            if (Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).equals(session.deviceId))
+                text += "（本机）";
+
+            binding.deviceTextView.setText(text);
 
             binding.deviceImageView.setImageResource(drawable);
             binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastDate.format(Constants.DATE_TIME_FORMATTER));
@@ -222,9 +174,6 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         HttpUtil.get("app/devices/by-user", (c, s) -> {
             JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Device.class);
             List<Device> list = Utils.objectMapper.readValue(s, javaType);
-            browserSessionList = list.stream()
-                    .filter((device) -> !TextUtils.isEmpty(device.userAgent))
-                    .collect(Collectors.toList());
             deviceSessionList = list.stream()
                     .filter((device -> !TextUtils.isEmpty(device.deviceId)))
                     .collect(Collectors.toList());
@@ -233,7 +182,6 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             binding.progressBar.setVisibility(View.GONE);
             loading = false;
             binding.expandableListView.expandGroup(0);
-            binding.expandableListView.expandGroup(1);
             adapter.notifyDataSetChanged();
         });
     }
@@ -249,8 +197,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
 
     void onDialogItemClick(int which, int groupPosition, int childPosition) {
         Device session;
-        if (groupPosition == 0) session = browserSessionList.get(childPosition);
-        else session = deviceSessionList.get(childPosition);
+        session = deviceSessionList.get(childPosition);
 
         if (which == 0) {
             Intent intent = new Intent(TrustedDeviceActivity.this, CustomNameActivity.class);
@@ -260,7 +207,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         } else {
             // 退出当前设备，二次确认
             String myDeviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            if (groupPosition == 1 && myDeviceId.equals(session.deviceId)) {
+            if (myDeviceId.equals(session.deviceId)) {
                 new MaterialAlertDialogBuilder(this, R.style.MyAlertDialog)
                         .setMessage("要退出当前设备吗？")
                         .setPositiveButton("确定", (d, w) -> {
