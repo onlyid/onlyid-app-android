@@ -139,25 +139,6 @@
 
         <LinearLayout
             style="@style/UserInfoItem"
-            android:onClick="bio">
-
-            <TextView
-                style="@style/UserInfoItemLabel"
-                android:text="简介" />
-
-            <TextView
-                android:id="@+id/bio_text_view"
-                style="@style/UserInfoItemText"
-                android:ellipsize="end"
-                android:singleLine="true" />
-
-            <include layout="@layout/arrow_right" />
-        </LinearLayout>
-
-        <include layout="@layout/list_divider" />
-
-        <LinearLayout
-            style="@style/UserInfoItem"
             android:onClick="password">
 
             <TextView

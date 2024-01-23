@@ -50,14 +50,13 @@ public class UserInfoActivity extends AppCompatActivity {
         String userString = Utils.sharedPreferences.getString(Constants.USER, null);
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
-            Glide.with(this).load(user.avatarUrl).into(binding.avatarImageView);
+            Glide.with(this).load(user.avatar).into(binding.avatarImageView);
             binding.nicknameTextView.setText(user.nickname);
             binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
             binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
             binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
             binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(Constants.DATE_FORMATTER));
             binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
-            binding.bioTextView.setText(TextUtils.isEmpty(user.bio) ? "点击设置" : user.bio);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -162,12 +161,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
     public void location(View v) {
         Intent intent = new Intent(this, EditLocationActivity.class);
-        startActivity(intent);
-    }
-
-    public void bio(View v) {
-        Intent intent = new Intent(this, EditBasicActivity.class);
-        intent.putExtra(TYPE, "bio");
         startActivity(intent);
     }
 

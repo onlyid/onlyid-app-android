@@ -56,12 +56,6 @@ public class EditBasicActivity extends AppCompatActivity {
                 binding.nicknameInput.getEditText().setText(user.nickname);
                 actionBar.setTitle("修改昵称");
                 break;
-            case "bio":
-                binding.tipTextView.setText("填写个人简介，让大家了解你。");
-                binding.bioInput.setVisibility(View.VISIBLE);
-                binding.bioInput.getEditText().setText(user.bio);
-                actionBar.setTitle("修改简介");
-                break;
         }
     }
 
@@ -94,9 +88,6 @@ public class EditBasicActivity extends AppCompatActivity {
                     return;
                 }
                 break;
-            case "bio":
-                // do nothing
-                break;
         }
 
         submit();
@@ -106,9 +97,6 @@ public class EditBasicActivity extends AppCompatActivity {
         switch (type) {
             case "nickname":
                 user.nickname = binding.nicknameInput.getEditText().getText().toString();
-                break;
-            case "bio":
-                user.bio = binding.bioInput.getEditText().getText().toString();
                 break;
         }
         Utils.showLoadingDialog(this);

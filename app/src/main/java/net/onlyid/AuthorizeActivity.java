@@ -43,7 +43,7 @@ public class AuthorizeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Glide.with(this).load(user.avatarUrl).into(binding.avatarImageView);
+        Glide.with(this).load(user.avatar).into(binding.avatarImageView);
         binding.nicknameTextView.setText(user.nickname);
 
         Glide.with(this).load(client.iconUrl).into(binding.iconImageView);

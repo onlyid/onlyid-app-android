@@ -98,7 +98,7 @@ public class EditAvatarActivity extends AppCompatActivity {
         String userString = Utils.sharedPreferences.getString(Constants.USER, null);
         try {
             User user = Utils.objectMapper.readValue(userString, User.class);
-            Glide.with(this).load(user.avatarUrl).listener(new RequestListener<Drawable>() {
+            Glide.with(this).load(user.avatar).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                             Target<Drawable> target, boolean isFirstResource) {

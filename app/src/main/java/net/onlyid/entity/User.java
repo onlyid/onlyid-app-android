@@ -1,7 +1,6 @@
 package net.onlyid.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class User {
     public enum Gender {
@@ -20,7 +19,7 @@ public class User {
     }
 
     public String id;
-    public String avatarUrl;
+    public String avatar;
     public String nickname;
     public String mobile;
     public String email;
@@ -28,7 +27,4 @@ public class User {
     public LocalDate birthDate;
     public String province;
     public String city;
-    public String bio;
-    public LocalDateTime createDate;
-    public LocalDateTime updatePasswordDate;
 }

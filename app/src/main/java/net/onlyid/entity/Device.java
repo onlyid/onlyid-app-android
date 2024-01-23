@@ -10,7 +10,6 @@ public class Device {
     public String sessionId;
     public String deviceId;
     public String deviceName;
-    public String userAgent;
     public Type type;
     public LocalDateTime firstDate;
     public String firstIp;
