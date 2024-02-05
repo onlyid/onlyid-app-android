@@ -3,10 +3,6 @@ package net.onlyid.entity;
 import java.time.LocalDateTime;
 
 public class Otp {
-    public enum Channel {
-        OTP, SSO, PRIVATE
-    }
-
     public Integer id;
     public String recipient;
     public String code;
@@ -16,7 +12,8 @@ public class Otp {
     public Integer maxFailCount;
     public Boolean sendSuccess;
     public Boolean verifySuccess;
-    public Channel channel;
+    public Boolean sso;
+    public Boolean toApp;
     public String clientId;
     public String tenant;
 
