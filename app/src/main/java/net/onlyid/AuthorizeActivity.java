@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
 import net.onlyid.entity.User;
 import net.onlyid.scan_login.ScanLoginActivity;
-import net.onlyid.util.Utils;
 
 public class AuthorizeActivity extends AppCompatActivity {
     static final String TAG = AuthorizeActivity.class.getSimpleName();
@@ -36,7 +36,7 @@ public class AuthorizeActivity extends AppCompatActivity {
 
     void init() {
         client = (Client) getIntent().getSerializableExtra("client");
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        String userString = Utils.pref.getString(Constants.USER, null);
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
         } catch (JsonProcessingException e) {

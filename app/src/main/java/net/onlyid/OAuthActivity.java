@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityOauthBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
@@ -42,7 +42,7 @@ public class OAuthActivity extends AppCompatActivity {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        HttpUtil.get("app/user", new HttpUtil.MyCallback() {
+        MyHttp.get("app/user", new MyHttp.Callback() {
             @Override
             public void onSuccess(Call c, String s) {
                 promptAuthorizeIfNecessary(OAuthActivity.this, config);
@@ -65,7 +65,7 @@ public class OAuthActivity extends AppCompatActivity {
     }
 
     public static void promptAuthorizeIfNecessary(Activity activity, OAuthConfig config) {
-        HttpUtil.get("app/user-client-links/" + config.clientId + "/check", (c, s) -> {
+        MyHttp.get("app/user-client-links/" + config.clientId + "/check", (c, s) -> {
             JSONObject respBody = new JSONObject(s);
             String clientString = respBody.getString("client");
             Client client = Utils.objectMapper.readValue(clientString, Client.class);
@@ -83,7 +83,7 @@ public class OAuthActivity extends AppCompatActivity {
     public static void callback(Activity activity, OAuthConfig config, Client client, boolean result) {
         Intent data = new Intent();
         if (result) {
-            HttpUtil.post("app/authorize-client/" + client.id, new JSONObject(), (c, s) -> {
+            MyHttp.post("app/authorize-client/" + client.id, new JSONObject(), (c, s) -> {
                 JSONObject respBody = new JSONObject(s);
                 String code = respBody.getString("authorizationCode");
                 data.putExtra(EXTRA_CODE, code);

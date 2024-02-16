@@ -21,12 +21,12 @@ import net.onlyid.Constants;
 import net.onlyid.LoginActivity;
 import net.onlyid.MyApplication;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityTrustedDeviceBinding;
 import net.onlyid.databinding.GroupSessionBinding;
 import net.onlyid.databinding.ItemSessionBinding;
 import net.onlyid.entity.Device;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
@@ -171,7 +171,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/devices/by-user", (c, s) -> {
+        MyHttp.get("/devices/by-user", (s) -> {
             JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Device.class);
             List<Device> list = Utils.objectMapper.readValue(s, javaType);
             deviceSessionList = list.stream()
@@ -222,11 +222,11 @@ public class TrustedDeviceActivity extends AppCompatActivity {
 
     void invalidateSession(String sessionId, boolean logout) {
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/devices/" + sessionId + "/logout", new JSONObject(), (c, s) -> {
+        MyHttp.post("/devices/" + sessionId + "/logout", new JSONObject(), (s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已退出登录", Toast.LENGTH_SHORT);
             if (logout) {
-                Utils.sharedPreferences.edit().putString(Constants.USER, null).apply();
+                Utils.pref.edit().putString(Constants.USER, null).apply();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();

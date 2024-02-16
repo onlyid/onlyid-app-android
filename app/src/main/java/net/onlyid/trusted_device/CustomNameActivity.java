@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityCustomNameBinding;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +51,7 @@ public class CustomNameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Utils.showLoadingDialog(this);
-        HttpUtil.post("app/devices/rename", jsonObject, (c, s) -> {
+        MyHttp.post("/devices/rename", jsonObject, (s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已保存", Toast.LENGTH_SHORT);
             setResult(RESULT_OK);

@@ -1,4 +1,4 @@
-package net.onlyid.util;
+package net.onlyid.common;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -41,7 +41,7 @@ public class UpdateUtil {
     }
 
     public void check() {
-        HttpUtil.get("app/android-version", (c, s) -> {
+        MyHttp.get("/android-version", (s) -> {
             JSONObject jsonObject = new JSONObject(s);
             current = jsonObject.getInt("current");
             oldest = jsonObject.getInt("oldest");
@@ -63,7 +63,7 @@ public class UpdateUtil {
                     .setCancelable(false)
                     .show();
         } else if (BuildConfig.VERSION_CODE < current) {
-            if (Utils.sharedPreferences.getInt("silentVersionCode", -1) == current) return;
+            if (Utils.pref.getInt("silentVersionCode", -1) == current) return;
 
             DialogUpdateBinding binding = DialogUpdateBinding.inflate(activity.getLayoutInflater());
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.item_dialog_list, featureList) {
@@ -79,7 +79,7 @@ public class UpdateUtil {
                     .setPositiveButton("更新", (dialog, which) -> downloadPackage())
                     .setNegativeButton("取消", (d, w) -> {
                         if (binding.checkBox.isChecked())
-                            Utils.sharedPreferences.edit().putInt("silentVersionCode", current).apply();
+                            Utils.pref.edit().putInt("silentVersionCode", current).apply();
                     })
                     .show();
         }

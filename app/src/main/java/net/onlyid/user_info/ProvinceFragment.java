@@ -18,9 +18,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 
 import net.onlyid.R;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.FragmentProvinceBinding;
 import net.onlyid.databinding.ItemLocationBinding;
-import net.onlyid.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

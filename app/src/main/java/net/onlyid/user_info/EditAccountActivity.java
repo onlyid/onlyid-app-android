@@ -19,10 +19,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditAccountBinding;
 import net.onlyid.entity.User;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +52,7 @@ public class EditAccountActivity extends AppCompatActivity {
             return validateAccount(account) ? account : null;
         };
 
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        String userString = Utils.pref.getString(Constants.USER, null);
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
         } catch (JsonProcessingException e) {
@@ -132,7 +132,7 @@ public class EditAccountActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Utils.showLoadingDialog(this);
-        HttpUtil.put("app/user/account", jsonObject, (c, s) -> {
+        MyHttp.put("/user/account", jsonObject, (s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已保存", Toast.LENGTH_SHORT);
             finish();

@@ -1,14 +1,11 @@
-package net.onlyid.util;
+package net.onlyid.common;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.widget.Toast;
-
-import androidx.preference.PreferenceManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -22,20 +19,18 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static ObjectMapper objectMapper;
-    public static SharedPreferences sharedPreferences;
+    public static final SharedPreferences pref;
     public static ProgressDialog loadingDialog;
 
     static {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.context);
+        pref = MyApplication.context.getSharedPreferences("main", Context.MODE_PRIVATE);
     }
 
-    public static void showToast(String message, int duration) {
-        Toast toast = Toast.makeText(MyApplication.context, message, duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+    public static void showToast(String text, int duration) {
+        Toast.makeText(MyApplication.context, text, duration).show();
     }
 
     public static void showAlertDialog(Context context, String message) {
@@ -79,5 +74,4 @@ public class Utils {
     public static int dp2px(Context context, float dpValue) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
     }
-
 }

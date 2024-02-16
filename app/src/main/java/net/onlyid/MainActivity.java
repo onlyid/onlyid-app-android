@@ -18,15 +18,15 @@ import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import net.onlyid.authorized_app.AuthorizedAppActivity;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.PermissionUtil;
+import net.onlyid.common.UpdateUtil;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.entity.Otp;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.PermissionUtil;
-import net.onlyid.util.UpdateUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        HttpUtil.get("app/user", new HttpUtil.MyCallback() {
+        MyHttp.get("app/user", new MyHttp.Callback() {
             @Override
             public void onSuccess(Call c, String s) {
                 Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void updateSessionAndDeviceLink() {
-        HttpUtil.put("app/session-and-device-link", new JSONObject(), new HttpUtil.MyCallback() {
+        MyHttp.put("app/session-and-device-link", new JSONObject(), new MyHttp.Callback() {
             @Override
             public void onSuccess(Call c, String s) {
             }
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void getOtp() {
-        HttpUtil.get("app/otp", (c, s) -> {
+        MyHttp.get("app/otp", (c, s) -> {
             Log.d(TAG, "onSuccess: " + s);
             if (TextUtils.isEmpty(s)) return;
 
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
-                        HttpUtil.get("app/otp", (c1, s1) -> {
+                        MyHttp.get("app/otp", (c1, s1) -> {
                             if (TextUtils.isEmpty(s1)) {
                                 countDownTimer.cancel();
                                 timer.cancel();

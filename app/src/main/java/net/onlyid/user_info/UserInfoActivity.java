@@ -18,10 +18,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityUserInfoBinding;
 import net.onlyid.entity.User;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
@@ -47,7 +47,7 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     void init() {
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        String userString = Utils.pref.getString(Constants.USER, null);
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
             Glide.with(this).load(user.avatar).into(binding.avatarImageView);
@@ -69,8 +69,8 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     void refresh() {
-        HttpUtil.get("app/user", (c, s) -> {
-            Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
+        MyHttp.get("/user", (s) -> {
+            Utils.pref.edit().putString(Constants.USER, s).apply();
             init();
         });
     }
@@ -79,7 +79,7 @@ public class UserInfoActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         try {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
-            HttpUtil.put("app/user", jsonObject, (c, s) -> {
+            MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.loadingDialog.dismiss();
                 Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 refresh();

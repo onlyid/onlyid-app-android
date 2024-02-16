@@ -19,10 +19,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityLoginBinding;
 import net.onlyid.entity.OAuthConfig;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            HttpUtil.post("app/login", jsonObject, (Call c, String s) -> {
+            MyHttp.post("app/login", jsonObject, (Call c, String s) -> {
                 Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
 
                 OAuthConfig config = (OAuthConfig) getIntent().getSerializableExtra("oauthConfig");

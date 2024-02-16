@@ -33,10 +33,10 @@ import com.google.zxing.common.HybridBinarizer;
 
 import net.onlyid.AuthorizeActivity;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
 import net.onlyid.entity.Client;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,7 +149,7 @@ public class ScanLoginActivity extends AppCompatActivity {
                         throw new Exception("uid或clientId为空");
                     }
 
-                    HttpUtil.get("app/user-client-links/" + clientId + "/check", (c, s) -> {
+                    MyHttp.get("/user-client-links/" + clientId + "/check", (s) -> {
                         JSONObject respBody = new JSONObject(s);
                         String clientString = respBody.getString("client");
                         Client client = Utils.objectMapper.readValue(clientString, Client.class);
@@ -207,7 +207,7 @@ public class ScanLoginActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        HttpUtil.post("app/scan-login", jsonObject, (c, s) -> {
+        MyHttp.post("/scan-login", jsonObject, (s) -> {
             activity.finish();
         });
     }

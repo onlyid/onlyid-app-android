@@ -8,8 +8,8 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
+import net.onlyid.common.Utils;
 import net.onlyid.entity.User;
-import net.onlyid.util.Utils;
 
 public class PushReceiver extends PushMessageReceiver {
     static final String TAG = PushReceiver.class.getSimpleName();
@@ -19,7 +19,7 @@ public class PushReceiver extends PushMessageReceiver {
         String command = message.getCommand();
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
-                String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+                String userString = Utils.pref.getString(Constants.USER, null);
                 try {
                     User user = Utils.objectMapper.readValue(userString, User.class);
                     MiPushClient.setUserAccount(context, user.id, null);

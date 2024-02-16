@@ -15,10 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditBasicBinding;
 import net.onlyid.entity.User;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
@@ -41,7 +41,7 @@ public class EditBasicActivity extends AppCompatActivity {
     }
 
     void init() {
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        String userString = Utils.pref.getString(Constants.USER, null);
         try {
             user = Utils.objectMapper.readValue(userString, User.class);
         } catch (JsonProcessingException e) {
@@ -102,7 +102,7 @@ public class EditBasicActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         try {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
-            HttpUtil.put("app/user", jsonObject, (c, s) -> {
+            MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.loadingDialog.dismiss();
                 Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 finish();

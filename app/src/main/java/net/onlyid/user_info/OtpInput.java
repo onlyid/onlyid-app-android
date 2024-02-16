@@ -9,9 +9,9 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.InputOtpBinding;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +37,7 @@ public class OtpInput extends RelativeLayout {
                 e.printStackTrace();
             }
             Utils.showLoadingDialog(getContext());
-            HttpUtil.post("app/send-otp", jsonObject, (c, s) -> {
+            MyHttp.post("/send-otp", jsonObject, (s) -> {
                 binding.sendButton.setEnabled(false);
                 Utils.loadingDialog.dismiss();
                 new CountDownTimer(60000, 1000) {

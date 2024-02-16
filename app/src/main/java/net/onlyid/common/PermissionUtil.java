@@ -1,4 +1,4 @@
-package net.onlyid.util;
+package net.onlyid.common;
 
 import android.Manifest;
 import android.app.Activity;

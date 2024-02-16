@@ -21,11 +21,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizedAppBinding;
 import net.onlyid.databinding.ItemClientBinding;
 import net.onlyid.entity.Client1;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +118,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        HttpUtil.get("app/clients/by-user", (c, s) -> {
+        MyHttp.get("/clients/by-user", (s) -> {
             JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Client1.class);
             clientList = Utils.objectMapper.readValue(s, type);
             // 过滤掉唯ID的应用
@@ -137,7 +137,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
 
     void onDialogItemClick(int which, int position) {
         Utils.showLoadingDialog(this);
-        HttpUtil.delete("app/user-client-links/" + clientList.get(position).id, (c, s) -> {
+        MyHttp.delete("/user-client-links/" + clientList.get(position).id, (s) -> {
             Utils.loadingDialog.dismiss();
             Utils.showToast("已取消授权", Toast.LENGTH_SHORT);
             initData();

@@ -33,20 +33,16 @@ import com.yalantis.ucrop.UCrop;
 
 import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.MyHttp;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditAvatarBinding;
 import net.onlyid.entity.User;
-import net.onlyid.util.HttpUtil;
-import net.onlyid.util.Utils;
 
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class EditAvatarActivity extends AppCompatActivity {
     static final String TAG = "AvatarActivity";
@@ -95,7 +91,7 @@ public class EditAvatarActivity extends AppCompatActivity {
             }
         });
 
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+        String userString = Utils.pref.getString(Constants.USER, null);
         try {
             User user = Utils.objectMapper.readValue(userString, User.class);
             Glide.with(this).load(user.avatar).listener(new RequestListener<Drawable>() {
@@ -194,12 +190,10 @@ public class EditAvatarActivity extends AppCompatActivity {
 
             File file = new File(getExternalCacheDir(), "resized-avatar");
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .addFormDataPart("file", null, RequestBody.create(MediaType.parse("image/jpeg"), file))
-                    .build();
+
             Utils.showLoadingDialog(this);
-            HttpUtil.post("app/image", requestBody, (c, s) -> {
-                HttpUtil.put("app/user/avatar", new JSONObject(s), (c1, s1) -> {
+            MyHttp.postFile("/image", file, "image/jpeg", (s) -> {
+                MyHttp.put("/user/avatar", new JSONObject(s), (s1) -> {
                     Utils.loadingDialog.dismiss();
                     Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 });
