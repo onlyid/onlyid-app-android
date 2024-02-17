@@ -19,8 +19,8 @@ import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizedAppBinding;

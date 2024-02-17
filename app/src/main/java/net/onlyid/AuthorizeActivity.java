@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import net.onlyid.common.Constants;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;

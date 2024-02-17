@@ -8,6 +8,7 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
+import net.onlyid.common.Constants;
 import net.onlyid.common.Utils;
 import net.onlyid.entity.User;
 

@@ -1,4 +1,4 @@
-package net.onlyid;
+package net.onlyid.common;
 
 import java.time.format.DateTimeFormatter;
 

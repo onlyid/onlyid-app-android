@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import net.onlyid.Constants;
 import net.onlyid.R;
+import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditLocationBinding;
