@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,7 +52,6 @@ public class CustomNameActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         MyHttp.post("/devices/rename", jsonObject, (s) -> {
             Utils.loadingDialog.dismiss();
-            Utils.showToast("已保存", Toast.LENGTH_SHORT);
             setResult(RESULT_OK);
             finish();
         });

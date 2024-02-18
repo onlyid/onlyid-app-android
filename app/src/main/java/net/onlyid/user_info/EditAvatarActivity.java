@@ -14,7 +14,6 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -195,7 +194,6 @@ public class EditAvatarActivity extends AppCompatActivity {
             MyHttp.postFile("/image", file, "image/jpeg", (s) -> {
                 MyHttp.put("/user/avatar", new JSONObject(s), (s1) -> {
                     Utils.loadingDialog.dismiss();
-                    Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 });
             });
         } catch (FileNotFoundException e) {

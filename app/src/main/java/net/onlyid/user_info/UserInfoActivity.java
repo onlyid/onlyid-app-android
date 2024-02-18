@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,7 +80,6 @@ public class UserInfoActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
             MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.loadingDialog.dismiss();
-                Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 refresh();
             });
         } catch (Exception e) {

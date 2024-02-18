@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -224,7 +223,6 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         MyHttp.post("/devices/" + sessionId + "/logout", new JSONObject(), (s) -> {
             Utils.loadingDialog.dismiss();
-            Utils.showToast("已退出登录", Toast.LENGTH_SHORT);
             if (logout) {
                 Utils.pref.edit().putString(Constants.USER, null).apply();
                 Intent intent = new Intent(this, LoginActivity.class);

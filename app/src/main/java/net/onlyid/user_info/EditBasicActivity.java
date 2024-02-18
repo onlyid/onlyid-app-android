@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -104,7 +103,6 @@ public class EditBasicActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
             MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.loadingDialog.dismiss();
-                Utils.showToast("已保存", Toast.LENGTH_SHORT);
                 finish();
             });
         } catch (Exception e) {

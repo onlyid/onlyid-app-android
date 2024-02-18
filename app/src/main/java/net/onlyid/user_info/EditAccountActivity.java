@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -134,7 +133,6 @@ public class EditAccountActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         MyHttp.put("/user/account", jsonObject, (s) -> {
             Utils.loadingDialog.dismiss();
-            Utils.showToast("已保存", Toast.LENGTH_SHORT);
             finish();
         });
     }

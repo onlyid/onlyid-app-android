@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -139,7 +138,6 @@ public class AuthorizedAppActivity extends AppCompatActivity {
         Utils.showLoadingDialog(this);
         MyHttp.delete("/user-client-links/" + clientList.get(position).id, (s) -> {
             Utils.loadingDialog.dismiss();
-            Utils.showToast("已取消授权", Toast.LENGTH_SHORT);
             initData();
         });
     }
