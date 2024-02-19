@@ -36,10 +36,10 @@ public class OtpInput extends RelativeLayout {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Utils.showLoadingDialog(getContext());
+            Utils.showLoading(getContext());
             MyHttp.post("/send-otp", jsonObject, (s) -> {
                 binding.sendButton.setEnabled(false);
-                Utils.loadingDialog.dismiss();
+                Utils.hideLoading();
                 new CountDownTimer(60000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         binding.sendButton.setText(String.valueOf(millisUntilFinished / 1000));

@@ -190,10 +190,10 @@ public class EditAvatarActivity extends AppCompatActivity {
             File file = new File(getExternalCacheDir(), "resized-avatar");
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
 
-            Utils.showLoadingDialog(this);
+            Utils.showLoading(this);
             MyHttp.postFile("/image", file, "image/jpeg", (s) -> {
                 MyHttp.put("/user/avatar", new JSONObject(s), (s1) -> {
-                    Utils.loadingDialog.dismiss();
+                    Utils.hideLoading();
                 });
             });
         } catch (FileNotFoundException e) {

@@ -135,9 +135,9 @@ public class AuthorizedAppActivity extends AppCompatActivity {
     }
 
     void onDialogItemClick(int which, int position) {
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         MyHttp.delete("/user-client-links/" + clientList.get(position).id, (s) -> {
-            Utils.loadingDialog.dismiss();
+            Utils.hideLoading();
             initData();
         });
     }

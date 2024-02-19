@@ -49,9 +49,9 @@ public class CustomNameActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         MyHttp.post("/devices/rename", jsonObject, (s) -> {
-            Utils.loadingDialog.dismiss();
+            Utils.hideLoading();
             setResult(RESULT_OK);
             finish();
         });

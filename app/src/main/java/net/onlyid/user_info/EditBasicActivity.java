@@ -98,11 +98,11 @@ public class EditBasicActivity extends AppCompatActivity {
                 user.nickname = binding.nicknameInput.getEditText().getText().toString();
                 break;
         }
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         try {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
             MyHttp.put("/user", jsonObject, (s) -> {
-                Utils.loadingDialog.dismiss();
+                Utils.hideLoading();
                 finish();
             });
         } catch (Exception e) {

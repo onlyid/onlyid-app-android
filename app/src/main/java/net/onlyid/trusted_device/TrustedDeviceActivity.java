@@ -220,9 +220,9 @@ public class TrustedDeviceActivity extends AppCompatActivity {
     }
 
     void invalidateSession(String sessionId, boolean logout) {
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         MyHttp.post("/devices/" + sessionId + "/logout", new JSONObject(), (s) -> {
-            Utils.loadingDialog.dismiss();
+            Utils.hideLoading();
             if (logout) {
                 Utils.pref.edit().putString(Constants.USER, null).apply();
                 Intent intent = new Intent(this, LoginActivity.class);

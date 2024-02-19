@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 把 material-ui 默认色搬过来了 -->
     <color name="primary">#3f51b5</color>
     <color name="primary_dark">#303f9f</color>
+    <!--start 这8个颜色取自mui4-->
     <color name="accent">#f50057</color>
     <color name="error">#f44336</color>
     <color name="warning">#ff9800</color>
@@ -10,7 +10,8 @@
     <color name="success">#4caf50</color>
     <color name="text_primary">#de000000</color>
     <color name="text_secondary">#8a000000</color>
-    <color name="gray">#7f7f7f</color>
     <color name="text_disabled">#61000000</color>
+    <!--end 这8个颜色取自mui4-->
+    <color name="gray">#7f7f7f</color>
     <color name="bg">#eee</color>
 </resources>

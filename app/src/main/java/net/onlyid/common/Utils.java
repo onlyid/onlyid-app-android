@@ -1,6 +1,6 @@
 package net.onlyid.common;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.TypedValue;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class Utils {
     public static ObjectMapper objectMapper;
     public static final SharedPreferences pref;
-    public static ProgressDialog loadingDialog;
+    static Dialog loadingDialog;
 
     static {
         objectMapper = new ObjectMapper();
@@ -38,10 +38,14 @@ public class Utils {
                 .show();
     }
 
-    public static void showLoadingDialog(Context context) {
-        loadingDialog = new ProgressDialog(context, R.style.LoadingDialog);
-        loadingDialog.setMessage("请稍候");
+    public static void showLoading(Context context) {
+        loadingDialog = new LoadingDialog(context);
         loadingDialog.show();
+    }
+
+    public static void hideLoading() {
+        if (loadingDialog != null)
+            loadingDialog.dismiss();
     }
 
     public static boolean isMobile(String string) {

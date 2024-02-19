@@ -117,9 +117,9 @@ public class EditPasswordActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         MyHttp.put("/user/password", jsonObject, (s) -> {
-            Utils.loadingDialog.dismiss();
+            Utils.hideLoading();
             finish();
         });
     }

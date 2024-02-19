@@ -130,9 +130,9 @@ public class EditAccountActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         MyHttp.put("/user/account", jsonObject, (s) -> {
-            Utils.loadingDialog.dismiss();
+            Utils.hideLoading();
             finish();
         });
     }

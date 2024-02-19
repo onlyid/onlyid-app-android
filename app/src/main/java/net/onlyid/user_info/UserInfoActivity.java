@@ -75,11 +75,11 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     void submit() {
-        Utils.showLoadingDialog(this);
+        Utils.showLoading(this);
         try {
             JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
             MyHttp.put("/user", jsonObject, (s) -> {
-                Utils.loadingDialog.dismiss();
+                Utils.hideLoading();
                 refresh();
             });
         } catch (Exception e) {

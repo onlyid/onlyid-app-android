@@ -1,6 +1,7 @@
 package net.onlyid.common;
 
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import net.onlyid.BuildConfig;
@@ -141,8 +142,9 @@ public class MyHttp {
                         if (response.isSuccessful()) {
                             callback.onSuccess(string);
                         } else {
-                            String msg = "⚠️" + new JSONObject(string).getString("error");
-                            Utils.showToast(msg, Toast.LENGTH_LONG);
+                            String errMsg = new JSONObject(string).getString("error");
+                            Utils.showToast("⚠️" + errMsg, Toast.LENGTH_LONG);
+                            Log.w(TAG, errMsg);
                         }
                         response.close();
                     } catch (Exception e) {
