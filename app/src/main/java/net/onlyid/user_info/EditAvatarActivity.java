@@ -1,15 +1,12 @@
 package net.onlyid.user_info;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +15,6 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -44,13 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class EditAvatarActivity extends AppCompatActivity {
-    static final String TAG = "AvatarActivity";
-    static final String[] PERMISSIONS = {
-            Manifest.permission.CAMERA,
-    };
-
     ActivityEditAvatarBinding binding;
-    Uri captureUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +102,7 @@ public class EditAvatarActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.pick_or_capture, menu);
+        getMenuInflater().inflate(R.menu.pick_image, menu);
         return true;
     }
 
@@ -127,9 +115,6 @@ public class EditAvatarActivity extends AppCompatActivity {
             case R.id.pick:
                 pick();
                 return true;
-            case R.id.capture:
-                capture();
-                return true;
             default:
                 return false;
         }
@@ -139,35 +124,6 @@ public class EditAvatarActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, 1);
-    }
-
-    void capture() {
-        for (String permission : PERMISSIONS) {
-            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, permission)) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS, 1);
-                return;
-            }
-        }
-
-        File file = new File(getExternalCacheDir(), "avatar");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        captureUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
-        startActivityForResult(intent, 2);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != 1) return;
-
-        for (int result : grantResults) {
-            if (PackageManager.PERMISSION_GRANTED != result) {
-                Utils.showAlertDialog(this, "你禁止了相机权限，拍照功能不可用");
-                return;
-            }
-        }
-
-        capture();
     }
 
     void crop(Uri uri) {
@@ -191,11 +147,9 @@ public class EditAvatarActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
 
             Utils.showLoading(this);
-            MyHttp.postFile("/image", file, "image/jpeg", (s) -> {
-                MyHttp.put("/user/avatar", new JSONObject(s), (s1) -> {
-                    Utils.hideLoading();
-                });
-            });
+            MyHttp.postFile("/image", file, "image/jpeg",
+                    (s) -> MyHttp.put("/user/avatar", new JSONObject(s),
+                            (s1) -> Utils.hideLoading()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -209,10 +163,6 @@ public class EditAvatarActivity extends AppCompatActivity {
             if (resultCode != RESULT_OK) return;
 
             crop(data.getData());
-        } else if (requestCode == 2) {
-            if (resultCode != RESULT_OK) return;
-
-            crop(captureUri);
         } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == UCrop.RESULT_ERROR) {
                 UCrop.getError(data).printStackTrace();

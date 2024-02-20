@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -110,18 +109,11 @@ public class UpdateUtil {
 
     void installPackage() {
         File file = new File(activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), APK_NAME);
-        Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
-            intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(uri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } else {
-            Uri uri = Uri.fromFile(file);
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
+
+        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        intent.setData(uri);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         activity.startActivity(intent);
     }
 
