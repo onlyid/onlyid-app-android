@@ -81,27 +81,27 @@ public class EditPasswordActivity extends AppCompatActivity {
     void validate() {
         String otp = binding.otpInput1.getOtp();
         if (TextUtils.isEmpty(otp)) {
-            Utils.showAlertDialog(this, "验证码不能为空");
+            Utils.showAlert(this, "验证码不能为空");
             return;
         }
 
         String password = binding.passwordInput.getEditText().getText().toString();
         if (TextUtils.isEmpty(password)) {
-            Utils.showAlertDialog(this, "新密码不能为空");
+            Utils.showAlert(this, "新密码不能为空");
             return;
         }
         if (password.length() < 6) {
-            Utils.showAlertDialog(this, "密码最少要输入6位");
+            Utils.showAlert(this, "密码最少要输入6位");
             return;
         }
 
         String password1 = binding.password1Input.getEditText().getText().toString();
         if (TextUtils.isEmpty(password1)) {
-            Utils.showAlertDialog(this, "重复新密码不能为空");
+            Utils.showAlert(this, "重复新密码不能为空");
             return;
         }
         if (!password1.equals(password)) {
-            Utils.showAlertDialog(this, "两次输入的密码不一致");
+            Utils.showAlert(this, "两次输入的密码不一致");
             return;
         }
 

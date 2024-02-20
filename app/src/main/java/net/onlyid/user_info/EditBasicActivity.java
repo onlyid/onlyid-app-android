@@ -83,7 +83,7 @@ public class EditBasicActivity extends AppCompatActivity {
             case "nickname":
                 String nickname = binding.nicknameInput.getEditText().getText().toString();
                 if (TextUtils.isEmpty(nickname)) {
-                    Utils.showAlertDialog(this, "昵称不能为空");
+                    Utils.showAlert(this, "昵称不能为空");
                     return;
                 }
                 break;

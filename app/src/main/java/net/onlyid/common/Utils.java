@@ -11,7 +11,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.MyApplication;
-import net.onlyid.R;
 
 import java.util.regex.Pattern;
 
@@ -31,8 +30,8 @@ public class Utils {
         Toast.makeText(MyApplication.context, text, duration).show();
     }
 
-    public static void showAlertDialog(Context context, String message) {
-        new MaterialAlertDialogBuilder(context, R.style.MyAlertDialog)
+    public static void showAlert(Context context, String message) {
+        new MaterialAlertDialogBuilder(context)
                 .setMessage(message)
                 .setPositiveButton("确定", null)
                 .show();
@@ -54,6 +53,7 @@ public class Utils {
     }
 
     public static int dp2px(Context context, float dpValue) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
     }
 }

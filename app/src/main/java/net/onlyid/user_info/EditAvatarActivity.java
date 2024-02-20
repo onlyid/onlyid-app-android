@@ -123,6 +123,7 @@ public class EditAvatarActivity extends AppCompatActivity {
     void pick() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
+        //noinspection deprecation
         startActivityForResult(intent, 1);
     }
 

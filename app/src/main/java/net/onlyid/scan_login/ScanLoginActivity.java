@@ -92,7 +92,7 @@ public class ScanLoginActivity extends AppCompatActivity {
 
         for (int result : grantResults) {
             if (PackageManager.PERMISSION_GRANTED != result) {
-                Utils.showAlertDialog(this, "你禁止了相机权限，扫码登录不可用");
+                Utils.showAlert(this, "你禁止了相机权限，扫码登录不可用");
                 return;
             }
         }

@@ -157,7 +157,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         binding.expandableListView.setAdapter(adapter);
         binding.expandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> true);
         binding.expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-            new MaterialAlertDialogBuilder(TrustedDeviceActivity.this, R.style.MyAlertDialog)
+            new MaterialAlertDialogBuilder(TrustedDeviceActivity.this)
                     .setItems(new String[]{"自定义名称", "退出登录"}, (dialog, which) -> {
                         onDialogItemClick(which, groupPosition, childPosition);
                     }).show();
@@ -207,7 +207,7 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             // 退出当前设备，二次确认
             String myDeviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
             if (myDeviceId.equals(session.deviceId)) {
-                new MaterialAlertDialogBuilder(this, R.style.MyAlertDialog)
+                new MaterialAlertDialogBuilder(this)
                         .setMessage("要退出当前设备吗？")
                         .setPositiveButton("确定", (d, w) -> {
                             invalidateSession(session.sessionId, true);

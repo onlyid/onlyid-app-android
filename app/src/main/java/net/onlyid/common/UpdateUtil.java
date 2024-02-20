@@ -55,7 +55,7 @@ public class UpdateUtil {
 
     void showDialogIfNecessary() {
         if (BuildConfig.VERSION_CODE < oldest) {
-            new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
+            new MaterialAlertDialogBuilder(activity)
                     .setMessage("当前版本已过期，请更新。")
                     .setPositiveButton("更新", (dialog, which) -> downloadPackage())
                     .setNegativeButton("退出", (d, w) -> activity.finish())
@@ -72,7 +72,7 @@ public class UpdateUtil {
                 }
             };
             binding.listView.setAdapter(adapter);
-            new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
+            new MaterialAlertDialogBuilder(activity)
                     .setTitle("有新版本，请更新：")
                     .setView(binding.getRoot())
                     .setPositiveButton("更新", (dialog, which) -> downloadPackage())

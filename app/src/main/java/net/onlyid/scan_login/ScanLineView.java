@@ -28,7 +28,7 @@ public class ScanLineView extends View {
         super(context);
         paint = new Paint();
         paint.setAntiAlias(true);
-        scanLineColor = getResources().getColor(R.color.accent);
+//        scanLineColor = getResources().getColor(R.color.accent);
         // 如果想用代码画线，则取消注释前两行，并注释掉第三行
 //        paint.setStyle(Paint.Style.FILL);
 //        paint.setColor(scanLineColor);

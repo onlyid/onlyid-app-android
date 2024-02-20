@@ -121,7 +121,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     public void gender(View v) {
         String[] genderOptions = {"男", "女", "其他", "暂不设置"};
-        new MaterialAlertDialogBuilder(this, R.style.MyAlertDialog)
+        new MaterialAlertDialogBuilder(this)
                 .setItems(genderOptions, (dialog, which) -> {
                     switch (which) {
                         case 0:
@@ -143,7 +143,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     public void birthday(View v) {
         LocalDate localDate = user.birthDate == null ? LocalDate.now() : user.birthDate;
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.MyDatePickerDialog,  (view, year, month, dayOfMonth) -> {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerDialog,  (view, year, month, dayOfMonth) -> {
             user.birthDate = LocalDate.of(year, month + 1, dayOfMonth);
             submit();
         }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());

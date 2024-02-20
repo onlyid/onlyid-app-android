@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import net.onlyid.R;
 import net.onlyid.databinding.DialogPermissionBinding;
 
 public class PermissionUtil {
@@ -33,7 +32,7 @@ public class PermissionUtil {
         for (String permission : PERMISSIONS) {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity, permission)) {
                 DialogPermissionBinding binding = DialogPermissionBinding.inflate(activity.getLayoutInflater());
-                new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
+                new MaterialAlertDialogBuilder(activity)
                         .setTitle("申请权限")
                         .setView(binding.getRoot())
                         .setPositiveButton("同意，开始使用", (dialog, which) -> ActivityCompat.requestPermissions(activity, PERMISSIONS, 1))
@@ -50,7 +49,7 @@ public class PermissionUtil {
 
         for (int result : grantResults) {
             if (PackageManager.PERMISSION_GRANTED != result) {
-                new MaterialAlertDialogBuilder(activity, R.style.MyAlertDialog)
+                new MaterialAlertDialogBuilder(activity)
                         .setMessage("你禁止了唯ID运行必需的权限，应用即将退出，请到设置页开启后重新打开应用。")
                         .setPositiveButton("去设置", (d, w) -> {
                             Intent intent = new Intent();

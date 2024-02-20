@@ -106,7 +106,7 @@ public class AuthorizedAppActivity extends AppCompatActivity {
             int p = position - 1;
             if (p < 0) return;
 
-            new MaterialAlertDialogBuilder(AuthorizedAppActivity.this, R.style.MyAlertDialog)
+            new MaterialAlertDialogBuilder(AuthorizedAppActivity.this)
                     .setItems(new String[]{"取消授权"}, (dialog, which) -> onDialogItemClick(which, p)).show();
         });
     }

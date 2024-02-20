@@ -139,7 +139,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
     boolean validateOtp(String otp) {
         if (TextUtils.isEmpty(otp)) {
-            Utils.showAlertDialog(this, "验证码不能为空");
+            Utils.showAlert(this, "验证码不能为空");
             return false;
         }
 
@@ -149,22 +149,22 @@ public class EditAccountActivity extends AppCompatActivity {
     boolean validateAccount(String account) {
         if ("mobile".equals(type)) {
             if (TextUtils.isEmpty(account)) {
-                Utils.showAlertDialog(this, "新手机号不能为空");
+                Utils.showAlert(this, "新手机号不能为空");
                 return false;
             }
 
             if (!Utils.isMobile(account)) {
-                Utils.showAlertDialog(this, "手机号格式不正确");
+                Utils.showAlert(this, "手机号格式不正确");
                 return false;
             }
         } else {
             if (TextUtils.isEmpty(account)) {
-                Utils.showAlertDialog(this, "新邮箱不能为空");
+                Utils.showAlert(this, "新邮箱不能为空");
                 return false;
             }
 
             if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches()) {
-                Utils.showAlertDialog(this, "邮箱格式不正确");
+                Utils.showAlert(this, "邮箱格式不正确");
                 return false;
             }
         }
