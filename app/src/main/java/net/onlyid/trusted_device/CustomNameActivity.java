@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityCustomNameBinding;
@@ -16,7 +14,7 @@ import net.onlyid.databinding.ActivityCustomNameBinding;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CustomNameActivity extends AppCompatActivity {
+public class CustomNameActivity extends BaseActivity {
     ActivityCustomNameBinding binding;
     String sessionId;
 
@@ -25,8 +23,6 @@ public class CustomNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCustomNameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -64,16 +60,14 @@ public class CustomNameActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.save:
-                submit();
-                return true;
-            default:
-                return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.save) {
+            submit();
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -19,6 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import net.onlyid.LoginActivity;
 import net.onlyid.MyApplication;
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -33,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TrustedDeviceActivity extends AppCompatActivity {
+public class TrustedDeviceActivity extends BaseActivity {
     static final String TAG = TrustedDeviceActivity.class.getSimpleName();
     ActivityTrustedDeviceBinding binding;
     List<Device> deviceSessionList = new ArrayList<>();
@@ -146,8 +144,6 @@ public class TrustedDeviceActivity extends AppCompatActivity {
         binding = ActivityTrustedDeviceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         init();
 
         initData();
@@ -183,15 +179,6 @@ public class TrustedDeviceActivity extends AppCompatActivity {
             binding.expandableListView.expandGroup(0);
             adapter.notifyDataSetChanged();
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return false;
     }
 
     void onDialogItemClick(int which, int groupPosition, int childPosition) {

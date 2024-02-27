@@ -3,17 +3,14 @@ package net.onlyid.scan_login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.databinding.ActivitySuccessBinding;
 import net.onlyid.entity.Client;
 
-public class SuccessActivity extends AppCompatActivity {
+public class SuccessActivity extends BaseActivity {
     static final String TAG = SuccessActivity.class.getSimpleName();
     ActivitySuccessBinding binding;
     Client client;
@@ -24,8 +21,6 @@ public class SuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySuccessBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -48,16 +43,6 @@ public class SuccessActivity extends AppCompatActivity {
                 finish();
             }
         }.start();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (android.R.id.home == item.getItemId()) {
-            finish();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void back(View v) {

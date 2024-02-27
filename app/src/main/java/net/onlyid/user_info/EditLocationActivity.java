@@ -2,15 +2,13 @@ package net.onlyid.user_info;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -21,7 +19,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class EditLocationActivity extends AppCompatActivity {
+public class EditLocationActivity extends BaseActivity {
     ActivityEditLocationBinding binding;
     User user;
 
@@ -30,8 +28,6 @@ public class EditLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityEditLocationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -45,15 +41,6 @@ public class EditLocationActivity extends AppCompatActivity {
         }
 
         getSupportFragmentManager().beginTransaction().add(R.id.container, new ProvinceFragment()).commit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
     }
 
     void showCityList(String province, ArrayList<String> cityList) {

@@ -5,17 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -28,7 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public class UserInfoActivity extends AppCompatActivity {
+public class UserInfoActivity extends BaseActivity {
     static final String TAG = UserInfoActivity.class.getSimpleName();
     static final String TYPE = "type";
     ActivityUserInfoBinding binding;
@@ -39,8 +36,6 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityUserInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -85,15 +80,6 @@ public class UserInfoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return false;
     }
 
     public void avatar(View v) {

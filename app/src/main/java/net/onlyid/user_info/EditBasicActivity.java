@@ -6,13 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -21,7 +20,7 @@ import net.onlyid.entity.User;
 
 import org.json.JSONObject;
 
-public class EditBasicActivity extends AppCompatActivity {
+public class EditBasicActivity extends BaseActivity {
     ActivityEditBasicBinding binding;
     String type;
     ActionBar actionBar;
@@ -34,7 +33,6 @@ public class EditBasicActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -65,16 +63,14 @@ public class EditBasicActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.save:
-                validate();
-                return true;
-            default:
-                return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.save) {
+            validate();
+            return true;
+        } else {
+            return false;
         }
     }
 

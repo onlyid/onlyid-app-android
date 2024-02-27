@@ -8,12 +8,10 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -23,7 +21,7 @@ import net.onlyid.entity.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EditPasswordActivity extends AppCompatActivity {
+public class EditPasswordActivity extends BaseActivity {
     ActivityEditPasswordBinding binding;
     User user;
     String recipient;
@@ -33,8 +31,6 @@ public class EditPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityEditPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -65,16 +61,14 @@ public class EditPasswordActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.save:
-                validate();
-                return true;
-            default:
-                return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.save) {
+            validate();
+            return true;
+        } else {
+            return false;
         }
     }
 

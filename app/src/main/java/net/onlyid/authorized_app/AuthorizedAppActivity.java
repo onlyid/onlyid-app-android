@@ -6,19 +6,16 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -30,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AuthorizedAppActivity extends AppCompatActivity {
+public class AuthorizedAppActivity extends BaseActivity {
     static final String TAG = AuthorizedAppActivity.class.getSimpleName();
     ActivityAuthorizedAppBinding binding;
     List<Client1> clientList = new ArrayList<>();
@@ -90,8 +87,6 @@ public class AuthorizedAppActivity extends AppCompatActivity {
         binding = ActivityAuthorizedAppBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         init();
 
         initData();
@@ -140,14 +135,5 @@ public class AuthorizedAppActivity extends AppCompatActivity {
             Utils.hideLoading();
             initData();
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return false;
     }
 }

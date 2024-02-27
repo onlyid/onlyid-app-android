@@ -9,14 +9,13 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.PatternsCompat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -26,7 +25,7 @@ import net.onlyid.entity.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EditAccountActivity extends AppCompatActivity {
+public class EditAccountActivity extends BaseActivity {
     static final String TAG = "EditAccountActivity";
     ActivityEditAccountBinding binding;
     String type;
@@ -40,7 +39,6 @@ public class EditAccountActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -102,16 +100,14 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.save:
-                submit();
-                return true;
-            default:
-                return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.save) {
+            submit();
+            return true;
+        } else {
+            return false;
         }
     }
 

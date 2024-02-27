@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import net.onlyid.BuildConfig;
+import net.onlyid.MyApplication;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,7 +144,11 @@ public class MyHttp {
                             callback.onSuccess(string);
                         } else {
                             String errMsg = new JSONObject(string).getString("error");
-                            Utils.showToast("⚠️" + errMsg, Toast.LENGTH_LONG);
+                            // 如果还停留在界面上，则用dialog展示错误信息，体验更友好
+                            if (MyApplication.currentActivity != null)
+                                Utils.showAlert(MyApplication.currentActivity, errMsg);
+                            else
+                                Utils.showToast("⚠️" + errMsg, Toast.LENGTH_LONG);
                             Log.w(TAG, errMsg);
                         }
                         response.close();

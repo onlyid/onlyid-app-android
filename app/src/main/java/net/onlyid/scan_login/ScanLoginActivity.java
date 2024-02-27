@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
@@ -33,6 +31,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import net.onlyid.AuthorizeActivity;
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
@@ -48,7 +47,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ScanLoginActivity extends AppCompatActivity {
+public class ScanLoginActivity extends BaseActivity {
     static final String TAG = ScanLoginActivity.class.getSimpleName();
     static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -74,8 +73,6 @@ public class ScanLoginActivity extends AppCompatActivity {
         binding = ActivityScanLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         for (String permission : PERMISSIONS) {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, permission)) {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, 1);
@@ -88,6 +85,7 @@ public class ScanLoginActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode != 1) return;
 
         for (int result : grantResults) {
@@ -187,15 +185,6 @@ public class ScanLoginActivity extends AppCompatActivity {
         super.onDestroy();
 
         executorService.shutdown();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return false;
     }
 
     public static void callback(Activity activity, String uid, Client client, boolean result) {

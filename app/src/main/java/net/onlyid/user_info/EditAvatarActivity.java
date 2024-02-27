@@ -12,9 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -25,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yalantis.ucrop.UCrop;
 
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -37,7 +36,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-public class EditAvatarActivity extends AppCompatActivity {
+public class EditAvatarActivity extends BaseActivity {
     ActivityEditAvatarBinding binding;
 
     @Override
@@ -45,8 +44,6 @@ public class EditAvatarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityEditAvatarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         init();
     }
@@ -107,16 +104,14 @@ public class EditAvatarActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.pick:
-                pick();
-                return true;
-            default:
-                return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.pick) {
+            pick();
+            return true;
+        } else {
+            return false;
         }
     }
 
