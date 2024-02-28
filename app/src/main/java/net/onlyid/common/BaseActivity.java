@@ -2,11 +2,10 @@ package net.onlyid.common;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.onlyid.LoginActivity;
-import net.onlyid.MainActivity;
 import net.onlyid.MyApplication;
 
 public class BaseActivity extends AppCompatActivity {
@@ -15,14 +14,16 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 这两个Activity不需要setup navigation
-        if (this instanceof MainActivity
-                || this instanceof LoginActivity)
-            return;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        ActionBar actionBar = getSupportActionBar();
+    // override只是为了suppress NPE inspection
+    @NonNull
+    @Override
+    public ActionBar getSupportActionBar() {
+        ActionBar actionBar = super.getSupportActionBar();
         assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        return actionBar;
     }
 
     @Override

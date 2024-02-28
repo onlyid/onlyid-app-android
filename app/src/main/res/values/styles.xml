@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="LargeButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="MainButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/bg</item>
         <item name="iconPadding">10dp</item>
