@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class UserInfoActivity extends BaseActivity {
     static final String TAG = UserInfoActivity.class.getSimpleName();
@@ -49,7 +50,7 @@ public class UserInfoActivity extends BaseActivity {
             binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
             binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
             binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
-            binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(Constants.DATE_FORMATTER));
+            binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
             binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

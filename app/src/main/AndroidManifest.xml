@@ -4,12 +4,15 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
+    <permission
+        android:name="net.onlyid.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -18,7 +21,6 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <permission android:name="net.onlyid.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
     <uses-permission android:name="net.onlyid.permission.MIPUSH_RECEIVE" />
 
     <application
@@ -28,26 +30,21 @@
         android:label="唯ID"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="02919836df23adaee129c306e78d83f5" />
-
-        <service android:name="com.amap.api.location.APSService" />
-
+        <activity
+            android:name=".login.TermsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.AccountActivity"
+            android:label="注册/登录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:label="登录"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".user_info.EditLocationActivity"
             android:label="选择地区"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".OAuthActivity"
-            android:exported="true"
-            android:theme="@style/OAuthActivityTheme">
-            <intent-filter>
-                <action android:name="net.onlyid.OAUTH_ACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".scan_login.IllegalQrCodeActivity"
             android:label="非法二维码"
@@ -99,6 +96,19 @@
             android:label="登录唯ID"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".OAuthActivity"
+            android:exported="true"
+            android:theme="@style/OAuthActivityTheme">
+            <intent-filter>
+                <action android:name="net.onlyid.OAUTH_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -107,10 +117,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -122,6 +128,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="02919836df23adaee129c306e78d83f5" />
+
+        <service android:name="com.amap.api.location.APSService" />
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"

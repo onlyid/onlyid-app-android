@@ -3,7 +3,7 @@
 
     <style name="LargeButton" parent="Widget.MaterialComponents.Button">
         <item name="android:minHeight">56dp</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="MainButton" parent="Widget.MaterialComponents.Button">

@@ -7,8 +7,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.Nullable;
-
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.InputOtpBinding;
@@ -21,7 +19,7 @@ public class OtpInput extends RelativeLayout {
     public String updateField;
     InputOtpBinding binding;
 
-    public OtpInput(Context context, @Nullable AttributeSet attrs) {
+    public OtpInput(Context context, AttributeSet attrs) {
         super(context, attrs);
         binding = InputOtpBinding.inflate(LayoutInflater.from(context), this);
 

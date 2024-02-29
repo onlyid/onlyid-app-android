@@ -69,9 +69,9 @@ public class AuthorizedAppActivity extends BaseActivity {
             ss.setSpan(new RelativeSizeSpan(0.88f),
                     client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             binding.nameTextView.setText(ss);
-            binding.createDateTextView.setText("首次登录时间：" + client.firstDate.format(Constants.DATE_TIME_FORMATTER));
+            binding.createDateTextView.setText("首次登录时间：" + client.firstDate.format(Constants.DATE_TIME_FORMATTER_H));
             binding.lastLoginDateTextView.setText("最近登录时间：" +
-                    (client.lastDate == null ? "-" : client.lastDate.format(Constants.DATE_TIME_FORMATTER)));
+                    (client.lastDate == null ? "-" : client.lastDate.format(Constants.DATE_TIME_FORMATTER_H)));
             binding.lastLoginLocationTextView.setText("最近登录地点：" +
                     (TextUtils.isEmpty(client.lastLocation) ? "-" : client.lastLocation));
             binding.lastLoginIpTextView.setText("最近登录IP：" +

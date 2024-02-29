@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -52,9 +53,10 @@ public class AccountActivity extends BaseActivity {
 
         binding.textView.setMovementMethod(LinkMovementMethod.getInstance());
         binding.textView.setText(ss);
+        binding.submitButton.setOnClickListener((v) -> submit());
     }
 
-    public void next(View v) {
+    void submit() {
         EditText editText = binding.accountInput.getEditText();
         assert editText != null;
         String account = editText.getText().toString();
@@ -67,7 +69,7 @@ public class AccountActivity extends BaseActivity {
             return;
         }
 
-        submit(account);
+        Log.e(TAG, "todo submit");
     }
 
     boolean validateAccount(String account) {
@@ -89,9 +91,5 @@ public class AccountActivity extends BaseActivity {
         }
 
         return true;
-    }
-
-    void submit(String account) {
-
     }
 }

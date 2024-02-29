@@ -122,11 +122,11 @@ public class TrustedDeviceActivity extends BaseActivity {
             binding.deviceTextView.setText(text);
 
             binding.deviceImageView.setImageResource(drawable);
-            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastDate.format(Constants.DATE_TIME_FORMATTER));
+            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
             binding.lastActiveLocationTextView.setText("最近活跃地点：" +
                     (TextUtils.isEmpty(session.lastLocation) ? "-" : session.lastLocation));
             binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastIp) ? "-" : session.lastIp));
-            binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.DATE_TIME_FORMATTER));
+            binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.DATE_TIME_FORMATTER_H));
 
             return convertView;
         }
