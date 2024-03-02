@@ -17,13 +17,12 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    // override只是为了suppress NPE inspection
+    // suppress NPE inspection
     @NonNull
     @Override
     public ActionBar getSupportActionBar() {
-        ActionBar actionBar = super.getSupportActionBar();
-        assert actionBar != null;
-        return actionBar;
+        //noinspection ConstantConditions
+        return super.getSupportActionBar();
     }
 
     @Override

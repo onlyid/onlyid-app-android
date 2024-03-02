@@ -3,6 +3,7 @@ package net.onlyid.common;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.Toast;
 
@@ -69,8 +70,9 @@ public class Utils {
         return pattern.matcher(string).matches();
     }
 
-    public static int dp2px(Context context, float dpValue) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    public static int dp2px(Context context, int dpValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float pxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, metrics);
+        return (int) (pxValue + 0.5f);
     }
 }

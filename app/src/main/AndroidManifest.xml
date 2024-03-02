@@ -31,6 +31,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".login.SignUpActivity"
+            android:label="注册"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".login.TermsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -98,11 +102,11 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/UCropActivity" />
         <activity
             android:name=".OAuthActivity"
             android:exported="true"
-            android:theme="@style/OAuthActivityTheme">
+            android:theme="@style/OAuthActivity">
             <intent-filter>
                 <action android:name="net.onlyid.OAUTH_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />

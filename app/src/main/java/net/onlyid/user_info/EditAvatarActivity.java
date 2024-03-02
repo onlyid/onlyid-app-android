@@ -105,13 +105,11 @@ public class EditAvatarActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
         if (item.getItemId() == R.id.pick) {
             pick();
             return true;
         } else {
-            return false;
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -123,13 +121,8 @@ public class EditAvatarActivity extends BaseActivity {
     }
 
     void crop(Uri uri) {
-        UCrop.Options options = new UCrop.Options();
-        options.setStatusBarColor(getResources().getColor(R.color.gray));
         File file = new File(getExternalCacheDir(), "cropped-avatar");
-        UCrop.of(uri, Uri.fromFile(file))
-                .withAspectRatio(1, 1)
-                .withOptions(options)
-                .start(this);
+        UCrop.of(uri, Uri.fromFile(file)).withAspectRatio(1, 1).start(this);
     }
 
     void submit(Uri uri) {

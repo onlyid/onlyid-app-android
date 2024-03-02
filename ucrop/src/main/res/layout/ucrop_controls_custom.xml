@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wrapper_states"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ucrop_height_wrapper_states"
+    android:background="@color/ucrop_color_widget_background"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/state_restore"
+        style="@style/ucrop_WrapperIconState">
+
+        <!-- 37dp = 27dp + 上下5dp padding-->
+        <ImageView
+            android:id="@+id/image_view_restore"
+            style="@style/ucrop_ImageViewWidgetIcon"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            app:srcCompat="@drawable/ucrop_ic_restore_custom" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/state_rotate"
+        style="@style/ucrop_WrapperIconState">
+
+        <ImageView
+            android:id="@+id/image_view_rotate"
+            style="@style/ucrop_ImageViewWidgetIcon"
+            app:srcCompat="@drawable/ucrop_ic_rotate_unselected" />
+    </LinearLayout>
+</LinearLayout>

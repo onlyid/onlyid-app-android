@@ -61,13 +61,11 @@ public class CustomNameActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
         if (item.getItemId() == R.id.save) {
             submit();
             return true;
         } else {
-            return false;
+            return super.onOptionsItemSelected(item);
         }
     }
 }

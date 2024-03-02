@@ -41,18 +41,12 @@ public class LoginActivity extends BaseActivity {
 
         binding.nicknameTextView.setText(user.nickname);
         binding.accountTextView.setText(user.account);
-        binding.submitButton.setOnClickListener((v) -> submit());
+        binding.submitButton.setOnClickListener((v) -> validateFields());
         binding.toggleLoginButton.setOnClickListener((v) -> toggleLogin());
         binding.sendOtpButton.recipientCallback = () -> user.account;
 
         passwordEditText = binding.passwordInput.getEditText();
         otpEditText = binding.otpInput.getEditText();
-    }
-
-    void submit() {
-        if (!validateField()) return;
-
-        Log.e(TAG, "todo submit");
     }
 
     void toggleLogin() {
@@ -69,24 +63,27 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    boolean validateField() {
+    void validateFields() {
         if ("password".equals(loginType)) {
             String text = passwordEditText.getText().toString();
 
             if (TextUtils.isEmpty(text)) {
                 Utils.showAlert(this, "请输入密码");
-                return false;
+                return;
             }
-        }
-        else {
+        } else {
             String text = otpEditText.getText().toString();
 
             if (TextUtils.isEmpty(text)) {
                 Utils.showAlert(this, "请输入验证码");
-                return false;
+                return;
             }
         }
 
-        return true;
+        submit();
+    }
+
+    void submit() {
+        Log.e(TAG, "todo submit");
     }
 }

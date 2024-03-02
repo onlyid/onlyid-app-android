@@ -22,6 +22,7 @@ import net.onlyid.databinding.ActivityAccountBinding;
 public class AccountActivity extends BaseActivity {
     static final String TAG = "AccountActivity";
     ActivityAccountBinding binding;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +54,29 @@ public class AccountActivity extends BaseActivity {
 
         binding.textView.setMovementMethod(LinkMovementMethod.getInstance());
         binding.textView.setText(ss);
-        binding.submitButton.setOnClickListener((v) -> submit());
+        binding.submitButton.setOnClickListener((v) -> validateFields());
+        editText = binding.accountInput.getEditText();
     }
 
-    void submit() {
-        EditText editText = binding.accountInput.getEditText();
-        assert editText != null;
+    void validateFields() {
         String account = editText.getText().toString();
 
-        if (!validateAccount(account)) return;
+        if (TextUtils.isEmpty(account)) {
+            Utils.showAlert(this, "请填写手机号/邮箱");
+            return;
+        }
+
+        if (account.contains("@")) {
+            if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches()) {
+                Utils.showAlert(this, "邮箱格式不正确");
+                return;
+            }
+        } else {
+            if (!Utils.isMobile(account)) {
+                Utils.showAlert(this, "手机号格式不正确");
+                return;
+            }
+        }
 
         if (!binding.checkBox.isChecked()) {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.checkbox_uncheck);
@@ -69,27 +84,10 @@ public class AccountActivity extends BaseActivity {
             return;
         }
 
-        Log.e(TAG, "todo submit");
+        submit();
     }
 
-    boolean validateAccount(String account) {
-        if (TextUtils.isEmpty(account)) {
-            Utils.showAlert(this, "请填写手机号/邮箱");
-            return false;
-        }
-
-        if (account.contains("@")) {
-            if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches()) {
-                Utils.showAlert(this, "邮箱格式不正确");
-                return false;
-            }
-        } else {
-            if (!Utils.isMobile(account)) {
-                Utils.showAlert(this, "手机号格式不正确");
-                return false;
-            }
-        }
-
-        return true;
+    void submit() {
+        Log.e(TAG, "todo submit");
     }
 }
