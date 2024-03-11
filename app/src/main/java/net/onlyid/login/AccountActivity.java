@@ -1,12 +1,12 @@
 package net.onlyid.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,8 +16,10 @@ import androidx.core.util.PatternsCompat;
 
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAccountBinding;
+import net.onlyid.entity.Entity1;
 
 public class AccountActivity extends BaseActivity {
     static final String TAG = "AccountActivity";
@@ -88,6 +90,19 @@ public class AccountActivity extends BaseActivity {
     }
 
     void submit() {
-        Log.e(TAG, "todo submit");
+        String account = editText.getText().toString();
+        MyHttp.get("/auth/check-account?account=" + account, resp -> {
+            if (TextUtils.isEmpty(resp)) {
+                Intent intent = new Intent(this, SignUpActivity.class);
+                intent.putExtra("account", account);
+                startActivity(intent);
+            } else {
+                Entity1 arg = Utils.gson.fromJson(resp, Entity1.class);
+                arg.account = account;
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("user", arg);
+                startActivity(intent);
+            }
+        });
     }
 }

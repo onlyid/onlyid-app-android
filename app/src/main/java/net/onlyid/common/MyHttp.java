@@ -7,86 +7,44 @@ import android.widget.Toast;
 import net.onlyid.BuildConfig;
 import net.onlyid.MyApplication;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class MyHttp {
     static final String TAG = MyHttp.class.getSimpleName();
     static final String BASE_URL;
 
     static OkHttpClient httpClient;
-    static List<Cookie> cookies;
     static Handler handler = new Handler();
 
     public interface Callback {
         void onSuccess(String resp) throws Exception;
     }
 
-    static CookieJar cookieJar = new CookieJar() {
-        @Override
-        public void saveFromResponse(HttpUrl url, List<Cookie> list) {
-            cookies = list;
-
-            for (Cookie cookie : list) {
-                if (!"JSESSIONID".equals(cookie.name())) continue;
-
-                try {
-                    JSONObject object = new JSONObject();
-                    object.put("value", cookie.value());
-                    object.put("domain", cookie.domain());
-                    Utils.pref.edit().putString("cookie", object.toString()).apply();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public List<Cookie> loadForRequest(HttpUrl url) {
-            if (cookies != null) return cookies;
-
-            List<Cookie> list = new ArrayList<>();
-            String string = Utils.pref.getString("cookie", null);
-            if (string != null) {
-                try {
-                    JSONObject object = new JSONObject(string);
-                    Cookie cookie = new Cookie.Builder()
-                            .name("JSESSIONID")
-                            .value(object.getString("value"))
-                            .domain(object.getString("domain"))
-                            .build();
-                    list.add(cookie);
-                    cookies = list;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            return list;
-        }
+    static Interceptor loginInterceptor = chain -> {
+        Request original = chain.request();
+        String token = Utils.pref.getString("token", "x");
+        //noinspection ConstantConditions
+        Request request = original.newBuilder().header("Auth", token).build();
+        return chain.proceed(request);
     };
 
     static {
         if (BuildConfig.DEBUG) BASE_URL = "http://192.168.31.117:8003/api/app";
         else BASE_URL = "https://onlyid.net/api/app";
 
-        httpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
+        httpClient = new OkHttpClient.Builder().addInterceptor(loginInterceptor).build();
     }
 
     public static void get(String url, Callback callback) {
@@ -134,9 +92,8 @@ public class MyHttp {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody body = response.body();
-                assert body != null;
-                String string = body.string();
+                //noinspection ConstantConditions
+                String string = response.body().string();
 
                 handler.post(() -> {
                     try {

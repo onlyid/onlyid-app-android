@@ -2,29 +2,36 @@ package net.onlyid.login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import com.yalantis.ucrop.UCrop;
 
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivitySignUpBinding;
 
-import java.io.File;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class SignUpActivity extends BaseActivity {
     static final String TAG = "SignUpActivity";
     static final int PICK_IMAGE = 1;
     ActivitySignUpBinding binding;
-    String account, imageType;
+    String account, imageType, filename;
     EditText accountEditText, nicknameEditText, otpEditText, passwordEditText;
 
     @Override
@@ -84,7 +91,22 @@ public class SignUpActivity extends BaseActivity {
     }
 
     void submit() {
-        Log.e(TAG, "todo submit");
+        JSONObject obj = new JSONObject();
+        //noinspection HardwareIds
+        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        try {
+            obj.put("password", passwordEditText.getText().toString());
+            obj.put("otp", otpEditText.getText().toString());
+            obj.put("account", account);
+            obj.put("filename", filename);
+            obj.put("nickname", nicknameEditText.getText().toString());
+            obj.put("deviceId", deviceId);
+            obj.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
+            obj.put("deviceType", "android");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyHttp.post("/auth/sign-up", obj, resp -> LoginActivity.completeLogin(this, resp));
     }
 
     void pickImage() {
@@ -99,14 +121,34 @@ public class SignUpActivity extends BaseActivity {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionQuality(100);
-        options.setCompressionFormat(
-                "image/jpeg".equals(imageType) ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG);
+        options.setCompressionFormat(getImageFormat());
 
         UCrop.of(uri, outUri).withAspectRatio(1, 1).withOptions(options).start(this);
     }
 
     void uploadImage(Uri uri) {
-        Log.e(TAG, "todo uploadImage");
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            bitmap = Bitmap.createScaledBitmap(bitmap, 256, 256, true);
+
+            int radius = Utils.dp2px(this, 5);
+            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+            drawable.setCornerRadius(radius);
+            binding.avatarImageView.setImageTintList(null);
+            binding.avatarImageView.setImageDrawable(drawable);
+
+            File file = new File(getExternalCacheDir(), "resized-avatar");
+            bitmap.compress(getImageFormat(), 90, new FileOutputStream(file));
+
+            MyHttp.postFile("/image", file, imageType, resp ->
+                    filename = new JSONObject(resp).getString("filename"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Bitmap.CompressFormat getImageFormat() {
+        return "image/jpeg".equals(imageType) ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG;
     }
 
     @Override
@@ -125,16 +167,7 @@ public class SignUpActivity extends BaseActivity {
             }
         } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
-                Uri uri = UCrop.getOutput(data);
-                uploadImage(uri);
-                binding.avatarImageView.setImageTintList(null);
-
-                int radius = Utils.dp2px(this, 5);
-                Glide.with(this).load(uri)
-                        .transform(new RoundedCornersTransformation(radius, 0))
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .into(binding.avatarImageView);
+                uploadImage(UCrop.getOutput(data));
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 //noinspection ConstantConditions
                 UCrop.getError(data).printStackTrace();

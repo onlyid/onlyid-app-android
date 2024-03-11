@@ -1,17 +1,25 @@
 package net.onlyid.login;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
 
+import net.onlyid.MainActivity;
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityLogin1Binding;
 import net.onlyid.entity.Entity1;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -84,6 +92,29 @@ public class LoginActivity extends BaseActivity {
     }
 
     void submit() {
-        Log.e(TAG, "todo submit");
+        JSONObject obj = new JSONObject();
+        //noinspection HardwareIds
+        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        try {
+            obj.put("account", user.account);
+            obj.put("otp", otpEditText.getText().toString());
+            obj.put("password", passwordEditText.getText().toString());
+            obj.put("deviceId", deviceId);
+            obj.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
+            obj.put("deviceType", "android");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyHttp.post("/auth/login", obj, resp -> completeLogin(this, resp));
+    }
+
+    static void completeLogin(Context context, String resp) throws JSONException {
+        JSONObject respBody = new JSONObject(resp);
+        Utils.pref.edit()
+                .putString("token", respBody.getString("token"))
+                .putString("user", respBody.getString("user"))
+                .apply();
+
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 }

@@ -33,12 +33,12 @@ public class SendOtpButton extends MaterialButton implements View.OnClickListene
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        MyHttp.post("/send-otp", obj, (resp) -> {
+        MyHttp.post("/auth/send-otp", obj, (resp) -> {
             setEnabled(false);
 
             new CountDownTimer(60000, 1000) {
                 public void onTick(long millisUntilFinished) {
-                    setText(String.valueOf(millisUntilFinished / 1000));
+                    setText(millisUntilFinished / 1000 + "秒后重试");
                 }
                 public void onFinish() {
                     setText("发送验证码");
