@@ -13,8 +13,7 @@ import androidx.annotation.Nullable;
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import net.onlyid.LoginActivity;
-import net.onlyid.MyApplication;
+import net.onlyid.MainActivity;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
@@ -212,10 +211,10 @@ public class TrustedDeviceActivity extends BaseActivity {
             Utils.hideLoading();
             if (logout) {
                 Utils.pref.edit().putString(Constants.USER, null).apply();
-                Intent intent = new Intent(this, LoginActivity.class);
+
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("login", true);
                 startActivity(intent);
-                finish();
-                MyApplication.mainActivity.finish();
             } else {
                 initData();
             }

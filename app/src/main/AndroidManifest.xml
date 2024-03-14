@@ -95,16 +95,13 @@
             android:label="个人信息"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
-            android:label="登录唯ID"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UCropActivity" />
         <activity
             android:name=".OAuthActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/OAuthActivity">
             <intent-filter>
                 <action android:name="net.onlyid.OAUTH_ACTIVITY" />
@@ -114,6 +111,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

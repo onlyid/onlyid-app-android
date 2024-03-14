@@ -1,11 +1,15 @@
 package net.onlyid.common;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import net.onlyid.BuildConfig;
+import net.onlyid.MainActivity;
 import net.onlyid.MyApplication;
+import net.onlyid.OAuthActivity;
 
 import org.json.JSONObject;
 
@@ -97,12 +101,24 @@ public class MyHttp {
 
                 handler.post(() -> {
                     try {
+                        Activity current = MyApplication.currentActivity;
                         if (response.isSuccessful()) {
                             callback.onSuccess(string);
+                        } else if (response.code() == 401) {
+                            if (current == null) {
+                                Utils.showToast("登录已过期，请重新登录", Toast.LENGTH_LONG);
+                            } else {
+                                Class<?> target = MainActivity.class;
+                                if (current instanceof OAuthActivity) target = OAuthActivity.class;
+
+                                Intent intent = new Intent(current, target);
+                                intent.putExtra("login", true);
+                                current.startActivity(intent);
+                            }
                         } else {
                             String errMsg = new JSONObject(string).getString("error");
                             // 如果还停留在界面上，则用dialog展示错误信息，体验更友好
-                            if (MyApplication.currentActivity != null)
+                            if (current != null)
                                 Utils.showAlert(MyApplication.currentActivity, errMsg);
                             else
                                 Utils.showToast("⚠️" + errMsg, Toast.LENGTH_LONG);
@@ -110,7 +126,7 @@ public class MyHttp {
                         }
                         response.close();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.w(TAG, "onResponse: " + string, e);
                     }
                 });
             }

@@ -12,22 +12,27 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import net.onlyid.authorized_app.AuthorizedAppActivity;
+import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.PermissionUtil;
 import net.onlyid.common.UpdateUtil;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
+import net.onlyid.entity.Client;
 import net.onlyid.entity.Otp;
+import net.onlyid.login.AccountActivity;
+import net.onlyid.scan_login.IllegalQrCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
+import net.onlyid.scan_login.SuccessActivity;
 import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.Duration;
@@ -35,13 +40,16 @@ import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.Call;
-
 public class MainActivity extends AppCompatActivity {
     static final String TAG = MainActivity.class.getSimpleName();
     static final String PUSH_TAG = "Push";
     static final String PUSH_APP_ID = "2882303761520030422";
     static final String PUSH_APP_KEY = "5222003035422";
+
+    static final int LOGIN = 9;
+    // 扫码登录用，暂时放这里
+    static final int SCAN_CODE = 10, AUTHORIZE = 11;
+    String uid, clientId;
 
     ActivityMainBinding binding;
     UpdateUtil updateUtil;
@@ -53,58 +61,38 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        refreshUserInfo();
-
-        initPush();
-        getOtp();
+        syncUserInfo();
 
         updateUtil = new UpdateUtil(this);
         updateUtil.check();
 
         permissionUtil = new PermissionUtil(this);
         permissionUtil.check();
-
-        MyApplication.mainActivity = this;
     }
 
-    void refreshUserInfo() {
-        String userString = Utils.sharedPreferences.getString(Constants.USER, null);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getBooleanExtra("login", false)) {
+            //noinspection deprecation
+            startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
+        }
+    }
+
+    void syncUserInfo() {
+        String userString = Utils.pref.getString(Constants.USER, null);
         if (TextUtils.isEmpty(userString)) {
             login();
             return;
         }
 
-        MyHttp.get("app/user", new MyHttp.Callback() {
-            @Override
-            public void onSuccess(Call c, String s) {
-                Utils.sharedPreferences.edit().putString(Constants.USER, s).apply();
-                updateSessionAndDeviceLink();
-            }
+        MyHttp.get("/user", (resp) -> {
+            Utils.pref.edit().putString(Constants.USER, resp).apply();
 
-            @Override
-            public boolean onResponseFailure(Call c, int code, String s) {
-                if (code == 401) {
-                    login();
-
-                    Utils.showToast("登录已失效", Toast.LENGTH_SHORT);
-                    return true;
-                }
-
-                return false;
-            }
-        });
-    }
-
-    void updateSessionAndDeviceLink() {
-        MyHttp.put("app/session-and-device-link", new JSONObject(), new MyHttp.Callback() {
-            @Override
-            public void onSuccess(Call c, String s) {
-            }
-
-            @Override
-            public boolean onResponseFailure(Call c, int code, String s) {
-                return true;
-            }
+            // 到时再看一下，首页的api怎么组织
+            initPush();
+            getOtp();
         });
     }
 
@@ -130,53 +118,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void getOtp() {
-        MyHttp.get("app/otp", (c, s) -> {
-            Log.d(TAG, "onSuccess: " + s);
-            if (TextUtils.isEmpty(s)) return;
+        MyHttp.get("/otp", (resp) -> {
+            Log.d(TAG, "onSuccess: " + resp);
+            if (TextUtils.isEmpty(resp)) return;
 
-            try {
-                Otp otp = Utils.objectMapper.readValue(s, Otp.class);
-                binding.otpLayout.setVisibility(View.VISIBLE);
-                binding.otpTextView.setText(otp.code);
-                Glide.with(this).load(otp.clientIconUrl).into(binding.iconImageView);
-                binding.otpProgressBar.setProgress(100);
-                long duration = Duration.between(otp.createDate, otp.expireDate).toMillis();
+            Otp otp = Utils.gson.fromJson(resp, Otp.class);
+            binding.otpLayout.setVisibility(View.VISIBLE);
+            binding.otpTextView.setText(otp.code);
+            Glide.with(this).load(otp.clientIconUrl).into(binding.iconImageView);
+            binding.otpProgressBar.setProgress(100);
+            long duration = Duration.between(otp.createDate, otp.expireDate).toMillis();
 
-                // 更新有效期进度条
-                CountDownTimer countDownTimer = new CountDownTimer(duration, 100) {
-                    public void onTick(long millisUntilFinished) {
-                        long newDuration = Duration.between(LocalDateTime.now(), otp.expireDate).toMillis();
-                        int progress = (int) (newDuration * 100 / duration);
-                        binding.otpProgressBar.setProgress(progress);
-                    }
+            // 更新有效期进度条
+            CountDownTimer countDownTimer = new CountDownTimer(duration, 100) {
+                public void onTick(long millisUntilFinished) {
+                    long newDuration = Duration.between(LocalDateTime.now(), otp.expireDate).toMillis();
+                    int progress = (int) (newDuration * 100 / duration);
+                    binding.otpProgressBar.setProgress(progress);
+                }
 
-                    public void onFinish() {
-                        Utils.showToast("验证码已过期，请重新发送", Toast.LENGTH_LONG);
-                    }
-                }.start();
+                public void onFinish() {
+                    Utils.showToast("验证码已过期，请重新发送", Toast.LENGTH_LONG);
+                }
+            }.start();
 
-                // 轮询检查验证码是否已使用
-                Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        MyHttp.get("app/otp", (c1, s1) -> {
-                            if (TextUtils.isEmpty(s1)) {
-                                countDownTimer.cancel();
-                                timer.cancel();
-                                binding.otpLayout.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }, 1000, 5000);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            // 轮询检查验证码是否已使用
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    MyHttp.get("/otp", (resp1) -> {
+                        if (TextUtils.isEmpty(resp1)) {
+                            countDownTimer.cancel();
+                            timer.cancel();
+                            binding.otpLayout.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }, 1000, 5000);
         });
     }
 
     void login() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
         finish();
     }
@@ -188,7 +172,54 @@ public class MainActivity extends AppCompatActivity {
 
     public void scanLogin(View v) {
         Intent intent = new Intent(this, ScanLoginActivity.class);
-        startActivity(intent);
+        //noinspection deprecation
+        startActivityForResult(intent, SCAN_CODE);
+    }
+
+    void handleScanResult(String text) {
+        try {
+            JSONObject obj = new JSONObject(text);
+            uid = obj.getString("uid");
+            clientId = obj.getString("clientId");
+            if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(clientId))
+                throw new Exception("uid或clientId为空");
+
+            MyHttp.get("/user-client-links/" + clientId + "/check", (resp) -> {
+                JSONObject respBody = new JSONObject(resp);
+                String clientString = respBody.getString("client");
+                Client client = Utils.gson.fromJson(clientString, Client.class);
+                if (respBody.getBoolean("linked")) {
+                    handleAuthResult(true);
+                    Intent intent = new Intent(this, SuccessActivity.class);
+                    intent.putExtra("client", client);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, AuthorizeActivity.class);
+                    intent.putExtra("client", client);
+                    intent.putExtra("uid", uid);
+                    //noinspection deprecation
+                    startActivityForResult(intent, AUTHORIZE);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Intent intent = new Intent(this, IllegalQrCodeActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    void handleAuthResult(boolean result) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("result", result);
+            obj.put("uid", uid);
+            obj.put("clientId", clientId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyHttp.post("/scan-login", obj, (resp) -> {
+        });
     }
 
     public void trustedDevice(View v) {
@@ -202,6 +233,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApplication.currentActivity = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MyApplication.currentActivity = null;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
@@ -210,6 +255,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionUtil.onRequestPermissionsResult(requestCode, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOGIN) {
+            if (resultCode != RESULT_OK) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        } else if (requestCode == SCAN_CODE) {
+            if (resultCode == RESULT_OK) {
+                handleScanResult(data.getStringExtra("text"));
+            }
+        } else if (requestCode == AUTHORIZE) {
+            // 到时再看一下，back和reject是否需要区分对待
+            handleAuthResult(resultCode == RESULT_OK);
+        }
     }
 }

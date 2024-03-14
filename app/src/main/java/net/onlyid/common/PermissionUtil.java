@@ -18,7 +18,6 @@ import net.onlyid.databinding.DialogPermissionBinding;
 public class PermissionUtil {
     static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE
     };
 

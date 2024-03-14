@@ -1,13 +1,11 @@
 package net.onlyid.scan_login;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -29,16 +27,10 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
-import net.onlyid.AuthorizeActivity;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanLoginBinding;
-import net.onlyid.entity.Client;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
@@ -139,38 +131,10 @@ public class ScanLoginActivity extends BaseActivity {
                 vibrator.vibrate(200);
 
                 Log.d(TAG, "result text: " + result.getText());
-                try {
-                    JSONObject jsonObject = new JSONObject(result.getText());
-                    String uid = jsonObject.getString("uid");
-                    String clientId = jsonObject.getString("clientId");
-                    if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(clientId)) {
-                        throw new Exception("uid或clientId为空");
-                    }
-
-                    MyHttp.get("/user-client-links/" + clientId + "/check", (s) -> {
-                        JSONObject respBody = new JSONObject(s);
-                        String clientString = respBody.getString("client");
-                        Client client = Utils.objectMapper.readValue(clientString, Client.class);
-                        if (respBody.getBoolean("linked")) {
-                            callback(ScanLoginActivity.this, uid, client, true);
-                            Intent intent = new Intent(ScanLoginActivity.this, SuccessActivity.class);
-                            intent.putExtra("client", client);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(ScanLoginActivity.this, AuthorizeActivity.class);
-                            intent.putExtra("client", client);
-                            intent.putExtra("uid", uid);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                    Intent intent = new Intent(ScanLoginActivity.this, IllegalQrCodeActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                Intent intent = new Intent();
+                intent.putExtra("text", result.getText());
+                setResult(RESULT_OK, intent);
+                finish();
             } catch (NotFoundException e) {
                 // do nothing
             } finally {
@@ -185,19 +149,5 @@ public class ScanLoginActivity extends BaseActivity {
         super.onDestroy();
 
         executorService.shutdown();
-    }
-
-    public static void callback(Activity activity, String uid, Client client, boolean result) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("result", result);
-            jsonObject.put("uid", uid);
-            jsonObject.put("clientId", client.id);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        MyHttp.post("/scan-login", jsonObject, (s) -> {
-            activity.finish();
-        });
     }
 }

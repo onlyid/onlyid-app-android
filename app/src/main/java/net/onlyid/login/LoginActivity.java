@@ -1,7 +1,6 @@
 package net.onlyid.login;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
 
-import net.onlyid.MainActivity;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -108,13 +106,14 @@ public class LoginActivity extends BaseActivity {
         MyHttp.post("/auth/login", obj, resp -> completeLogin(this, resp));
     }
 
-    static void completeLogin(Context context, String resp) throws JSONException {
+    static void completeLogin(Activity activity, String resp) throws JSONException {
         JSONObject respBody = new JSONObject(resp);
         Utils.pref.edit()
                 .putString("token", respBody.getString("token"))
                 .putString("user", respBody.getString("user"))
                 .apply();
 
-        context.startActivity(new Intent(context, MainActivity.class));
+        activity.setResult(RESULT_OK);
+        activity.finish();
     }
 }

@@ -1,26 +1,22 @@
 package net.onlyid;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityOauthBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
+import net.onlyid.login.AccountActivity;
 
 import org.json.JSONObject;
 
-import okhttp3.Call;
-
 public class OAuthActivity extends AppCompatActivity {
-    public static final int REQUEST_OAUTH = 2;
-    static final String TAG = OAuthActivity.class.getSimpleName();
+    static final String TAG = "OAuthActivity";
+    static final int LOGIN = 2, AUTHORIZE = 3;
     static final String EXTRA_CODE = "extraCode";
     static final String EXTRA_STATE = "extraState";
     ActivityOauthBinding binding;
@@ -35,65 +31,69 @@ public class OAuthActivity extends AppCompatActivity {
         init();
     }
 
-    void init() {
-        try {
-            String configString = getIntent().getStringExtra("oauthConfig");
-            config = Utils.objectMapper.readValue(configString, OAuthConfig.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getBooleanExtra("login", false)) {
+            //noinspection deprecation
+            startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
         }
-        MyHttp.get("app/user", new MyHttp.Callback() {
-            @Override
-            public void onSuccess(Call c, String s) {
-                promptAuthorizeIfNecessary(OAuthActivity.this, config);
-            }
-
-            @Override
-            public boolean onResponseFailure(Call c, int code, String s) {
-                if (code == 401) {
-
-                    Intent intent = new Intent(OAuthActivity.this, LoginActivity.class);
-                    intent.putExtra("oauthConfig", config);
-                    startActivityForResult(intent, REQUEST_OAUTH);
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
     }
 
-    public static void promptAuthorizeIfNecessary(Activity activity, OAuthConfig config) {
-        MyHttp.get("app/user-client-links/" + config.clientId + "/check", (c, s) -> {
-            JSONObject respBody = new JSONObject(s);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApplication.currentActivity = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MyApplication.currentActivity = null;
+    }
+
+    void init() {
+        String configString = getIntent().getStringExtra("oauthConfig");
+        config = Utils.gson.fromJson(configString, OAuthConfig.class);
+
+        // 首先判断当前是否已经登录
+        MyHttp.get("/user", (resp) -> promptAuthorizeIfNecessary());
+    }
+
+    void promptAuthorizeIfNecessary() {
+        MyHttp.get("/user-client-links/" + config.clientId + "/check", (resp) -> {
+            JSONObject respBody = new JSONObject(resp);
             String clientString = respBody.getString("client");
-            Client client = Utils.objectMapper.readValue(clientString, Client.class);
+            Client client = Utils.gson.fromJson(clientString, Client.class);
             if (respBody.getBoolean("linked")) {
-                callback(activity, config, client, true);
+                handleAuthResult(true);
             } else {
-                Intent intent = new Intent(activity, AuthorizeActivity.class);
+                Intent intent = new Intent(this, AuthorizeActivity.class);
                 intent.putExtra("client", client);
-                intent.putExtra("oauthConfig", config);
-                activity.startActivityForResult(intent, REQUEST_OAUTH);
+                //noinspection deprecation
+                startActivityForResult(intent, AUTHORIZE);
             }
         });
     }
 
-    public static void callback(Activity activity, OAuthConfig config, Client client, boolean result) {
-        Intent data = new Intent();
+    void handleAuthResult(boolean result) {
         if (result) {
-            MyHttp.post("app/authorize-client/" + client.id, new JSONObject(), (c, s) -> {
-                JSONObject respBody = new JSONObject(s);
+            MyHttp.post("/authorize-client/" + config.clientId, new JSONObject(), (resp) -> {
+                JSONObject respBody = new JSONObject(resp);
                 String code = respBody.getString("authorizationCode");
+
+                Intent data = new Intent();
                 data.putExtra(EXTRA_CODE, code);
                 data.putExtra(EXTRA_STATE, config.state);
-                activity.setResult(RESULT_OK, data);
-                activity.finish();
+                setResult(RESULT_OK, data);
+                finish();
             });
         } else {
-            activity.setResult(RESULT_CANCELED);
-            activity.finish();
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -101,9 +101,16 @@ public class OAuthActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_OAUTH) {
-            setResult(resultCode, data);
-            finish();
+        if (requestCode == LOGIN) {
+            if (resultCode == RESULT_OK) {
+                promptAuthorizeIfNecessary();
+            } else {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        } else if (requestCode == AUTHORIZE) {
+            // 到时再看一下，back和reject是否需要区分对待
+            handleAuthResult(resultCode == RESULT_OK);
         }
     }
 }
