@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class CustomNameActivity extends BaseActivity {
     ActivityCustomNameBinding binding;
-    String sessionId;
+    String deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class CustomNameActivity extends BaseActivity {
 
     void init() {
         Intent intent = getIntent();
-        sessionId = intent.getStringExtra("sessionId");
+        deviceId = intent.getStringExtra("deviceId");
         String customName = intent.getStringExtra("customName");
 
         binding.customNameInput.getEditText().setText(customName);
@@ -40,8 +40,8 @@ public class CustomNameActivity extends BaseActivity {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("sessionId", sessionId);
-            jsonObject.put("deviceName", customName);
+            jsonObject.put("deviceId", deviceId);
+            jsonObject.put("customName", customName);
         } catch (JSONException e) {
             e.printStackTrace();
         }

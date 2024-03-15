@@ -18,7 +18,9 @@ import com.google.gson.JsonSerializer;
 
 import net.onlyid.MyApplication;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -29,13 +31,20 @@ public class Utils {
     static Dialog loadingDialog;
 
     static {
-        JsonDeserializer<LocalDateTime> jsonDeserializer =
+        JsonDeserializer<LocalDateTime> localDateTimeDeserializer =
                 (json, type, context) -> LocalDateTime.parse(json.getAsString());
-        JsonSerializer<LocalDateTime> jsonSerializer =
+        JsonDeserializer<LocalDate> localDateDeserializer =
+                (json, type, context) -> LocalDate.parse(json.getAsString());
+        JsonSerializer<LocalDateTime> localDateTimeSerializer =
                 (src, type, context) -> new JsonPrimitive(src.format(Constants.DATE_TIME_FORMATTER));
+        JsonSerializer<LocalDate> localDateSerializer =
+                (src, type, context) -> new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE));
+
         gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, jsonDeserializer)
-                .registerTypeAdapter(LocalDateTime.class, jsonSerializer)
+                .registerTypeAdapter(LocalDateTime.class, localDateTimeDeserializer)
+                .registerTypeAdapter(LocalDate.class, localDateDeserializer)
+                .registerTypeAdapter(LocalDateTime.class, localDateTimeSerializer)
+                .registerTypeAdapter(LocalDate.class, localDateSerializer)
                 .create();
 
         objectMapper = new ObjectMapper();

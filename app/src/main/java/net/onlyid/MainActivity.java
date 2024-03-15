@@ -75,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         if (intent.getBooleanExtra("login", false)) {
-            //noinspection deprecation
-            startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
+            login();
         }
     }
 
@@ -160,9 +159,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void login() {
-        Intent intent = new Intent(this, AccountActivity.class);
-        startActivity(intent);
-        finish();
+        //noinspection deprecation
+        startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
     }
 
     public void userInfo(View v) {

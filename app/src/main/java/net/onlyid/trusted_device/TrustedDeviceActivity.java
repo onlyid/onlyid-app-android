@@ -10,8 +10,8 @@ import android.widget.BaseExpandableListAdapter;
 
 import androidx.annotation.Nullable;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import net.onlyid.MainActivity;
 import net.onlyid.R;
@@ -101,31 +101,31 @@ public class TrustedDeviceActivity extends BaseActivity {
                 binding = (ItemSessionBinding) convertView.getTag();
             }
 
-            Device session;
+            Device device = deviceSessionList.get(childPosition);
             int drawable;
-            session = deviceSessionList.get(childPosition);
 
-            if (session.type.equals(Device.Type.ANDROID)) {
+            if (device.type.equals(Device.Type.android)) {
                 drawable = R.drawable.device_android;
             } else {
                 drawable = R.drawable.device_apple;
             }
 
             String text;
-            if (!TextUtils.isEmpty(session.userDeviceName)) text = session.userDeviceName;
-            else text = session.deviceName;
+            if (!TextUtils.isEmpty(device.customName)) text = device.customName;
+            else text = device.name;
 
-            if (Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).equals(session.deviceId))
-                text += "（本机）";
+            //noinspection HardwareIds
+            String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            if (deviceId.equals(device.deviceId)) text += "（本机）";
 
             binding.deviceTextView.setText(text);
 
             binding.deviceImageView.setImageResource(drawable);
-            binding.lastActiveDateTextView.setText("最近活跃时间：" + session.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
+            binding.lastActiveDateTextView.setText("最近活跃时间：" + device.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
             binding.lastActiveLocationTextView.setText("最近活跃地点：" +
-                    (TextUtils.isEmpty(session.lastLocation) ? "-" : session.lastLocation));
-            binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(session.lastIp) ? "-" : session.lastIp));
-            binding.expireDateTextView.setText("登录过期时间：" + session.expireDate.format(Constants.DATE_TIME_FORMATTER_H));
+                    (TextUtils.isEmpty(device.lastLocation) ? "-" : device.lastLocation));
+            binding.lastActiveIpTextView.setText("最近活跃IP：" + (TextUtils.isEmpty(device.lastIp) ? "-" : device.lastIp));
+            binding.expireDateTextView.setText("登录过期时间：" + device.expireDate.format(Constants.DATE_TIME_FORMATTER_H));
 
             return convertView;
         }
@@ -165,9 +165,8 @@ public class TrustedDeviceActivity extends BaseActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        MyHttp.get("/devices/by-user", (s) -> {
-            JavaType javaType = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Device.class);
-            List<Device> list = Utils.objectMapper.readValue(s, javaType);
+        MyHttp.get("/devices/by-user", (resp) -> {
+            List<Device> list = Utils.gson.fromJson(resp, new TypeToken<List<Device>>(){});
             deviceSessionList = list.stream()
                     .filter((device -> !TextUtils.isEmpty(device.deviceId)))
                     .collect(Collectors.toList());
@@ -186,11 +185,13 @@ public class TrustedDeviceActivity extends BaseActivity {
 
         if (which == 0) {
             Intent intent = new Intent(TrustedDeviceActivity.this, CustomNameActivity.class);
-            intent.putExtra("sessionId", session.sessionId);
-            intent.putExtra("customName", session.userDeviceName);
+            intent.putExtra("deviceId", session.deviceId);
+            intent.putExtra("customName", session.customName);
+            //noinspection deprecation
             startActivityForResult(intent, 1);
         } else {
             // 退出当前设备，二次确认
+            //noinspection HardwareIds
             String myDeviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
             if (myDeviceId.equals(session.deviceId)) {
                 new MaterialAlertDialogBuilder(this)
@@ -210,7 +211,7 @@ public class TrustedDeviceActivity extends BaseActivity {
         MyHttp.post("/devices/" + sessionId + "/logout", new JSONObject(), (s) -> {
             Utils.hideLoading();
             if (logout) {
-                Utils.pref.edit().putString(Constants.USER, null).apply();
+                Utils.pref.edit().remove(Constants.USER).apply();
 
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("login", true);

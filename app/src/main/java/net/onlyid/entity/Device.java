@@ -4,19 +4,17 @@ import java.time.LocalDateTime;
 
 public class Device {
     public enum Type {
-        ANDROID, IOS, BROWSER
+        android, apple
     }
 
     public String sessionId;
     public String deviceId;
-    public String deviceName;
+    public String name;
     public Type type;
-    public LocalDateTime firstDate;
-    public String firstIp;
-    public String firstLocation;
+    public LocalDateTime createDate;
     public LocalDateTime lastDate;
     public String lastIp;
     public String lastLocation;
-    public String userDeviceName;
+    public String customName;
     public LocalDateTime expireDate;
 }
