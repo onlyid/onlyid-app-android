@@ -14,8 +14,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
+import com.google.gson.reflect.TypeToken;
 
 import net.onlyid.R;
 import net.onlyid.common.Utils;
@@ -96,12 +95,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
 
         scanner.close();
 
-        try {
-            JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Province.class);
-            chinaCityList = Utils.objectMapper.readValue(stringBuilder.toString(), type);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        chinaCityList = Utils.gson.fromJson(stringBuilder.toString(), new TypeToken<List<Province>>() {});
     }
 
     @Override

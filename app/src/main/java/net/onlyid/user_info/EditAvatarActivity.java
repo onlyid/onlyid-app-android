@@ -19,12 +19,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yalantis.ucrop.UCrop;
 
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditAvatarBinding;
@@ -75,26 +74,21 @@ public class EditAvatarActivity extends BaseActivity {
             }
         });
 
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            User user = Utils.objectMapper.readValue(userString, User.class);
-            Glide.with(this).load(user.avatar).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                            Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                }
+        User user = MyApplication.getCurrentUser();
+        Glide.with(this).load(user.avatar).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                        Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
 
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                                               DataSource dataSource, boolean isFirstResource) {
-                    new Handler().post(() -> binding.photoView.setScale(binding.photoView.getMinimumScale()));
-                    return false;
-                }
-            }).into(binding.photoView);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                           DataSource dataSource, boolean isFirstResource) {
+                new Handler().post(() -> binding.photoView.setScale(binding.photoView.getMinimumScale()));
+                return false;
+            }
+        }).into(binding.photoView);
     }
 
     @Override

@@ -1,9 +1,8 @@
 package net.onlyid.entity;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Client implements Serializable {
+public class Entity2 {
     public enum Type {
         APP, WEB, OTHER;
 
@@ -23,7 +22,8 @@ public class Client implements Serializable {
     public String iconUrl;
     public String name;
     public Type type;
-    public String tenant;
-    public LocalDateTime createDate;
-    public String description;
+    public LocalDateTime firstDate;
+    public String lastIp;
+    public String lastLocation;
+    public LocalDateTime lastDate;
 }

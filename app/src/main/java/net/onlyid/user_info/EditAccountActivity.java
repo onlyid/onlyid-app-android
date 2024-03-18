@@ -12,11 +12,9 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.util.PatternsCompat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditAccountBinding;
@@ -49,12 +47,7 @@ public class EditAccountActivity extends BaseActivity {
             return validateAccount(account) ? account : null;
         };
 
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            user = Utils.objectMapper.readValue(userString, User.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user = MyApplication.getCurrentUser();
 
         type = getIntent().getStringExtra(UserInfoActivity.TYPE);
         switch (type) {

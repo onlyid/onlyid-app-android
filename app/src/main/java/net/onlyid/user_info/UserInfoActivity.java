@@ -8,9 +8,9 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
@@ -42,19 +42,14 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     void init() {
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            user = Utils.objectMapper.readValue(userString, User.class);
-            Glide.with(this).load(user.avatar).into(binding.avatarImageView);
-            binding.nicknameTextView.setText(user.nickname);
-            binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
-            binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
-            binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
-            binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-            binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user = MyApplication.getCurrentUser();
+        Glide.with(this).load(user.avatar).into(binding.avatarImageView);
+        binding.nicknameTextView.setText(user.nickname);
+        binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
+        binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
+        binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
+        binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
     }
 
     @Override
@@ -73,7 +68,7 @@ public class UserInfoActivity extends BaseActivity {
     void submit() {
         Utils.showLoading(this);
         try {
-            JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
+            JSONObject jsonObject = new JSONObject(Utils.gson.toJson(user));
             MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.hideLoading();
                 refresh();
@@ -130,7 +125,7 @@ public class UserInfoActivity extends BaseActivity {
 
     public void birthday(View v) {
         LocalDate localDate = user.birthDate == null ? LocalDate.now() : user.birthDate;
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerDialog,  (view, year, month, dayOfMonth) -> {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerDialog, (view, year, month, dayOfMonth) -> {
             user.birthDate = LocalDate.of(year, month + 1, dayOfMonth);
             submit();
         }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());

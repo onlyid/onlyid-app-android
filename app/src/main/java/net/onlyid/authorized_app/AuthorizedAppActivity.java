@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.bumptech.glide.Glide;
-import com.fasterxml.jackson.databind.JavaType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
@@ -21,16 +21,15 @@ import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizedAppBinding;
 import net.onlyid.databinding.ItemClientBinding;
-import net.onlyid.entity.Client1;
+import net.onlyid.entity.Entity2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AuthorizedAppActivity extends BaseActivity {
-    static final String TAG = AuthorizedAppActivity.class.getSimpleName();
+    private static final String TAG = "AuthorizedAppActivity";
     ActivityAuthorizedAppBinding binding;
-    List<Client1> clientList = new ArrayList<>();
+    List<Entity2> clientList = new ArrayList<>();
     boolean loading = true;
 
     BaseAdapter adapter = new BaseAdapter() {
@@ -60,11 +59,11 @@ public class AuthorizedAppActivity extends BaseActivity {
                 binding = (ItemClientBinding) convertView.getTag();
             }
 
-            Client1 client = clientList.get(position);
+            Entity2 client = clientList.get(position);
             Glide.with(convertView).load(client.iconUrl).into(binding.imageView);
             String type = "（" + client.type.toLocalizedString() + "）";
             SpannableString ss = new SpannableString(client.name + type);
-            ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray)),
+            ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray, null)),
                     client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new RelativeSizeSpan(0.88f),
                     client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -112,13 +111,8 @@ public class AuthorizedAppActivity extends BaseActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         loading = true;
 
-        MyHttp.get("/clients/by-user", (s) -> {
-            JavaType type = Utils.objectMapper.getTypeFactory().constructParametricType(ArrayList.class, Client1.class);
-            clientList = Utils.objectMapper.readValue(s, type);
-            // 过滤掉唯ID的应用
-            clientList = clientList.stream()
-                    .filter((client -> !client.name.startsWith("唯ID")))
-                    .collect(Collectors.toList());
+        MyHttp.get("/clients/by-user", (resp) -> {
+            clientList = Utils.gson.fromJson(resp, new TypeToken<List<Entity2>>(){});
 
             if (clientList.isEmpty()) binding.emptyView.getRoot().setVisibility(View.VISIBLE);
             else binding.listView.setVisibility(View.VISIBLE);

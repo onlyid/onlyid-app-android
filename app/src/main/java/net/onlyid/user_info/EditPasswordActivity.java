@@ -8,11 +8,9 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditPasswordBinding;
@@ -36,12 +34,7 @@ public class EditPasswordActivity extends BaseActivity {
     }
 
     void init() {
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            user = Utils.objectMapper.readValue(userString, User.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user = MyApplication.getCurrentUser();
 
         if (TextUtils.isEmpty(user.mobile)) recipient = user.email;
         else recipient = user.mobile;

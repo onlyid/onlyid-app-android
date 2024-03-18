@@ -8,11 +8,9 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditBasicBinding;
@@ -38,12 +36,7 @@ public class EditBasicActivity extends BaseActivity {
     }
 
     void init() {
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            user = Utils.objectMapper.readValue(userString, User.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user = MyApplication.getCurrentUser();
 
         type = getIntent().getStringExtra(UserInfoActivity.TYPE);
         switch (type) {
@@ -94,7 +87,7 @@ public class EditBasicActivity extends BaseActivity {
         }
         Utils.showLoading(this);
         try {
-            JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
+            JSONObject jsonObject = new JSONObject(Utils.gson.toJson(user));
             MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.hideLoading();
                 finish();

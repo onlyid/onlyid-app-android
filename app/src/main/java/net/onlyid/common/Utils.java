@@ -7,8 +7,6 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,7 +24,6 @@ import java.util.regex.Pattern;
 public class Utils {
     static final String TAG = "Utils";
     public static final Gson gson;
-    public static ObjectMapper objectMapper;
     public static final SharedPreferences pref;
     static Dialog loadingDialog;
 
@@ -46,9 +43,6 @@ public class Utils {
                 .registerTypeAdapter(LocalDateTime.class, localDateTimeSerializer)
                 .registerTypeAdapter(LocalDate.class, localDateSerializer)
                 .create();
-
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
 
         pref = MyApplication.context.getSharedPreferences("main", Context.MODE_PRIVATE);
     }

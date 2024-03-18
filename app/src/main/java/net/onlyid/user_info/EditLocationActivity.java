@@ -5,11 +5,9 @@ import android.text.TextUtils;
 
 import androidx.fragment.app.FragmentTransaction;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
-import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditLocationBinding;
@@ -33,12 +31,7 @@ public class EditLocationActivity extends BaseActivity {
     }
 
     void init() {
-        String userString = Utils.pref.getString(Constants.USER, null);
-        try {
-            user = Utils.objectMapper.readValue(userString, User.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        user = MyApplication.getCurrentUser();
 
         getSupportFragmentManager().beginTransaction().add(R.id.container, new ProvinceFragment()).commit();
     }
@@ -64,7 +57,7 @@ public class EditLocationActivity extends BaseActivity {
 
         Utils.showLoading(this);
         try {
-            JSONObject jsonObject = new JSONObject(Utils.objectMapper.writeValueAsString(user));
+            JSONObject jsonObject = new JSONObject(Utils.gson.toJson(user));
             MyHttp.put("/user", jsonObject, (s) -> {
                 Utils.hideLoading();
                 finish();
