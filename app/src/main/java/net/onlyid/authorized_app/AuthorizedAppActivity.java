@@ -26,6 +26,8 @@ import net.onlyid.entity.Entity2;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class AuthorizedAppActivity extends BaseActivity {
     private static final String TAG = "AuthorizedAppActivity";
     ActivityAuthorizedAppBinding binding;
@@ -60,7 +62,10 @@ public class AuthorizedAppActivity extends BaseActivity {
             }
 
             Entity2 client = clientList.get(position);
-            Glide.with(convertView).load(client.iconUrl).into(binding.imageView);
+            int radius = Utils.dp2px(AuthorizedAppActivity.this, 5);
+            Glide.with(convertView).load(client.iconUrl)
+                    .transform(new RoundedCornersTransformation(radius, 0))
+                    .into(binding.imageView);
             String type = "（" + client.type.toLocalizedString() + "）";
             SpannableString ss = new SpannableString(client.name + type);
             ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray, null)),

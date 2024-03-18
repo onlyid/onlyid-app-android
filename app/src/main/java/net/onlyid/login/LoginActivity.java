@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
-import net.onlyid.databinding.ActivityLogin1Binding;
+import net.onlyid.databinding.ActivityLoginBinding;
 import net.onlyid.entity.Entity1;
 
 import org.json.JSONException;
@@ -23,7 +23,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class LoginActivity extends BaseActivity {
     static final String TAG = "LoginActivity";
-    ActivityLogin1Binding binding;
+    ActivityLoginBinding binding;
     Entity1 user;
     String loginType = "password";
     EditText passwordEditText, otpEditText;
@@ -31,7 +31,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLogin1Binding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         user = (Entity1) getIntent().getSerializableExtra("user");

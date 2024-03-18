@@ -40,6 +40,8 @@ import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class MainActivity extends AppCompatActivity {
     static final String TAG = MainActivity.class.getSimpleName();
     static final String PUSH_TAG = "Push";
@@ -124,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
             Otp otp = Utils.gson.fromJson(resp, Otp.class);
             binding.otpLayout.setVisibility(View.VISIBLE);
             binding.otpTextView.setText(otp.code);
-            Glide.with(this).load(otp.clientIconUrl).into(binding.iconImageView);
+            int radius = Utils.dp2px(this, 5);
+            Glide.with(this).load(otp.clientIconUrl)
+                    .transform(new RoundedCornersTransformation(radius, 0))
+                    .into(binding.iconImageView);
             binding.otpProgressBar.setProgress(100);
             long duration = Duration.between(otp.createDate, otp.expireDate).toMillis();
 

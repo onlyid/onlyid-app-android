@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class UserInfoActivity extends BaseActivity {
     static final String TAG = UserInfoActivity.class.getSimpleName();
     static final String TYPE = "type";
@@ -43,7 +45,10 @@ public class UserInfoActivity extends BaseActivity {
 
     void init() {
         user = MyApplication.getCurrentUser();
-        Glide.with(this).load(user.avatar).into(binding.avatarImageView);
+        int radius = Utils.dp2px(this, 5);
+        Glide.with(this).load(user.avatar)
+                .transform(new RoundedCornersTransformation(radius, 0))
+                .into(binding.avatarImageView);
         binding.nicknameTextView.setText(user.nickname);
         binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
         binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);

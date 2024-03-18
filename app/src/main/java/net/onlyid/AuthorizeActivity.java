@@ -6,9 +6,12 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizeBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.User;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class AuthorizeActivity extends BaseActivity {
     static final String TAG = AuthorizeActivity.class.getSimpleName();
@@ -29,10 +32,15 @@ public class AuthorizeActivity extends BaseActivity {
         client = (Client) getIntent().getSerializableExtra("client");
         user = MyApplication.getCurrentUser();
 
-        Glide.with(this).load(user.avatar).into(binding.avatarImageView);
+        int radius = Utils.dp2px(this, 5);
+        Glide.with(this).load(user.avatar)
+                .transform(new RoundedCornersTransformation(radius, 0))
+                .into(binding.avatarImageView);
         binding.nicknameTextView.setText(user.nickname);
 
-        Glide.with(this).load(client.iconUrl).into(binding.iconImageView);
+        Glide.with(this).load(client.iconUrl)
+                .transform(new RoundedCornersTransformation(radius, 0))
+                .into(binding.iconImageView);
         binding.clientNameTextView.setText(client.name);
         binding.tipTextView.setText("「" + client.name + "」将获得你的手机号、昵称等账号信息。");
     }
