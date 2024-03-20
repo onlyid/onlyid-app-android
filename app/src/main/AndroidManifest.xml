@@ -30,6 +30,10 @@
         android:label="唯ID"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="02919836df23adaee129c306e78d83f5" />
+
         <activity
             android:name=".login.SignUpActivity"
             android:label="注册"
@@ -128,10 +132,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="02919836df23adaee129c306e78d83f5" />
 
         <service android:name="com.amap.api.location.APSService" />
         <service

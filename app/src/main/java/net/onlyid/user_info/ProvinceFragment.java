@@ -81,7 +81,13 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     }
 
     void init() {
-        locationClient = new AMapLocationClient(getContext());
+        AMapLocationClient.updatePrivacyShow(getContext(),true,true);
+        AMapLocationClient.updatePrivacyAgree(getContext(),true);
+        try {
+            locationClient = new AMapLocationClient(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         locationClient.setLocationListener(this);
         AMapLocationClientOption locationOption = new AMapLocationClientOption();
         locationOption.setOnceLocation(true);
