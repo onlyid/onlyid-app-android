@@ -1,13 +1,15 @@
 package net.onlyid.user_info;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.amap.api.location.AMapLocation;
@@ -27,6 +29,10 @@ import java.util.Scanner;
 
 public class ProvinceFragment extends Fragment implements AMapLocationListener, AdapterView.OnItemClickListener {
     static final String TAG = ProvinceFragment.class.getSimpleName();
+    static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
 
     static final class Province {
         public String province;
@@ -77,10 +83,47 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        init();
+        initData();
+        checkLocationPermission();
     }
 
-    void init() {
+    void initData() {
+        Scanner scanner = new Scanner(getResources().openRawResource(R.raw.china_city_list));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while (scanner.hasNextLine()) stringBuilder.append(scanner.nextLine());
+
+        scanner.close();
+        chinaCityList = Utils.gson.fromJson(stringBuilder.toString(), new TypeToken<List<Province>>() {});
+    }
+
+    void checkLocationPermission() {
+        for (String permission : PERMISSIONS) {
+            //noinspection ConstantConditions
+            if (PackageManager.PERMISSION_GRANTED != getContext().checkSelfPermission(permission)) {
+                //noinspection deprecation
+                requestPermissions(PERMISSIONS, 1);
+                return;
+            }
+        }
+
+        initLocation();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        int count = 0;
+        for (int result : grantResults) {
+            if (PackageManager.PERMISSION_GRANTED == result) count++;
+        }
+
+        // fine和coarse，有任一权限，都尝试定位
+        if (count > 0) initLocation();
+        else locationBinding.textView.setText("当前位置：没有定位权限");
+    }
+
+    void initLocation() {
         AMapLocationClient.updatePrivacyShow(getContext(),true,true);
         AMapLocationClient.updatePrivacyAgree(getContext(),true);
         try {
@@ -90,22 +133,13 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         }
         locationClient.setLocationListener(this);
         AMapLocationClientOption locationOption = new AMapLocationClientOption();
-        locationOption.setOnceLocation(true);
-        locationOption.setNeedAddress(true);
+        locationOption.setOnceLocation(true).setNeedAddress(true);
         locationClient.setLocationOption(locationOption);
         locationClient.startLocation();
-
-        Scanner scanner = new Scanner(getResources().openRawResource(R.raw.china_city_list));
-        StringBuilder stringBuilder = new StringBuilder();
-        while (scanner.hasNextLine()) stringBuilder.append(scanner.nextLine());
-
-        scanner.close();
-
-        chinaCityList = Utils.gson.fromJson(stringBuilder.toString(), new TypeToken<List<Province>>() {});
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProvinceBinding.inflate(inflater, container, false);
 
         ItemLocationBinding binding1 = ItemLocationBinding.inflate(inflater);
@@ -115,7 +149,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
 
         locationBinding = ItemLocationBinding.inflate(inflater);
         locationBinding.textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_location_on_24, 0, 0, 0);
-        locationBinding.textView.setText("当前位置：定位中。。。");
+        locationBinding.textView.setText("当前位置：定位中...");
         locationBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
         binding.getRoot().addHeaderView(locationBinding.getRoot());
 
@@ -129,7 +163,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     public void onLocationChanged(AMapLocation location) {
         this.location = location;
 
-        if (location == null || location.getErrorCode() != 0) {
+        if (location == null || location.getErrorCode() != 0 || TextUtils.isEmpty(location.getProvince())) {
             locationBinding.textView.setText("当前位置：定位失败");
         } else {
             if (location.getProvince().equals(location.getCity())) {
@@ -141,6 +175,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EditLocationActivity activity = (EditLocationActivity) getActivity();
         if (position == 0) {
@@ -163,6 +198,6 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     public void onDestroy() {
         super.onDestroy();
 
-        locationClient.onDestroy();
+        if (locationClient != null) locationClient.onDestroy();
     }
 }

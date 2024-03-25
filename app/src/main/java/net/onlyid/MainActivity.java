@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +18,6 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import net.onlyid.authorized_app.AuthorizedAppActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
-import net.onlyid.common.PermissionUtil;
 import net.onlyid.common.UpdateUtil;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     UpdateUtil updateUtil;
-    PermissionUtil permissionUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         updateUtil = new UpdateUtil(this);
         updateUtil.check();
-
-        permissionUtil = new PermissionUtil(this);
-        permissionUtil.check();
     }
 
     @Override
@@ -254,12 +248,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         updateUtil.destroy();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionUtil.onRequestPermissionsResult(requestCode, grantResults);
     }
 
     @Override

@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "net.onlyid"
         minSdkVersion 26
-        targetSdkVersion 30
-        versionCode 16
-        versionName "1.16"
+        targetSdkVersion 31
+        versionCode 17
+        versionName "1.17"
         archivesBaseName = "onlyid"
     }
     buildTypes {
@@ -41,5 +41,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-    implementation 'com.amap.api:location:5.6.2'
+    implementation 'com.amap.api:location:6.4.3'
 }
