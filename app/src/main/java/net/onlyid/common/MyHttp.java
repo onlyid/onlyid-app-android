@@ -105,7 +105,7 @@ public class MyHttp {
                         if (response.isSuccessful()) {
                             callback.onSuccess(string);
                         } else if (response.code() == 401) {
-                            Utils.pref.edit().remove("user").apply();
+                            Utils.pref.edit().remove(Constants.USER).apply();
 
                             if (current == null) {
                                 Utils.showToast("登录已过期，请重新登录", Toast.LENGTH_LONG);

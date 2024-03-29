@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.bumptech.glide.Glide;
 
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityLoginBinding;
@@ -110,7 +111,7 @@ public class LoginActivity extends BaseActivity {
         JSONObject respBody = new JSONObject(resp);
         Utils.pref.edit()
                 .putString("token", respBody.getString("token"))
-                .putString("user", respBody.getString("user"))
+                .putString("user", respBody.getString(Constants.USER))
                 .apply();
 
         activity.setResult(RESULT_OK);
