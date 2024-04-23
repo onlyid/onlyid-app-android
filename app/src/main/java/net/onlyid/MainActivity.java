@@ -16,9 +16,9 @@ import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import net.onlyid.authorized_app.AuthorizedAppActivity;
+import net.onlyid.common.CheckUpdate;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
-import net.onlyid.common.UpdateUtil;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.entity.Client;
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     String uid, clientId;
 
     ActivityMainBinding binding;
-    UpdateUtil updateUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +59,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        syncUserInfo();
-
-        updateUtil = new UpdateUtil(this);
-        updateUtil.check();
+        CheckUpdate.start(this, this::syncUserInfo);
     }
 
     @Override
@@ -234,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         MyApplication.currentActivity = this;
+        CheckUpdate.installIfNecessary();
     }
 
     @Override
@@ -247,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        updateUtil.destroy();
+        CheckUpdate.destroy();
     }
 
     @Override
@@ -256,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == LOGIN) {
             if (resultCode != RESULT_OK) {
-                setResult(RESULT_CANCELED);
                 finish();
             }
         } else if (requestCode == SCAN_CODE) {
