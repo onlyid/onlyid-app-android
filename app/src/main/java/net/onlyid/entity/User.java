@@ -27,4 +27,19 @@ public class User {
     public LocalDate birthDate;
     public String province;
     public String city;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", birthDate=" + birthDate +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                '}';
+    }
 }

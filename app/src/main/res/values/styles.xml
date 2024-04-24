@@ -6,8 +6,45 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="MainActivity_Button1_Layout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">26dp</item>
+        <item name="android:paddingBottom">18dp</item>
+    </style>
+
+    <style name="MainActivity_Button1_Label">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="MainActivity_Button2_Layout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">30dp</item>
+        <item name="android:paddingBottom">30dp</item>
+    </style>
+
+    <style name="MainActivity_Button2_Label">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
     <style name="MainButton" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/bg</item>
+        <item name="android:backgroundTint">@color/border2</item>
         <item name="iconPadding">10dp</item>
         <item name="android:paddingTop">20dp</item>
         <item name="android:paddingBottom">20dp</item>
