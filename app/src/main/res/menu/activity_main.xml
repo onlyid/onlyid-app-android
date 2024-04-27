@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/pick"
-        android:title="从相册选择"
-        android:showAsAction="never" />
+        android:id="@+id/support"
+        android:showAsAction="never"
+        android:title="需要帮助？" />
 </menu>

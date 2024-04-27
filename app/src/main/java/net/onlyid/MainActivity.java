@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -23,11 +26,12 @@ import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.entity.Client;
 import net.onlyid.entity.Otp;
+import net.onlyid.entity.User;
+import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
 import net.onlyid.scan_login.IllegalQrCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.scan_login.SuccessActivity;
-import net.onlyid.trusted_device.TrustedDeviceActivity;
 import net.onlyid.user_info.UserInfoActivity;
 
 import org.json.JSONException;
@@ -41,7 +45,7 @@ import java.util.TimerTask;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MainActivity extends AppCompatActivity {
-    static final String TAG = MainActivity.class.getSimpleName();
+    static final String TAG = "MainActivity";
     static final String PUSH_TAG = "Push";
     static final String PUSH_APP_ID = "2882303761520030422";
     static final String PUSH_APP_KEY = "5222003035422";
@@ -59,7 +63,39 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ActionBar actionBar = getSupportActionBar();
+        //noinspection ConstantConditions
+        actionBar.setIcon(R.drawable.ic_logo);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        initView();
+
         CheckUpdate.start(this, this::syncUserInfo);
+    }
+
+    void initView() {
+        binding.userProfileLayout.setOnClickListener((v) -> userProfile());
+        binding.scanLoginLayout.setOnClickListener((v) -> scanLogin());
+        binding.authorizationLayout.setOnClickListener((v) -> authorization());
+        binding.loginHistoryLayout.setOnClickListener((v) -> {});
+        binding.securityLayout.setOnClickListener((v) -> {});
+        binding.switchAccountLayout.setOnClickListener((v) -> {});
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.support) {
+            startActivity(new Intent(this, SupportActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -84,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
             // 到时再看一下，首页的api怎么组织
             initPush();
             getOtp();
+
+            User user = MyApplication.getCurrentUser();
+            int radius = Utils.dp2px(this, 5);
+            Glide.with(this).load(user.avatar)
+                    .transform(new RoundedCornersTransformation(radius, 0))
+                    .into(binding.avatarImageView);
         });
     }
 
@@ -158,12 +200,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
     }
 
-    public void userInfo(View v) {
+    void userProfile() {
         Intent intent = new Intent(this, UserInfoActivity.class);
         startActivity(intent);
     }
 
-    public void scanLogin(View v) {
+    void scanLogin() {
         Intent intent = new Intent(this, ScanLoginActivity.class);
         //noinspection deprecation
         startActivityForResult(intent, SCAN_CODE);
@@ -215,12 +257,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void trustedDevice(View v) {
-        Intent intent = new Intent(this, TrustedDeviceActivity.class);
-        startActivity(intent);
-    }
-
-    public void authorizedApp(View v) {
+    void authorization() {
         Intent intent = new Intent(this, AuthorizedAppActivity.class);
         startActivity(intent);
     }

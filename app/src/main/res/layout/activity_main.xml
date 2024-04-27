@@ -39,44 +39,159 @@
             android:progressTint="@color/primary" />
     </LinearLayout>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="15dp"
-        android:paddingRight="10dp">
-
-        <Button
-            style="@style/MainButton"
-            android:drawableTop="@drawable/ic_baseline_account_circle_24"
-            android:onClick="userInfo"
-            android:text="个人信息" />
-
-        <Button
-            style="@style/MainButton"
-            android:drawableTop="@drawable/ic_qr_code"
-            android:onClick="scanLogin"
-            android:text="扫码登录" />
-    </LinearLayout>
+        android:layout_height="1dp"
+        android:layout_marginTop="120dp"
+        android:background="#ddd" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="8dp"
-        android:paddingRight="10dp">
+        android:layout_height="wrap_content">
 
-        <Button
-            style="@style/MainButton"
-            android:drawableTop="@drawable/ic_baseline_devices_24"
-            android:onClick="trustedDevice"
-            android:text="可信设备" />
+        <LinearLayout
+            android:id="@+id/user_profile_layout"
+            style="@style/MainActivity_Button1_Layout">
 
-        <Button
-            style="@style/MainButton"
-            android:drawableTop="@drawable/ic_baseline_apps_24"
-            android:onClick="authorizedApp"
-            android:text="授权应用" />
+            <ImageView
+                android:id="@+id/avatar_image_view"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/ic_person" />
+
+            <TextView
+                style="@style/MainActivity_Button1_Label"
+                android:text="我的账号" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ddd" />
+
+        <LinearLayout
+            android:id="@+id/scan_login_layout"
+            style="@style/MainActivity_Button1_Layout">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/ic_qr_code_scanner"
+                android:tint="#e73f51b5" />
+
+            <TextView
+                style="@style/MainActivity_Button1_Label"
+                android:text="扫码登录" />
+        </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/authorization_layout"
+            style="@style/MainActivity_Button2_Layout">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_apps"
+                android:tint="#2299dd" />
+
+            <TextView
+                style="@style/MainActivity_Button2_Label"
+                android:text="授权应用" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ddd" />
+
+        <LinearLayout
+            android:id="@+id/login_history_layout"
+            style="@style/MainActivity_Button2_Layout">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_history"
+                android:tint="#F08C10" />
+
+            <TextView
+                style="@style/MainActivity_Button2_Label"
+                android:text="登录历史" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/security_layout"
+            style="@style/MainActivity_Button2_Layout">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="0.5dp"
+                android:src="@drawable/ic_security"
+                android:tint="@color/success" />
+
+            <TextView
+                style="@style/MainActivity_Button2_Label"
+                android:text="安全设置" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ddd" />
+
+        <LinearLayout
+            android:id="@+id/switch_account_layout"
+            style="@style/MainActivity_Button2_Layout">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="0.5dp"
+                android:src="@drawable/ic_switch_account"
+                android:tint="#e73f51b5" />
+
+            <TextView
+                style="@style/MainActivity_Button2_Label"
+                android:text="切换账号" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:text="用一个账号登录全球互联网" />
 </LinearLayout>
