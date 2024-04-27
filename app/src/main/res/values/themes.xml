@@ -42,7 +42,7 @@
 
     <style name="OAuthActivity" parent="Theme.MaterialComponents.Dialog">
         <item name="windowNoTitle">true</item>
-        <item name="android:background">@color/bg</item>
+        <item name="android:background">@color/border2</item>
     </style>
 
     <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">

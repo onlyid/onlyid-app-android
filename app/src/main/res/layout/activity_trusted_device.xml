@@ -7,7 +7,7 @@
         android:id="@+id/expandable_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:childDivider="@color/bg"
+        android:childDivider="@color/border2"
         android:divider="@android:color/transparent"
         android:dividerHeight="1dp"
         android:groupIndicator="@null" />

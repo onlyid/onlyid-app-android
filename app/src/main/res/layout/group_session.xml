@@ -23,7 +23,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/bg" />
+            android:background="@color/border2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,6 +36,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/bg" />
+            android:background="@color/border2" />
     </LinearLayout>
 </LinearLayout>
