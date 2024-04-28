@@ -1,4 +1,4 @@
-package net.onlyid.user_info;
+package net.onlyid.user_profile;
 
 import android.content.Context;
 import android.os.CountDownTimer;

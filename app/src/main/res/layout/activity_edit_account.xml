@@ -24,7 +24,7 @@
             android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <net.onlyid.user_info.OtpInput
+    <net.onlyid.user_profile.OtpInput
         android:id="@+id/otp_input1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

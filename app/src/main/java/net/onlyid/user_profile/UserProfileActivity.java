@@ -1,4 +1,4 @@
-package net.onlyid.user_info;
+package net.onlyid.user_profile;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
-import net.onlyid.databinding.ActivityUserInfoBinding;
+import net.onlyid.databinding.ActivityUserProfileBinding;
 import net.onlyid.entity.User;
 
 import org.json.JSONObject;
@@ -28,16 +28,16 @@ import java.time.format.DateTimeFormatter;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-public class UserInfoActivity extends BaseActivity {
-    static final String TAG = UserInfoActivity.class.getSimpleName();
+public class UserProfileActivity extends BaseActivity {
+    static final String TAG = UserProfileActivity.class.getSimpleName();
     static final String TYPE = "type";
-    ActivityUserInfoBinding binding;
+    ActivityUserProfileBinding binding;
     User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityUserInfoBinding.inflate(getLayoutInflater());
+        binding = ActivityUserProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         init();

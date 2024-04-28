@@ -32,7 +32,7 @@ import net.onlyid.login.AccountActivity;
 import net.onlyid.scan_login.IllegalQrCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.scan_login.SuccessActivity;
-import net.onlyid.user_info.UserInfoActivity;
+import net.onlyid.user_profile.UserProfileActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void userProfile() {
-        Intent intent = new Intent(this, UserInfoActivity.class);
+        Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package net.onlyid.user_info;
+package net.onlyid.user_profile;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -49,7 +49,7 @@ public class EditAccountActivity extends BaseActivity {
 
         user = MyApplication.getCurrentUser();
 
-        type = getIntent().getStringExtra(UserInfoActivity.TYPE);
+        type = getIntent().getStringExtra(UserProfileActivity.TYPE);
         switch (type) {
             case "mobile":
                 if (TextUtils.isEmpty(user.mobile)) {

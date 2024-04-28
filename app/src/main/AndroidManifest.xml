@@ -46,7 +46,7 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.EditLocationActivity"
+            android:name=".user_profile.EditLocationActivity"
             android:label="选择地区"
             android:screenOrientation="portrait" />
         <activity
@@ -66,17 +66,17 @@
             android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.EditPasswordActivity"
+            android:name=".user_profile.EditPasswordActivity"
             android:label="修改密码"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.EditAccountActivity"
+            android:name=".user_profile.EditAccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.EditBasicActivity"
+            android:name=".user_profile.EditBasicActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.EditAvatarActivity"
+            android:name=".user_profile.EditAvatarActivity"
             android:label="修改头像"
             android:screenOrientation="portrait" />
         <activity
@@ -92,7 +92,7 @@
             android:label="扫码登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_info.UserInfoActivity"
+            android:name=".user_profile.UserProfileActivity"
             android:label="个人信息"
             android:screenOrientation="portrait" />
         <activity

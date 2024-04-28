@@ -1,4 +1,4 @@
-package net.onlyid.user_info;
+package net.onlyid.user_profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

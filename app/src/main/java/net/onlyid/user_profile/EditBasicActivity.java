@@ -1,4 +1,4 @@
-package net.onlyid.user_info;
+package net.onlyid.user_profile;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,7 +38,7 @@ public class EditBasicActivity extends BaseActivity {
     void init() {
         user = MyApplication.getCurrentUser();
 
-        type = getIntent().getStringExtra(UserInfoActivity.TYPE);
+        type = getIntent().getStringExtra(UserProfileActivity.TYPE);
         switch (type) {
             case "nickname":
                 binding.tipTextView.setText("起一个好名字，让大家更容易记住你。");
