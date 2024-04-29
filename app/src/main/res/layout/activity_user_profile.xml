@@ -131,23 +131,5 @@
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
-
-        <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="password">
-
-            <TextView
-                style="@style/UserInfoItemLabel"
-                android:text="密码" />
-
-            <TextView
-                style="@style/UserInfoItemText"
-                android:text="● ● ● ● ● ●"
-                android:textSize="8sp" />
-
-            <include layout="@layout/arrow_right" />
-        </LinearLayout>
-
-        <include layout="@layout/list_divider" />
     </LinearLayout>
 </ScrollView>

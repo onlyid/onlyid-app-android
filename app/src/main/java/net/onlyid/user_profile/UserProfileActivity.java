@@ -148,9 +148,4 @@ public class UserProfileActivity extends BaseActivity {
         Intent intent = new Intent(this, EditLocationActivity.class);
         startActivity(intent);
     }
-
-    public void password(View v) {
-        Intent intent = new Intent(this, EditPasswordActivity.class);
-        startActivity(intent);
-    }
 }

@@ -66,10 +66,6 @@
             android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_profile.EditPasswordActivity"
-            android:label="修改密码"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".user_profile.EditAccountActivity"
             android:screenOrientation="portrait" />
         <activity
