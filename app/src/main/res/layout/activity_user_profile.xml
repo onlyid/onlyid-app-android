@@ -6,7 +6,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:divider="@drawable/list_divider"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
 
         <LinearLayout
             style="@style/UserInfoItem"
@@ -28,8 +30,6 @@
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
-        <include layout="@layout/list_divider" />
-
         <LinearLayout
             style="@style/UserInfoItem"
             android:onClick="nickname">
@@ -44,8 +44,6 @@
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
-
-        <include layout="@layout/list_divider" />
 
         <LinearLayout
             style="@style/UserInfoItem"
@@ -62,8 +60,6 @@
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
-        <include layout="@layout/list_divider" />
-
         <LinearLayout
             style="@style/UserInfoItem"
             android:onClick="email">
@@ -78,8 +74,6 @@
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
-
-        <include layout="@layout/list_divider" />
 
         <LinearLayout
             style="@style/UserInfoItem"
@@ -96,8 +90,6 @@
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
-        <include layout="@layout/list_divider" />
-
         <LinearLayout
             style="@style/UserInfoItem"
             android:onClick="birthday">
@@ -113,8 +105,6 @@
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
-        <include layout="@layout/list_divider" />
-
         <LinearLayout
             style="@style/UserInfoItem"
             android:onClick="location">
@@ -129,7 +119,5 @@
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
-
-        <include layout="@layout/list_divider" />
     </LinearLayout>
 </ScrollView>
