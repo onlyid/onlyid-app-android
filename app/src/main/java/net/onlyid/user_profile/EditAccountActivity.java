@@ -49,7 +49,7 @@ public class EditAccountActivity extends BaseActivity {
 
         user = MyApplication.getCurrentUser();
 
-        type = getIntent().getStringExtra(UserProfileActivity.TYPE);
+        type = getIntent().getStringExtra("type");
         switch (type) {
             case "mobile":
                 if (TextUtils.isEmpty(user.mobile)) {

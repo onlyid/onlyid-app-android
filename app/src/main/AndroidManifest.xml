@@ -66,10 +66,16 @@
             android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".user_profile.EditBirthDateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user_profile.EditGenderActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".user_profile.EditAccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_profile.EditBasicActivity"
+            android:name=".user_profile.EditNicknameActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditAvatarActivity"
@@ -89,7 +95,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.UserProfileActivity"
-            android:label="个人信息"
+            android:label="账号资料"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

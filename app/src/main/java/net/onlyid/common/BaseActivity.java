@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.onlyid.MyApplication;
 
 public class BaseActivity extends AppCompatActivity {
+    static final String TAG = "BaseActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

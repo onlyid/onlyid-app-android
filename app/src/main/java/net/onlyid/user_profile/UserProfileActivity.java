@@ -1,17 +1,12 @@
 package net.onlyid.user_profile;
 
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.MyApplication;
-import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
@@ -19,20 +14,13 @@ import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityUserProfileBinding;
 import net.onlyid.entity.User;
 
-import org.json.JSONObject;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class UserProfileActivity extends BaseActivity {
-    static final String TAG = UserProfileActivity.class.getSimpleName();
-    static final String TYPE = "type";
+    static final String TAG = "UserProfileActivity";
     ActivityUserProfileBinding binding;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,111 +28,78 @@ public class UserProfileActivity extends BaseActivity {
         binding = ActivityUserProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        init();
+        initView();
     }
 
-    void init() {
-        user = MyApplication.getCurrentUser();
-        int radius = Utils.dp2px(this, 5);
+    void initView() {
+        User user = MyApplication.getCurrentUser();
+        int radius = Utils.dp2px(this, 7);
         Glide.with(this).load(user.avatar)
                 .transform(new RoundedCornersTransformation(radius, 0))
                 .into(binding.avatarImageView);
+
         binding.nicknameTextView.setText(user.nickname);
-        binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "点击设置" : user.mobile);
-        binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "点击设置" : user.email);
-        binding.genderTextView.setText(user.gender == null ? "点击设置" : user.gender.toLocalizedString());
-        binding.birthdayTextView.setText(user.birthDate == null ? "点击设置" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "点击设置" : user.province + "-" + user.city);
+        binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "-" : user.mobile);
+        binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "-" : user.email);
+        binding.genderTextView.setText(user.gender == null ? "-" : user.gender.toLocalizedString());
+        binding.birthDateTextView.setText(user.birthDate == null ? "-" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "-" : user.province + "-" + user.city);
+
+        binding.avatarLayout.setOnClickListener((v) -> avatar());
+        binding.nicknameLayout.setOnClickListener((v) -> nickname());
+        binding.mobileLayout.setOnClickListener((v) -> mobile());
+        binding.emailLayout.setOnClickListener((v) -> email());
+        binding.genderLayout.setOnClickListener((v) -> gender());
+        binding.birthDateLayout.setOnClickListener((v) -> birthDate());
+        binding.locationLayout.setOnClickListener((v) -> location());
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         refresh();
     }
 
     void refresh() {
-        MyHttp.get("/user", (s) -> {
-            Utils.pref.edit().putString(Constants.USER, s).apply();
-            init();
+        MyHttp.get("/user", (resp) -> {
+            Utils.pref.edit().putString(Constants.USER, resp).apply();
+            initView();
         });
     }
 
-    void submit() {
-        Utils.showLoading(this);
-        try {
-            JSONObject jsonObject = new JSONObject(Utils.gson.toJson(user));
-            MyHttp.put("/user", jsonObject, (s) -> {
-                Utils.hideLoading();
-                refresh();
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void avatar(View v) {
+    void avatar() {
         Intent intent = new Intent(this, EditAvatarActivity.class);
         startActivity(intent);
     }
 
-    public void nickname(View v) {
-        Intent intent = new Intent(this, EditBasicActivity.class);
-        intent.putExtra(TYPE, "nickname");
+    void nickname() {
+        Intent intent = new Intent(this, EditNicknameActivity.class);
         startActivity(intent);
     }
 
-    public void mobile(View v) {
+    void mobile() {
         Intent intent = new Intent(this, EditAccountActivity.class);
-        intent.putExtra(TYPE, "mobile");
+        intent.putExtra("type", "mobile");
         startActivity(intent);
     }
 
-    public void email(View v) {
+    void email() {
         Intent intent = new Intent(this, EditAccountActivity.class);
-        intent.putExtra(TYPE, "email");
+        intent.putExtra("type", "email");
         startActivity(intent);
     }
 
-    public void gender(View v) {
-        String[] genderOptions = {"男", "女", "其他", "暂不设置"};
-        new MaterialAlertDialogBuilder(this)
-                .setItems(genderOptions, (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            user.gender = User.Gender.MALE;
-                            break;
-                        case 1:
-                            user.gender = User.Gender.FEMALE;
-                            break;
-                        case 2:
-                            user.gender = User.Gender.OTHER;
-                            break;
-                        case 3:
-                            user.gender = null;
-                    }
-                    submit();
-                })
-                .show();
+    void gender() {
+        Intent intent = new Intent(this, EditGenderActivity.class);
+        startActivity(intent);
     }
 
-    public void birthday(View v) {
-        LocalDate localDate = user.birthDate == null ? LocalDate.now() : user.birthDate;
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerDialog, (view, year, month, dayOfMonth) -> {
-            user.birthDate = LocalDate.of(year, month + 1, dayOfMonth);
-            submit();
-        }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());
-        datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "暂不设置", (dialog, which) -> {
-            user.birthDate = null;
-            submit();
-        });
-        LocalDateTime min = LocalDateTime.of(1900, 1, 1, 0, 0);
-        datePickerDialog.getDatePicker().setMinDate(min.toInstant(ZoneOffset.ofHours(0)).toEpochMilli());
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        datePickerDialog.show();
+    void birthDate() {
+        Intent intent = new Intent(this, EditBirthDateActivity.class);
+        startActivity(intent);
     }
 
-    public void location(View v) {
+    void location() {
         Intent intent = new Intent(this, EditLocationActivity.class);
         startActivity(intent);
     }

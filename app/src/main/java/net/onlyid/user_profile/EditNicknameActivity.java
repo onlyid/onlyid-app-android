@@ -13,13 +13,13 @@ import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
-import net.onlyid.databinding.ActivityEditBasicBinding;
+import net.onlyid.databinding.ActivityEditNicknameBinding;
 import net.onlyid.entity.User;
 
 import org.json.JSONObject;
 
-public class EditBasicActivity extends BaseActivity {
-    ActivityEditBasicBinding binding;
+public class EditNicknameActivity extends BaseActivity {
+    ActivityEditNicknameBinding binding;
     String type;
     ActionBar actionBar;
     User user;
@@ -27,7 +27,7 @@ public class EditBasicActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityEditBasicBinding.inflate(getLayoutInflater());
+        binding = ActivityEditNicknameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         actionBar = getSupportActionBar();
@@ -38,7 +38,7 @@ public class EditBasicActivity extends BaseActivity {
     void init() {
         user = MyApplication.getCurrentUser();
 
-        type = getIntent().getStringExtra(UserProfileActivity.TYPE);
+        type = "nickname";
         switch (type) {
             case "nickname":
                 binding.tipTextView.setText("起一个好名字，让大家更容易记住你。");

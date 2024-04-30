@@ -11,111 +11,111 @@
         android:showDividers="middle|end">
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="avatar"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:id="@+id/avatar_layout"
+            style="@style/UserProfileActivity_ItemLayout"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="头像" />
 
             <ImageView
                 android:id="@+id/avatar_image_view"
-                android:layout_width="80dp"
-                android:layout_height="80dp" />
+                android:layout_width="72dp"
+                android:layout_height="72dp" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="nickname">
+            android:id="@+id/nickname_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:text="昵称" />
 
             <TextView
                 android:id="@+id/nickname_text_view"
-                style="@style/UserInfoItemText" />
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="mobile">
+            android:id="@+id/mobile_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:text="手机号" />
 
             <TextView
                 android:id="@+id/mobile_text_view"
-                style="@style/UserInfoItemText" />
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="email">
+            android:id="@+id/email_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:text="邮箱" />
 
             <TextView
                 android:id="@+id/email_text_view"
-                style="@style/UserInfoItemText" />
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="gender">
+            android:id="@+id/gender_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:text="性别" />
 
             <TextView
                 android:id="@+id/gender_text_view"
-                style="@style/UserInfoItemText" />
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="birthday">
+            android:id="@+id/birth_date_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
-                android:text="生日" />
+                style="@style/UserProfileActivity_ItemLabel"
+                android:text="年纪" />
 
             <TextView
-                android:id="@+id/birthday_text_view"
-                style="@style/UserInfoItemText" />
+                android:id="@+id/birth_date_text_view"
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/UserInfoItem"
-            android:onClick="location">
+            android:id="@+id/location_layout"
+            style="@style/UserProfileActivity_ItemLayout">
 
             <TextView
-                style="@style/UserInfoItemLabel"
+                style="@style/UserProfileActivity_ItemLabel"
                 android:text="地区" />
 
             <TextView
                 android:id="@+id/location_text_view"
-                style="@style/UserInfoItemText" />
+                style="@style/UserProfileActivity_ItemText" />
 
             <include layout="@layout/list_arrow_right" />
         </LinearLayout>

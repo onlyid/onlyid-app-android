@@ -51,7 +51,7 @@
 
         <LinearLayout
             android:id="@+id/user_profile_layout"
-            style="@style/MainActivity_Button1_Layout">
+            style="@style/MainActivity_Button1Layout">
 
             <ImageView
                 android:id="@+id/avatar_image_view"
@@ -60,7 +60,7 @@
                 android:src="@drawable/ic_person" />
 
             <TextView
-                style="@style/MainActivity_Button1_Label"
+                style="@style/MainActivity_Button1Label"
                 android:text="我的账号" />
         </LinearLayout>
 
@@ -71,7 +71,7 @@
 
         <LinearLayout
             android:id="@+id/scan_login_layout"
-            style="@style/MainActivity_Button1_Layout">
+            style="@style/MainActivity_Button1Layout">
 
             <ImageView
                 android:layout_width="55dp"
@@ -80,7 +80,7 @@
                 android:tint="#e73f51b5" />
 
             <TextView
-                style="@style/MainActivity_Button1_Label"
+                style="@style/MainActivity_Button1Label"
                 android:text="扫码登录" />
         </LinearLayout>
     </LinearLayout>
@@ -96,7 +96,7 @@
 
         <LinearLayout
             android:id="@+id/authorization_layout"
-            style="@style/MainActivity_Button2_Layout">
+            style="@style/MainActivity_Button2Layout">
 
             <ImageView
                 android:layout_width="32dp"
@@ -105,7 +105,7 @@
                 android:tint="#2299dd" />
 
             <TextView
-                style="@style/MainActivity_Button2_Label"
+                style="@style/MainActivity_Button2Label"
                 android:text="授权应用" />
         </LinearLayout>
 
@@ -116,7 +116,7 @@
 
         <LinearLayout
             android:id="@+id/login_history_layout"
-            style="@style/MainActivity_Button2_Layout">
+            style="@style/MainActivity_Button2Layout">
 
             <ImageView
                 android:layout_width="32dp"
@@ -125,7 +125,7 @@
                 android:tint="#F08C10" />
 
             <TextView
-                style="@style/MainActivity_Button2_Label"
+                style="@style/MainActivity_Button2Label"
                 android:text="登录历史" />
         </LinearLayout>
     </LinearLayout>
@@ -141,7 +141,7 @@
 
         <LinearLayout
             android:id="@+id/security_layout"
-            style="@style/MainActivity_Button2_Layout">
+            style="@style/MainActivity_Button2Layout">
 
             <ImageView
                 android:layout_width="32dp"
@@ -151,7 +151,7 @@
                 android:tint="@color/success" />
 
             <TextView
-                style="@style/MainActivity_Button2_Label"
+                style="@style/MainActivity_Button2Label"
                 android:text="安全设置" />
         </LinearLayout>
 
@@ -162,7 +162,7 @@
 
         <LinearLayout
             android:id="@+id/switch_account_layout"
-            style="@style/MainActivity_Button2_Layout">
+            style="@style/MainActivity_Button2Layout">
 
             <ImageView
                 android:layout_width="32dp"
@@ -172,7 +172,7 @@
                 android:tint="#e73f51b5" />
 
             <TextView
-                style="@style/MainActivity_Button2_Label"
+                style="@style/MainActivity_Button2Label"
                 android:text="切换账号" />
 
         </LinearLayout>
