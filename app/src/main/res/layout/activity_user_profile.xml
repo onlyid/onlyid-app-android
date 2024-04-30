@@ -25,7 +25,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -42,7 +42,7 @@
                 android:id="@+id/nickname_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -59,7 +59,7 @@
                 android:id="@+id/mobile_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -76,7 +76,7 @@
                 android:id="@+id/email_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -93,7 +93,7 @@
                 android:id="@+id/gender_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -110,7 +110,7 @@
                 android:id="@+id/birthday_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />
@@ -127,7 +127,7 @@
                 android:id="@+id/location_text_view"
                 style="@style/UserInfoItemText" />
 
-            <include layout="@layout/arrow_right" />
+            <include layout="@layout/list_arrow_right" />
         </LinearLayout>
 
         <include layout="@layout/list_divider" />

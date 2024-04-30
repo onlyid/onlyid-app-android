@@ -18,5 +18,5 @@
 
     <include
         android:id="@+id/arrow_right"
-        layout="@layout/arrow_right" />
+        layout="@layout/list_arrow_right" />
 </LinearLayout>

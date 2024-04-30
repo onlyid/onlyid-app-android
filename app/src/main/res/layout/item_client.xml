@@ -50,6 +50,6 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <include layout="@layout/arrow_right" />
+    <include layout="@layout/list_arrow_right" />
 
 </LinearLayout>
