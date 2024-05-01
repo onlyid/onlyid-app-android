@@ -1,10 +1,15 @@
 package net.onlyid.user_profile;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.yalantis.ucrop.UCrop;
 
 import net.onlyid.MyApplication;
 import net.onlyid.common.BaseActivity;
@@ -14,13 +19,20 @@ import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityUserProfileBinding;
 import net.onlyid.entity.User;
 
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.format.DateTimeFormatter;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class UserProfileActivity extends BaseActivity {
     static final String TAG = "UserProfileActivity";
+    static final int PICK_IMAGE = 1;
     ActivityUserProfileBinding binding;
+    String imageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +57,8 @@ public class UserProfileActivity extends BaseActivity {
         binding.birthDateTextView.setText(user.birthDate == null ? "-" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
         binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "-" : user.province + "-" + user.city);
 
-        binding.avatarLayout.setOnClickListener((v) -> avatar());
+        binding.avatarLayout.setOnClickListener((v) -> pickImage());
+        binding.avatarImageView.setOnClickListener((v) -> avatar());
         binding.nicknameLayout.setOnClickListener((v) -> nickname());
         binding.mobileLayout.setOnClickListener((v) -> mobile());
         binding.emailLayout.setOnClickListener((v) -> email());
@@ -102,5 +115,69 @@ public class UserProfileActivity extends BaseActivity {
     void location() {
         Intent intent = new Intent(this, EditLocationActivity.class);
         startActivity(intent);
+    }
+
+    void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        //noinspection deprecation
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    void cropImage(Uri uri) {
+        Uri outUri = Uri.fromFile(new File(getExternalCacheDir(), "avatar"));
+
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionQuality(100);
+        options.setCompressionFormat(getImageFormat());
+
+        UCrop.of(uri, outUri).withAspectRatio(1, 1).withOptions(options).start(this);
+    }
+
+    void submitAvatar(Uri uri) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            bitmap = Bitmap.createScaledBitmap(bitmap, 256, 256, true);
+
+            File file = new File(getExternalCacheDir(), "resized-avatar");
+            bitmap.compress(getImageFormat(), 90, new FileOutputStream(file));
+
+            Utils.showLoading(this);
+            MyHttp.postFile("/image", file, imageType, (resp) ->
+                    MyHttp.put("/user/avatar", new JSONObject(resp),  (resp1) -> {
+                            Utils.hideLoading();
+                            Utils.showToast("保存成功", Toast.LENGTH_SHORT);
+                    }));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Bitmap.CompressFormat getImageFormat() {
+        return "image/jpeg".equals(imageType) ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                //noinspection ConstantConditions
+                imageType = getContentResolver().getType(uri);
+                if ("image/jpeg".equals(imageType) || "image/png".equals(imageType))
+                    cropImage(uri);
+                else
+                    Utils.showAlert(this, "只支持JPG/PNG格式照片");
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == RESULT_OK) {
+                submitAvatar(UCrop.getOutput(data));
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                //noinspection ConstantConditions
+                UCrop.getError(data).printStackTrace();
+            }
+        }
     }
 }

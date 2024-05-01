@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection ConstantConditions
         actionBar.setIcon(R.drawable.ic_logo);
         actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(" 唯ID");
 
         initView();
 

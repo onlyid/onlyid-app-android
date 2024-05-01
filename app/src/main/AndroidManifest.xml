@@ -79,7 +79,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditAvatarActivity"
-            android:label="修改头像"
+            android:label="头像"
             android:screenOrientation="portrait" />
         <activity
             android:name=".authorized_app.AuthorizedAppActivity"
@@ -118,7 +118,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label=" 唯ID"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
