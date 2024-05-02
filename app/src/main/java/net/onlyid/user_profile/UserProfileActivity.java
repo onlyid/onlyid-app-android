@@ -81,7 +81,7 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     void avatar() {
-        Intent intent = new Intent(this, EditAvatarActivity.class);
+        Intent intent = new Intent(this, AvatarActivity.class);
         startActivity(intent);
     }
 

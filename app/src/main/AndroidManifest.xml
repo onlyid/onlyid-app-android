@@ -78,7 +78,8 @@
             android:name=".user_profile.EditNicknameActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_profile.EditAvatarActivity"
+            android:name=".user_profile.AvatarActivity"
+            android:theme="@style/AvatarActivity"
             android:label="头像"
             android:screenOrientation="portrait" />
         <activity

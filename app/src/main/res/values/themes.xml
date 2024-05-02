@@ -36,6 +36,11 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="AvatarActivity" parent="Theme.MaterialComponents">
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:navigationBarColor">#121212</item>
+    </style>
+
     <style name="UCropActivity" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:navigationBarColor">#000</item>
     </style>
