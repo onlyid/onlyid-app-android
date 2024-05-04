@@ -70,4 +70,9 @@
         <item name="android:layout_marginLeft">20dp</item>
     </style>
 
+    <style name="UserProfileActivity_ItemLayout.Gender">
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+
 </resources>

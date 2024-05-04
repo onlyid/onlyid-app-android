@@ -70,6 +70,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditGenderActivity"
+            android:label="设置性别"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditAccountActivity"
@@ -80,9 +81,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.AvatarActivity"
-            android:theme="@style/AvatarActivity"
             android:label="头像"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AvatarActivity" />
         <activity
             android:name=".authorized_app.AuthorizedAppActivity"
             android:label="授权应用"

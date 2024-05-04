@@ -46,7 +46,7 @@ public class EditAccountActivity extends BaseActivity {
                 tip = "绑定手机号后，可以使用手机号登录";
                 hint = "手机号";
             } else {
-                title = "修改手机号";
+                title = "更换手机号";
                 tip = "当前手机号：" + user.mobile;
                 hint = "新手机号";
             }
@@ -57,7 +57,7 @@ public class EditAccountActivity extends BaseActivity {
                 tip = "绑定邮箱后，可以使用邮箱登录";
                 hint = "邮箱";
             } else {
-                title = "修改邮箱";
+                title = "更换邮箱";
                 tip = "当前邮箱：" + user.email;
                 hint = "新邮箱";
             }
