@@ -44,19 +44,19 @@ public class EditNicknameActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.save) {
-            validate();
+            validateFields();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-    void validate() {
+    void validateFields() {
         String nickname = binding.nicknameEditText.getText().toString();
         String errMsg = null;
 
         if (TextUtils.isEmpty(nickname))
-            errMsg = "新昵称不能为空";
+            errMsg = "昵称不能为空";
         else if (getLength(nickname) > 20)
             errMsg = "昵称不能超10字（英文字母算半个字）";
 

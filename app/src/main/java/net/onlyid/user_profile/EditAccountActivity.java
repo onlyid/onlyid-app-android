@@ -2,14 +2,11 @@ package net.onlyid.user_profile;
 
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.core.util.PatternsCompat;
 
 import net.onlyid.MyApplication;
@@ -27,8 +24,6 @@ public class EditAccountActivity extends BaseActivity {
     static final String TAG = "EditAccountActivity";
     ActivityEditAccountBinding binding;
     String type;
-    ActionBar actionBar;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,54 +31,44 @@ public class EditAccountActivity extends BaseActivity {
         binding = ActivityEditAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        actionBar = getSupportActionBar();
-
-        init();
+        initView();
     }
 
-    void init() {
-        binding.otpInput1.getParams = () -> {
-            String account = binding.accountInput.getEditText().getText().toString();
-            return validateAccount(account) ? account : null;
-        };
-
-        user = MyApplication.getCurrentUser();
-
+    void initView() {
+        User user = MyApplication.getCurrentUser();
         type = getIntent().getStringExtra("type");
-        switch (type) {
-            case "mobile":
-                if (TextUtils.isEmpty(user.mobile)) {
-                    binding.tipTextView.setText("绑定手机号后，下次登录可使用手机号。");
-                    binding.accountInput.setHint("手机号");
-                } else {
-                    SpannableStringBuilder ssb = new SpannableStringBuilder("当前手机号是 ");
-                    ssb.append(user.mobile);
-                    ssb.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 7, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    ssb.append("，更换手机号后，下次登录可使用新手机号。");
-                    binding.tipTextView.setText(ssb);
-                    binding.accountInput.setHint("新手机号");
-                }
-                binding.accountInput.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-                binding.otpInput1.updateField = "手机号";
-                actionBar.setTitle("修改手机号");
-                break;
-            case "email":
-                if (TextUtils.isEmpty(user.email)) {
-                    binding.tipTextView.setText("绑定邮箱后，下次登录可使用邮箱。");
-                    binding.accountInput.setHint("邮箱");
-                } else {
-                    SpannableStringBuilder ssb = new SpannableStringBuilder("当前邮箱是 ");
-                    ssb.append(user.email);
-                    ssb.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.text_primary)), 6, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    ssb.append("，更换邮箱后，下次登录可使用新邮箱。");
-                    binding.tipTextView.setText(ssb);
-                    binding.accountInput.setHint("新邮箱");
-                }
-                binding.accountInput.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                binding.otpInput1.updateField = "邮箱";
-                actionBar.setTitle("修改邮箱");
-                break;
+        String title, tip, hint;
+        int inputType;
+
+        if ("mobile".equals(type)) {
+            if (TextUtils.isEmpty(user.mobile)) {
+                title = "绑定手机号";
+                tip = "绑定手机号后，可以使用手机号登录";
+                hint = "手机号";
+            } else {
+                title = "修改手机号";
+                tip = "当前手机号：" + user.mobile;
+                hint = "新手机号";
+            }
+            inputType = InputType.TYPE_CLASS_PHONE;
+        } else {
+            if (TextUtils.isEmpty(user.email)) {
+                title = "绑定邮箱";
+                tip = "绑定邮箱后，可以使用邮箱登录";
+                hint = "邮箱";
+            } else {
+                title = "修改邮箱";
+                tip = "当前邮箱：" + user.email;
+                hint = "新邮箱";
+            }
+            inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
         }
+
+        getSupportActionBar().setTitle(title);
+        binding.tipTextView.setText(tip);
+        binding.accountInput.setHint(hint);
+        binding.accountEditText.setInputType(inputType);
+        binding.sendOtpButton.recipientCallback = () -> binding.accountEditText.getText().toString();
     }
 
     @Override
@@ -95,67 +80,55 @@ public class EditAccountActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.save) {
-            submit();
+            validateFields();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
+    void validateFields() {
+        String account = binding.accountEditText.getText().toString();
+        String otp = binding.otpEditText.getText().toString();
+        String errMsg = null;
+
+        if ("mobile".equals(type)) {
+            if (TextUtils.isEmpty(account))
+                errMsg = "手机号不能为空";
+            else if (!Utils.isMobile(account))
+                errMsg = "手机号格式不正确";
+        } else {
+            if (TextUtils.isEmpty(account))
+                errMsg = "邮箱不能为空";
+            else if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches())
+                errMsg = "邮箱格式不正确";
+        }
+
+        if (!TextUtils.isEmpty(errMsg)) {
+            Utils.showAlert(this, errMsg);
+            return;
+        }
+
+        if (TextUtils.isEmpty(otp)) {
+            Utils.showAlert(this, "请输入验证码");
+            return;
+        }
+
+        submit();
+    }
+
     void submit() {
-        String account = binding.accountInput.getEditText().getText().toString();
-        if (!validateAccount(account)) return;
-
-        String otp = binding.otpInput1.getOtp();
-        if (!validateOtp(otp)) return;
-
-        JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("type", type);
-            jsonObject.put("otp", otp);
-            jsonObject.put("account", account);
+            JSONObject obj = new JSONObject();
+            obj.put("type", type);
+            obj.put("otp", binding.otpEditText.getText().toString());
+            obj.put("account", binding.accountEditText.getText().toString());
+            MyHttp.put("/user/account", obj, (resp) -> {
+                Utils.showToast("保存成功", Toast.LENGTH_SHORT);
+                finish();
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Utils.showLoading(this);
-        MyHttp.put("/user/account", jsonObject, (s) -> {
-            Utils.hideLoading();
-            finish();
-        });
-    }
-
-    boolean validateOtp(String otp) {
-        if (TextUtils.isEmpty(otp)) {
-            Utils.showAlert(this, "验证码不能为空");
-            return false;
-        }
-
-        return true;
-    }
-
-    boolean validateAccount(String account) {
-        if ("mobile".equals(type)) {
-            if (TextUtils.isEmpty(account)) {
-                Utils.showAlert(this, "新手机号不能为空");
-                return false;
-            }
-
-            if (!Utils.isMobile(account)) {
-                Utils.showAlert(this, "手机号格式不正确");
-                return false;
-            }
-        } else {
-            if (TextUtils.isEmpty(account)) {
-                Utils.showAlert(this, "新邮箱不能为空");
-                return false;
-            }
-
-            if (!PatternsCompat.EMAIL_ADDRESS.matcher(account).matches()) {
-                Utils.showAlert(this, "邮箱格式不正确");
-                return false;
-            }
-        }
-
-        return true;
     }
 }
