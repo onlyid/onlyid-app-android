@@ -110,7 +110,9 @@ public class AccountActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setResult(resultCode);
-        finish();
+        if (resultCode == RESULT_OK) {
+            setResult(resultCode);
+            finish();
+        }
     }
 }
