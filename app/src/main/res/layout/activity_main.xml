@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -77,7 +78,7 @@
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:src="@drawable/ic_qr_code_scanner"
-                android:tint="#e73f51b5" />
+                app:tint="#e73f51b5" />
 
             <TextView
                 style="@style/MainActivity_Button1Label"
@@ -102,7 +103,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_apps"
-                android:tint="#2299dd" />
+                app:tint="#2299dd" />
 
             <TextView
                 style="@style/MainActivity_Button2Label"
@@ -122,7 +123,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_history"
-                android:tint="#F08C10" />
+                app:tint="#F08C10" />
 
             <TextView
                 style="@style/MainActivity_Button2Label"
@@ -148,7 +149,7 @@
                 android:layout_height="32dp"
                 android:padding="0.5dp"
                 android:src="@drawable/ic_security"
-                android:tint="@color/success" />
+                app:tint="@color/success" />
 
             <TextView
                 style="@style/MainActivity_Button2Label"
@@ -169,7 +170,7 @@
                 android:layout_height="32dp"
                 android:padding="0.5dp"
                 android:src="@drawable/ic_switch_account"
-                android:tint="#e73f51b5" />
+                app:tint="#e73f51b5" />
 
             <TextView
                 style="@style/MainActivity_Button2Label"

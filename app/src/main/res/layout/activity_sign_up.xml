@@ -21,7 +21,7 @@
             android:layout_marginTop="68dp"
             android:background="@drawable/bg_upload_avatar"
             android:src="@drawable/ic_person"
-            android:tint="#ccc" />
+            app:tint="#ccc" />
 
         <TextView
             android:id="@+id/upload_text_view"
