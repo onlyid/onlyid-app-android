@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import androidx.appcompat.app.ActionBar;
+import android.widget.Toast;
 
 import net.onlyid.MyApplication;
 import net.onlyid.R;
@@ -16,13 +14,12 @@ import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditNicknameBinding;
 import net.onlyid.entity.User;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EditNicknameActivity extends BaseActivity {
+    static final String TAG = "EditNicknameActivity";
     ActivityEditNicknameBinding binding;
-    String type;
-    ActionBar actionBar;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +27,12 @@ public class EditNicknameActivity extends BaseActivity {
         binding = ActivityEditNicknameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        actionBar = getSupportActionBar();
-
-        init();
+        initView();
     }
 
-    void init() {
-        user = MyApplication.getCurrentUser();
-
-        type = "nickname";
-        switch (type) {
-            case "nickname":
-                binding.tipTextView.setText("起一个好名字，让大家更容易记住你。");
-                binding.nicknameInput.setVisibility(View.VISIBLE);
-                binding.nicknameInput.getEditText().setText(user.nickname);
-                actionBar.setTitle("修改昵称");
-                break;
-        }
+    void initView() {
+        User user = MyApplication.getCurrentUser();
+        binding.nicknameEditText.setText(user.nickname);
     }
 
     @Override
@@ -66,33 +52,42 @@ public class EditNicknameActivity extends BaseActivity {
     }
 
     void validate() {
-        switch (type) {
-            case "nickname":
-                String nickname = binding.nicknameInput.getEditText().getText().toString();
-                if (TextUtils.isEmpty(nickname)) {
-                    Utils.showAlert(this, "昵称不能为空");
-                    return;
-                }
-                break;
-        }
+        String nickname = binding.nicknameEditText.getText().toString();
+        String errMsg = null;
 
-        submit();
+        if (TextUtils.isEmpty(nickname))
+            errMsg = "新昵称不能为空";
+        else if (getLength(nickname) > 20)
+            errMsg = "昵称不能超10字（英文字母算半个字）";
+
+        if (TextUtils.isEmpty(errMsg))
+            submit();
+        else
+            Utils.showAlert(this, errMsg);
+    }
+
+    /**
+     * 一个英文算1个字，一个中文算2个字
+     */
+    int getLength(String s) {
+        int count = 0;
+        for (char c : s.toCharArray()) {
+            if (c < 128) count++;
+            else count += 2;
+        }
+        return count;
     }
 
     void submit() {
-        switch (type) {
-            case "nickname":
-                user.nickname = binding.nicknameInput.getEditText().getText().toString();
-                break;
-        }
-        Utils.showLoading(this);
+        User user = MyApplication.getCurrentUser();
+        user.nickname = binding.nicknameEditText.getText().toString();
         try {
-            JSONObject jsonObject = new JSONObject(Utils.gson.toJson(user));
-            MyHttp.put("/user", jsonObject, (s) -> {
-                Utils.hideLoading();
+            JSONObject obj = new JSONObject(Utils.gson.toJson(user));
+            MyHttp.put("/user", obj, (resp) -> {
+                Utils.showToast("保存成功", Toast.LENGTH_SHORT);
                 finish();
             });
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

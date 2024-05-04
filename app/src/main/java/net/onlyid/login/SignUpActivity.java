@@ -64,8 +64,8 @@ public class SignUpActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(nickname))
             errMsg = "请填写昵称";
-        else if (nickname.length() > 20)
-            errMsg = "昵称不能超20字";
+        else if (getLength(nickname) > 20)
+            errMsg = "昵称不能超10字（英文字母算半个字）";
         else if (TextUtils.isEmpty(otp))
             errMsg = "请输入验证码";
         else if (TextUtils.isEmpty(password) || password.length() < 6)
@@ -88,6 +88,18 @@ public class SignUpActivity extends BaseActivity {
         } else {
             Utils.showAlert(this, errMsg);
         }
+    }
+
+    /**
+     * 一个英文算1个字，一个中文算2个字
+     */
+    int getLength(String s) {
+        int count = 0;
+        for (char c : s.toCharArray()) {
+            if (c < 128) count++;
+            else count += 2;
+        }
+        return count;
     }
 
     void submit() {
