@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     AMapLocationClient locationClient;
     AMapLocation location;
     List<Province> chinaCityList;
+    Parcelable listViewState; // 保存滚动位置
 
     BaseAdapter adapter = new BaseAdapter() {
         @Override
@@ -160,6 +162,8 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         binding.getRoot().setAdapter(adapter);
         binding.getRoot().setOnItemClickListener(this);
 
+        if (listViewState != null) binding.getRoot().onRestoreInstanceState(listViewState);
+
         return binding.getRoot();
     }
 
@@ -203,5 +207,11 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         super.onDestroy();
 
         if (locationClient != null) locationClient.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        listViewState = binding.getRoot().onSaveInstanceState();
     }
 }
