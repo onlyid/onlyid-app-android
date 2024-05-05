@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingStart="20dp"
+    android:paddingLeft="20dp"
     android:paddingTop="15dp"
-    android:paddingEnd="10dp"
+    android:paddingRight="20dp"
     android:paddingBottom="15dp">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/text_primary"
-        android:textSize="@dimen/text2" />
+        android:textSize="@dimen/text3" />
 
     <include
         android:id="@+id/arrow_right"

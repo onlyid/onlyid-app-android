@@ -56,7 +56,7 @@ public class UserProfileActivity extends BaseActivity {
         binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "-" : user.email);
         binding.genderTextView.setText(user.gender == null ? "-" : user.gender.toLocalizedString());
         binding.birthDateTextView.setText(birthDate2String(user.birthDate));
-        binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "-" : user.province + "-" + user.city);
+        binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "-" : user.province + " " + user.city);
 
         binding.avatarLayout.setOnClickListener((v) -> pickImage());
         binding.avatarImageView.setOnClickListener((v) -> avatar());

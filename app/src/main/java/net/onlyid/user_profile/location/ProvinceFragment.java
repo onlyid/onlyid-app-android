@@ -2,6 +2,7 @@ package net.onlyid.user_profile.location;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -120,7 +121,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
 
         // fine和coarse，有任一权限，都尝试定位
         if (count > 0) initLocation();
-        else locationBinding.textView.setText("当前位置：没有定位权限");
+        else locationBinding.textView.setText("没有定位权限");
     }
 
     void initLocation() {
@@ -143,13 +144,16 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         binding = FragmentProvinceBinding.inflate(inflater, container, false);
 
         ItemLocationBinding binding1 = ItemLocationBinding.inflate(inflater);
-        binding1.textView.setText("暂不设置");
+        binding1.textView.setText("不设置");
         binding1.arrowRight.getRoot().setVisibility(View.INVISIBLE);
         binding.getRoot().addHeaderView(binding1.getRoot());
 
         locationBinding = ItemLocationBinding.inflate(inflater);
-        locationBinding.textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_location_on_24, 0, 0, 0);
-        locationBinding.textView.setText("当前位置：定位中...");
+        locationBinding.textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_on, 0, 0, 0);
+        locationBinding.textView.setCompoundDrawableTintList(
+                ColorStateList.valueOf(getResources().getColor(R.color.primary, null)));
+        locationBinding.textView.setCompoundDrawablePadding(Utils.dp2px(getContext(), 3));
+        locationBinding.textView.setText("定位中...");
         locationBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
         binding.getRoot().addHeaderView(locationBinding.getRoot());
 
@@ -164,12 +168,12 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         this.location = location;
 
         if (location == null || location.getErrorCode() != 0 || TextUtils.isEmpty(location.getProvince())) {
-            locationBinding.textView.setText("当前位置：定位失败");
+            locationBinding.textView.setText("定位失败");
         } else {
             if (location.getProvince().equals(location.getCity())) {
-                locationBinding.textView.setText("当前位置：" + location.getCity() + "-" + location.getDistrict());
+                locationBinding.textView.setText(location.getCity() + " " + location.getDistrict());
             } else {
-                locationBinding.textView.setText("当前位置：" + location.getProvince() + "-" + location.getCity());
+                locationBinding.textView.setText(location.getProvince() + " " + location.getCity());
             }
         }
     }
