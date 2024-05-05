@@ -1,4 +1,4 @@
-package net.onlyid.user_profile;
+package net.onlyid.user_profile.location;
 
 import android.os.Bundle;
 import android.text.TextUtils;

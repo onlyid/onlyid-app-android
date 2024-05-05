@@ -18,6 +18,7 @@ import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityUserProfileBinding;
 import net.onlyid.entity.User;
+import net.onlyid.user_profile.location.EditLocationActivity;
 
 import org.json.JSONObject;
 

@@ -1,4 +1,4 @@
-package net.onlyid.user_profile;
+package net.onlyid.user_profile.location;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
