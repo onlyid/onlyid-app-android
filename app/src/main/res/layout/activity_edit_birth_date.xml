@@ -1,7 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:divider="@drawable/list_divider"
+    android:orientation="vertical"
+    android:showDividers="middle|end">
 
+    <LinearLayout
+        android:id="@+id/p60s_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="60后" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/p60s_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/p70s_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="70后" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/p70s_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/p80s_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="80后" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/p80s_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/p90s_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="90后" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/p90s_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/p00s_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="00后" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/p00s_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clear_layout"
+        style="@style/UserProfileActivity_ItemLayout.Gender">
+
+        <TextView
+            style="@style/UserProfileActivity_ItemLabel.Gender"
+            android:text="不设置" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/clear_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_save"
+            app:tint="@color/success" />
+    </LinearLayout>
 </LinearLayout>

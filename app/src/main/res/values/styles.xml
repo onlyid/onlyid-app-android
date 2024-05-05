@@ -71,6 +71,11 @@
     </style>
 
     <style name="UserProfileActivity_ItemLayout.Gender">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="UserProfileActivity_ItemLabel.Gender">
         <item name="android:paddingTop">15dp</item>
         <item name="android:paddingBottom">15dp</item>
     </style>

@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -54,7 +54,7 @@ public class UserProfileActivity extends BaseActivity {
         binding.mobileTextView.setText(TextUtils.isEmpty(user.mobile) ? "-" : user.mobile);
         binding.emailTextView.setText(TextUtils.isEmpty(user.email) ? "-" : user.email);
         binding.genderTextView.setText(user.gender == null ? "-" : user.gender.toLocalizedString());
-        binding.birthDateTextView.setText(user.birthDate == null ? "-" : user.birthDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        binding.birthDateTextView.setText(birthDate2String(user.birthDate));
         binding.locationTextView.setText(TextUtils.isEmpty(user.province) ? "-" : user.province + "-" + user.city);
 
         binding.avatarLayout.setOnClickListener((v) -> pickImage());
@@ -65,6 +65,24 @@ public class UserProfileActivity extends BaseActivity {
         binding.genderLayout.setOnClickListener((v) -> gender());
         binding.birthDateLayout.setOnClickListener((v) -> birthDate());
         binding.locationLayout.setOnClickListener((v) -> location());
+    }
+
+    String birthDate2String(LocalDate birthDate) {
+        LocalDate y1960 = LocalDate.of(1960, 1, 1);
+
+        if (birthDate == null) {
+            return "-";
+        } else if (birthDate.isBefore(y1960.plusYears(10))) {
+            return "60后";
+        } else if (birthDate.isBefore(y1960.plusYears(20))) {
+            return "70后";
+        } else if (birthDate.isBefore(y1960.plusYears(30))) {
+            return "80后";
+        }  else if (birthDate.isBefore(y1960.plusYears(40))) {
+            return "90后";
+        } else {
+            return "00后";
+        }
     }
 
     @Override

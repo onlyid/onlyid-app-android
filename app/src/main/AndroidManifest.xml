@@ -67,6 +67,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditBirthDateActivity"
+            android:label="出生年代"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditGenderActivity"
