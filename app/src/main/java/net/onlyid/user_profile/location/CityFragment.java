@@ -9,33 +9,19 @@ import android.widget.BaseAdapter;
 
 import androidx.fragment.app.Fragment;
 
+import net.onlyid.common.MyAdapter;
 import net.onlyid.databinding.FragmentCityBinding;
 import net.onlyid.databinding.ItemLocationBinding;
 
 import java.util.List;
 
 public class CityFragment extends Fragment implements AdapterView.OnItemClickListener {
-    static final String TAG = CityFragment.class.getSimpleName();
+    static final String TAG = "CityFragment";
 
     FragmentCityBinding binding;
     List<String> cityList;
 
-    BaseAdapter adapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
-            return cityList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return cityList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
+    BaseAdapter adapter = new MyAdapter(() -> cityList) {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ItemLocationBinding binding;
@@ -75,6 +61,6 @@ public class CityFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EditLocationActivity activity = (EditLocationActivity) getActivity();
-        activity.submit(getArguments().getString("province") + " " + cityList.get(position));
+        activity.submit(getArguments().getString("province"), cityList.get(position));
     }
 }

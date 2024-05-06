@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 
 import androidx.fragment.app.Fragment;
 
@@ -18,52 +17,30 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.google.gson.reflect.TypeToken;
 
 import net.onlyid.R;
+import net.onlyid.common.MyAdapter;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.FragmentProvinceBinding;
 import net.onlyid.databinding.ItemLocationBinding;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ProvinceFragment extends Fragment implements AMapLocationListener, AdapterView.OnItemClickListener {
-    static final String TAG = ProvinceFragment.class.getSimpleName();
+    static final String TAG = "ProvinceFragment";
     static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
-    static final class Province {
-        public String province;
-        public ArrayList<String> city;
-    }
-
     FragmentProvinceBinding binding;
     ItemLocationBinding locationBinding;
     AMapLocationClient locationClient;
-    AMapLocation location;
-    List<Province> chinaCityList;
+    AMapLocation location; // 当前位置
+    List<String> provinceList;
     Parcelable listViewState; // 保存滚动位置
 
-    BaseAdapter adapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
-            return chinaCityList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return chinaCityList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
+    MyAdapter adapter = new MyAdapter(() -> provinceList) {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ItemLocationBinding binding;
@@ -75,9 +52,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
                 binding = (ItemLocationBinding) convertView.getTag();
             }
 
-            Province province = chinaCityList.get(position);
-            binding.textView.setText(province.province);
-
+            binding.textView.setText(provinceList.get(position));
             return convertView;
         }
     };
@@ -91,13 +66,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     }
 
     void initData() {
-        Scanner scanner = new Scanner(getResources().openRawResource(R.raw.china_city_list));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        while (scanner.hasNextLine()) stringBuilder.append(scanner.nextLine());
-
-        scanner.close();
-        chinaCityList = Utils.gson.fromJson(stringBuilder.toString(), new TypeToken<List<Province>>() {});
+        provinceList = getArguments().getStringArrayList("provinceList");
     }
 
     void checkLocationPermission() {
@@ -127,8 +96,8 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     }
 
     void initLocation() {
-        AMapLocationClient.updatePrivacyShow(getContext(),true,true);
-        AMapLocationClient.updatePrivacyAgree(getContext(),true);
+        AMapLocationClient.updatePrivacyShow(getContext(), true, true);
+        AMapLocationClient.updatePrivacyAgree(getContext(), true);
         try {
             locationClient = new AMapLocationClient(getContext());
         } catch (Exception e) {
@@ -145,15 +114,15 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProvinceBinding.inflate(inflater, container, false);
 
-        ItemLocationBinding binding1 = ItemLocationBinding.inflate(inflater);
-        binding1.textView.setText("不设置");
-        binding1.arrowRight.getRoot().setVisibility(View.INVISIBLE);
-        binding.getRoot().addHeaderView(binding1.getRoot());
+        ItemLocationBinding clearBinding = ItemLocationBinding.inflate(inflater);
+        clearBinding.textView.setText("不设置");
+        clearBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
+        binding.getRoot().addHeaderView(clearBinding.getRoot());
 
         locationBinding = ItemLocationBinding.inflate(inflater);
         locationBinding.textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location_on, 0, 0, 0);
-        locationBinding.textView.setCompoundDrawableTintList(
-                ColorStateList.valueOf(getResources().getColor(R.color.primary, null)));
+        ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.primary, null));
+        locationBinding.textView.setCompoundDrawableTintList(colorStateList);
         locationBinding.textView.setCompoundDrawablePadding(Utils.dp2px(getContext(), 3));
         locationBinding.textView.setText("定位中...");
         locationBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
@@ -174,11 +143,10 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         if (location == null || location.getErrorCode() != 0 || TextUtils.isEmpty(location.getProvince())) {
             locationBinding.textView.setText("定位失败");
         } else {
-            if (location.getProvince().equals(location.getCity())) {
+            if (location.getProvince().equals(location.getCity()))
                 locationBinding.textView.setText(location.getCity() + " " + location.getDistrict());
-            } else {
+            else
                 locationBinding.textView.setText(location.getProvince() + " " + location.getCity());
-            }
         }
     }
 
@@ -187,18 +155,16 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EditLocationActivity activity = (EditLocationActivity) getActivity();
         if (position == 0) {
-            activity.submit(null);
+            activity.submit(null, null);
         } else if (position == 1) {
             if (location == null || location.getErrorCode() != 0) return;
 
-            if (location.getProvince().equals(location.getCity())) {
-                activity.submit(location.getCity() + " " + location.getDistrict());
-            } else {
-                activity.submit(location.getProvince() + " " + location.getCity());
-            }
+            if (location.getProvince().equals(location.getCity()))
+                activity.submit(location.getCity(), location.getDistrict());
+            else
+                activity.submit(location.getProvince(), location.getCity());
         } else {
-            Province province = chinaCityList.get(position - 2);
-            activity.showCityList(province.province, province.city);
+            activity.showCityList(position - 2);
         }
     }
 
@@ -212,6 +178,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         listViewState = binding.getRoot().onSaveInstanceState();
     }
 }

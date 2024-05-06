@@ -7,6 +7,6 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/gray"
+        android:indeterminateTint="#666"
         android:padding="12dp" />
 </FrameLayout>
