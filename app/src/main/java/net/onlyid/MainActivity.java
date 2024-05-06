@@ -1,6 +1,7 @@
 package net.onlyid;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -29,7 +31,6 @@ import net.onlyid.entity.Otp;
 import net.onlyid.entity.User;
 import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
-import net.onlyid.scan_login.IllegalQrCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.scan_login.SuccessActivity;
 import net.onlyid.user_profile.UserProfileActivity;
@@ -240,8 +241,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
 
-            Intent intent = new Intent(this, IllegalQrCodeActivity.class);
-            startActivity(intent);
+            Drawable drawable = getDrawable(R.drawable.ic_error);
+            drawable.setTint(0xeff44336);
+            new MaterialAlertDialogBuilder(this)
+                    .setIcon(drawable)
+                    .setTitle("这不是唯ID的二维码")
+                    .setPositiveButton("确定", null)
+                    .show();
         }
     }
 

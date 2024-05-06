@@ -50,10 +50,6 @@
             android:label="选择地区"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scan_login.IllegalQrCodeActivity"
-            android:label="非法二维码"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".scan_login.SuccessActivity"
             android:label="登录成功"
             android:screenOrientation="portrait" />
