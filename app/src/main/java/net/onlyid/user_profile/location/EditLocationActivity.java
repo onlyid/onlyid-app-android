@@ -49,7 +49,10 @@ public class EditLocationActivity extends BaseActivity {
     }
 
     void submit(String location) {
-        if (!TextUtils.isEmpty(location)) {
+        if (TextUtils.isEmpty(location)) {
+            user.province = null;
+            user.city = null;
+        } else {
             String[] arr = location.split(" ");
             user.province = arr[0];
             user.city = arr[1];
