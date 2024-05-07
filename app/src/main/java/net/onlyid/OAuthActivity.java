@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.onlyid.authorization.AuthorizeActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityOauthBinding;

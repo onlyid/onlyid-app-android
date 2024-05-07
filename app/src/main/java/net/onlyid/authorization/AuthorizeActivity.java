@@ -1,10 +1,11 @@
-package net.onlyid;
+package net.onlyid.authorization;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 
+import net.onlyid.MyApplication;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizeBinding;

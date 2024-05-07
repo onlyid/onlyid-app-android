@@ -1,4 +1,4 @@
-package net.onlyid.authorized_app;
+package net.onlyid.authorization;
 
 import android.os.Bundle;
 import android.text.Spannable;
@@ -28,8 +28,8 @@ import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-public class AuthorizedAppActivity extends BaseActivity {
-    private static final String TAG = "AuthorizedAppActivity";
+public class AuthorizationActivity extends BaseActivity {
+    private static final String TAG = "AuthorizationActivity";
     ActivityAuthorizedAppBinding binding;
     List<Entity2> clientList = new ArrayList<>();
     boolean loading = true;
@@ -62,7 +62,7 @@ public class AuthorizedAppActivity extends BaseActivity {
             }
 
             Entity2 client = clientList.get(position);
-            int radius = Utils.dp2px(AuthorizedAppActivity.this, 5);
+            int radius = Utils.dp2px(AuthorizationActivity.this, 5);
             Glide.with(convertView).load(client.iconUrl)
                     .transform(new RoundedCornersTransformation(radius, 0))
                     .into(binding.imageView);
@@ -105,7 +105,7 @@ public class AuthorizedAppActivity extends BaseActivity {
             int p = position - 1;
             if (p < 0) return;
 
-            new MaterialAlertDialogBuilder(AuthorizedAppActivity.this)
+            new MaterialAlertDialogBuilder(AuthorizationActivity.this)
                     .setItems(new String[]{"取消授权"}, (dialog, which) -> onDialogItemClick(which, p)).show();
         });
     }

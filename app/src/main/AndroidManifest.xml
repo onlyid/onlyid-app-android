@@ -58,7 +58,7 @@
             android:label="自定义名称"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AuthorizeActivity"
+            android:name=".authorization.AuthorizeActivity"
             android:label="登录授权"
             android:screenOrientation="portrait" />
         <activity
@@ -82,7 +82,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AvatarActivity" />
         <activity
-            android:name=".authorized_app.AuthorizedAppActivity"
+            android:name=".authorization.AuthorizationActivity"
             android:label="授权应用"
             android:screenOrientation="portrait" />
         <activity

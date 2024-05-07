@@ -20,7 +20,8 @@ import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
-import net.onlyid.authorized_app.AuthorizedAppActivity;
+import net.onlyid.authorization.AuthorizationActivity;
+import net.onlyid.authorization.AuthorizeActivity;
 import net.onlyid.common.CheckUpdate;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void authorization() {
-        Intent intent = new Intent(this, AuthorizedAppActivity.class);
+        Intent intent = new Intent(this, AuthorizationActivity.class);
         startActivity(intent);
     }
 
