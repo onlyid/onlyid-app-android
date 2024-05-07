@@ -1,7 +1,6 @@
 package net.onlyid;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -15,29 +14,23 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import net.onlyid.authorization.AuthorizationActivity;
-import net.onlyid.authorization.AuthorizeActivity;
 import net.onlyid.common.CheckUpdate;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
-import net.onlyid.entity.Client;
 import net.onlyid.entity.Otp;
 import net.onlyid.entity.User;
 import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
+import net.onlyid.scan_login.ScanCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
-import net.onlyid.scan_login.SuccessActivity;
 import net.onlyid.user_profile.UserProfileActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -51,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
     static final String PUSH_TAG = "Push";
     static final String PUSH_APP_ID = "2882303761520030422";
     static final String PUSH_APP_KEY = "5222003035422";
-
-    static final int LOGIN = 9;
-    // 扫码登录用，暂时放这里
-    static final int SCAN_CODE = 10, AUTHORIZE = 11;
-    String uid, clientId;
+    static final int LOGIN = 1, SCAN_CODE = 2;
 
     ActivityMainBinding binding;
 
@@ -209,60 +198,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void scanLogin() {
-        Intent intent = new Intent(this, ScanLoginActivity.class);
+        Intent intent = new Intent(this, ScanCodeActivity.class);
         //noinspection deprecation
         startActivityForResult(intent, SCAN_CODE);
-    }
-
-    void handleScanResult(String text) {
-        try {
-            JSONObject obj = new JSONObject(text);
-            uid = obj.getString("uid");
-            clientId = obj.getString("clientId");
-            if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(clientId))
-                throw new Exception("uid或clientId为空");
-
-            MyHttp.get("/user-client-links/" + clientId + "/check", (resp) -> {
-                JSONObject respBody = new JSONObject(resp);
-                String clientString = respBody.getString("client");
-                Client client = Utils.gson.fromJson(clientString, Client.class);
-                if (respBody.getBoolean("linked")) {
-                    handleAuthResult(true);
-                    Intent intent = new Intent(this, SuccessActivity.class);
-                    intent.putExtra("client", client);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(this, AuthorizeActivity.class);
-                    intent.putExtra("client", client);
-                    intent.putExtra("uid", uid);
-                    //noinspection deprecation
-                    startActivityForResult(intent, AUTHORIZE);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            Drawable drawable = getDrawable(R.drawable.ic_error);
-            drawable.setTint(0xeff44336);
-            new MaterialAlertDialogBuilder(this)
-                    .setIcon(drawable)
-                    .setTitle("这不是唯ID的二维码")
-                    .setPositiveButton("确定", null)
-                    .show();
-        }
-    }
-
-    void handleAuthResult(boolean result) {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("result", result);
-            obj.put("uid", uid);
-            obj.put("clientId", clientId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        MyHttp.post("/scan-login", obj, (resp) -> {
-        });
     }
 
     void authorization() {
@@ -302,11 +240,10 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (requestCode == SCAN_CODE) {
             if (resultCode == RESULT_OK) {
-                handleScanResult(data.getStringExtra("text"));
+                Intent intent = new Intent(this, ScanLoginActivity.class);
+                intent.putExtra("scanResult", data.getStringExtra("scanResult"));
+                startActivity(intent);
             }
-        } else if (requestCode == AUTHORIZE) {
-            // 到时再看一下，back和reject是否需要区分对待
-            handleAuthResult(resultCode == RESULT_OK);
         }
     }
 }

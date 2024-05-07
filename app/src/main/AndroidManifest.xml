@@ -50,10 +50,6 @@
             android:label="选择地区"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scan_login.SuccessActivity"
-            android:label="登录成功"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".trusted_device.CustomNameActivity"
             android:label="自定义名称"
             android:screenOrientation="portrait" />
@@ -91,6 +87,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/LoadingActivity" />
+        <activity
+            android:name=".scan_login.ScanCodeActivity"
             android:label="扫码登录"
             android:screenOrientation="portrait" />
         <activity
