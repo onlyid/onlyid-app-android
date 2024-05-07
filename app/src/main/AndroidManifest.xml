@@ -91,8 +91,8 @@
             android:theme="@style/LoadingActivity" />
         <activity
             android:name=".scan_login.ScanCodeActivity"
-            android:label="扫码登录"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ScanCodeActivity" />
         <activity
             android:name=".user_profile.UserProfileActivity"
             android:label="账号资料"

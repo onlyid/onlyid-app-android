@@ -54,6 +54,11 @@
         <item name="android:statusBarColor">#fff</item>
     </style>
 
+    <style name="ScanCodeActivity" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:navigationBarColor">#121212</item>
+    </style>
+
     <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:datePickerStyle">@style/DatePicker</item>
         <item name="android:textSize">@dimen/text1</item>

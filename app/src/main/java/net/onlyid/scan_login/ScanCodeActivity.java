@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
@@ -26,8 +27,8 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
+import net.onlyid.MyApplication;
 import net.onlyid.R;
-import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanCodeBinding;
 
@@ -38,7 +39,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ScanCodeActivity extends BaseActivity {
+public class ScanCodeActivity extends AppCompatActivity {
     static final String TAG = "ScanCodeActivity";
     static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -64,6 +65,8 @@ public class ScanCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityScanCodeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.backImageView.setOnClickListener((v) -> onBackPressed());
 
         for (String permission : PERMISSIONS) {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, permission)) {
@@ -148,5 +151,19 @@ public class ScanCodeActivity extends BaseActivity {
         super.onDestroy();
 
         executorService.shutdown();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApplication.currentActivity = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MyApplication.currentActivity = null;
     }
 }

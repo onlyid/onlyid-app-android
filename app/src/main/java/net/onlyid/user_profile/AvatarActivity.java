@@ -1,5 +1,6 @@
 package net.onlyid.user_profile;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 
 import net.onlyid.MyApplication;
+import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.databinding.ActivityAvatarBinding;
 import net.onlyid.entity.User;
@@ -24,6 +26,10 @@ public class AvatarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAvatarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Drawable arrowBack = getDrawable(R.drawable.abc_ic_ab_back_material);
+        arrowBack.setColorFilter(0xffe0e0e0, PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(arrowBack);
 
         initView();
     }
