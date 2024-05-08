@@ -55,8 +55,10 @@
     </style>
 
     <style name="ScanCodeActivity" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
         <item name="android:statusBarColor">#121212</item>
         <item name="android:navigationBarColor">#121212</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialog</item>
     </style>
 
     <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
