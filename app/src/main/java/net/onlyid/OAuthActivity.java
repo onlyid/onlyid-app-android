@@ -9,7 +9,6 @@ import net.onlyid.authorization.AuthorizeActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityOauthBinding;
-import net.onlyid.entity.Client;
 import net.onlyid.entity.OAuthConfig;
 import net.onlyid.login.AccountActivity;
 
@@ -61,26 +60,14 @@ public class OAuthActivity extends AppCompatActivity {
         config = Utils.gson.fromJson(configString, OAuthConfig.class);
 
         // 首先判断当前是否已经登录
-        MyHttp.get("/user", (resp) -> promptAuthorizeIfNecessary());
+        MyHttp.get("/user", (resp) -> afterLogin());
     }
 
-    void promptAuthorizeIfNecessary() {
-        MyHttp.get("/user-client-links/" + config.clientId + "/check", (resp) -> {
-            JSONObject respBody = new JSONObject(resp);
-            String clientString = respBody.getString("client");
-            Client client = Utils.gson.fromJson(clientString, Client.class);
-            if (respBody.getBoolean("linked")) {
-                handleAuthResult(true);
-            } else {
-                Intent intent = new Intent(this, AuthorizeActivity.class);
-                intent.putExtra("client", client);
-                //noinspection deprecation
-                startActivityForResult(intent, AUTHORIZE);
-            }
-        });
+    void afterLogin() {
+        AuthorizeActivity.startIfNecessary(this, config.clientId, () -> handleAuthorizeResult(true));
     }
 
-    void handleAuthResult(boolean result) {
+    void handleAuthorizeResult(boolean result) {
         if (result) {
             MyHttp.post("/authorize-client/" + config.clientId, new JSONObject(), (resp) -> {
                 JSONObject respBody = new JSONObject(resp);
@@ -104,14 +91,13 @@ public class OAuthActivity extends AppCompatActivity {
 
         if (requestCode == LOGIN) {
             if (resultCode == RESULT_OK) {
-                promptAuthorizeIfNecessary();
+                afterLogin();
             } else {
                 setResult(RESULT_CANCELED);
                 finish();
             }
         } else if (requestCode == AUTHORIZE) {
-            // 到时再看一下，back和reject是否需要区分对待
-            handleAuthResult(resultCode == RESULT_OK);
+            handleAuthorizeResult(resultCode == RESULT_OK);
         }
     }
 }

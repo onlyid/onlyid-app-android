@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="50dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -61,12 +61,11 @@
 
     <Button
         android:id="@+id/login_button"
+        style="@style/LargeButton"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:onClick="login"
-        android:text="登 录"
-        android:textSize="@dimen/text3" />
+        android:text="登 录" />
 
     <TextView
         android:id="@+id/tip_text_view"
@@ -78,13 +77,13 @@
         android:textSize="@dimen/text1" />
 
     <Button
+        android:id="@+id/cancel_button"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:onClick="reject"
-        android:text="拒 绝"
+        android:text="取消"
         android:textSize="@dimen/text1" />
 </RelativeLayout>

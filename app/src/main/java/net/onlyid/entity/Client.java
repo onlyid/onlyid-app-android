@@ -7,7 +7,7 @@ public class Client implements Serializable {
     public enum Type {
         APP, WEB, OTHER;
 
-        public String toLocalizedString() {
+        public String toString() {
             switch (this) {
                 case APP:
                     return "APP";

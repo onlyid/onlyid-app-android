@@ -36,6 +36,15 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:datePickerStyle">@style/DatePicker</item>
+        <item name="android:textSize">@dimen/text1</item>
+    </style>
+
+    <style name="DatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
     <style name="AvatarActivity" parent="Theme.MaterialComponents">
         <item name="android:statusBarColor">#121212</item>
         <item name="android:navigationBarColor">#121212</item>
@@ -59,15 +68,6 @@
         <item name="android:statusBarColor">#121212</item>
         <item name="android:navigationBarColor">#121212</item>
         <item name="materialAlertDialogTheme">@style/AlertDialog</item>
-    </style>
-
-    <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:datePickerStyle">@style/DatePicker</item>
-        <item name="android:textSize">@dimen/text1</item>
-    </style>
-
-    <style name="DatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
     </style>
 
 </resources>
