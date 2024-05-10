@@ -3,6 +3,7 @@ package net.onlyid.authorization;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
 
@@ -23,8 +24,6 @@ public class AuthorizeActivity extends BaseActivity {
     static final String TAG = "AuthorizeActivity";
 
     ActivityAuthorizeBinding binding;
-    Client client;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,30 +31,33 @@ public class AuthorizeActivity extends BaseActivity {
         binding = ActivityAuthorizeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        init();
+        getSupportActionBar().setElevation(0);
+
+        initView();
     }
 
-    void init() {
-        client = (Client) getIntent().getSerializableExtra("client");
-        user = MyApplication.getCurrentUser();
+    void initView() {
+        Client client = (Client) getIntent().getSerializableExtra("client");
+        User user = MyApplication.getCurrentUser();
 
-        int radius = Utils.dp2px(this, 5);
-        Glide.with(this).load(user.avatar)
-                .transform(new RoundedCornersTransformation(radius, 0))
-                .into(binding.avatarImageView);
-        binding.nicknameTextView.setText(user.nickname);
-
+        int radius = Utils.dp2px(this, 10);
         Glide.with(this).load(client.iconUrl)
                 .transform(new RoundedCornersTransformation(radius, 0))
                 .into(binding.iconImageView);
-        binding.clientNameTextView.setText(client.name);
-        binding.tipTextView.setText("「" + client.name + "」将获得你的手机号、昵称等账号信息。");
+        binding.clientTextView.setText(client.name);
 
-        binding.loginButton.setOnClickListener((v) -> login());
+        int radius1 = Utils.dp2px(this, 5);
+        Glide.with(this).load(user.avatar)
+                .transform(new RoundedCornersTransformation(radius1, 0))
+                .into(binding.avatarImageView);
+        binding.nicknameTextView.setText(user.nickname);
+        binding.accountTextView.setText(TextUtils.isEmpty(user.email) ? user.mobile : user.email);
+
+        binding.loginButton.setOnClickListener((v) -> authorize());
         binding.cancelButton.setOnClickListener((v) -> cancel());
     }
 
-    void login() {
+    void authorize() {
         setResult(RESULT_OK);
         finish();
     }

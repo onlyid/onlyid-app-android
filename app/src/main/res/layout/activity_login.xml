@@ -20,7 +20,7 @@
             android:layout_marginTop="72dp"
             android:background="@drawable/bg_account_big"
             android:gravity="center_vertical"
-            android:padding="10dp">
+            android:padding="12dp">
 
             <ImageView
                 android:id="@+id/avatar_image_view"

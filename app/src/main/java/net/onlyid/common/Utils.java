@@ -25,7 +25,7 @@ public class Utils {
     static final String TAG = "Utils";
     public static final Gson gson;
     public static final SharedPreferences pref;
-    static Dialog loadingDialog;
+    public static Dialog loadingDialog;
 
     static {
         JsonDeserializer<LocalDateTime> localDateTimeDeserializer =

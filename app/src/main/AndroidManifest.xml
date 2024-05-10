@@ -87,8 +87,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/LoadingActivity" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanCodeActivity"
             android:screenOrientation="portrait"

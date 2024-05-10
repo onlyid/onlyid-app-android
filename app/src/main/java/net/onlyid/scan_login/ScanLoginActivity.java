@@ -5,20 +5,19 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import net.onlyid.MyApplication;
 import net.onlyid.R;
 import net.onlyid.authorization.AuthorizeActivity;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ScanLoginActivity extends AppCompatActivity {
+public class ScanLoginActivity extends BaseActivity {
+    static final String TAG = "ScanLoginActivity";
     String uid, clientId;
 
     @Override
@@ -26,7 +25,10 @@ public class ScanLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_login);
 
+        getSupportActionBar().hide();
+
         Utils.showLoading(this);
+        Utils.loadingDialog.setOnDismissListener(d -> finish());
 
         String text = getIntent().getStringExtra("scanResult");
         handleScanResult(text);
@@ -74,19 +76,5 @@ public class ScanLoginActivity extends AppCompatActivity {
         if (requestCode == AuthorizeActivity.AUTHORIZE) {
             handleAuthorizeResult(resultCode == RESULT_OK);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        MyApplication.currentActivity = this;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        MyApplication.currentActivity = null;
     }
 }

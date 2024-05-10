@@ -9,7 +9,6 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Size;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -28,8 +27,8 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
-import net.onlyid.MyApplication;
 import net.onlyid.R;
+import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanCodeBinding;
 
@@ -40,7 +39,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ScanCodeActivity extends AppCompatActivity {
+public class ScanCodeActivity extends BaseActivity {
     static final String TAG = "ScanCodeActivity";
     static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -155,19 +154,5 @@ public class ScanCodeActivity extends AppCompatActivity {
         super.onDestroy();
 
         executorService.shutdown();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        MyApplication.currentActivity = this;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        MyApplication.currentActivity = null;
     }
 }
