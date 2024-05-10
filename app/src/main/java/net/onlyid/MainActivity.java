@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ActionBar actionBar = getSupportActionBar();
-        //noinspection ConstantConditions
         actionBar.setIcon(R.drawable.ic_logo);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(" 唯ID");

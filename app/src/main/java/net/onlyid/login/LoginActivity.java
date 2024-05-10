@@ -35,6 +35,8 @@ public class LoginActivity extends BaseActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getSupportActionBar().setElevation(0);
+
         user = (Entity1) getIntent().getSerializableExtra("user");
 
         initView();

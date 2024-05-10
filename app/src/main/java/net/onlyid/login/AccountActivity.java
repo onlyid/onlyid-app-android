@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.core.util.PatternsCompat;
 
 import net.onlyid.R;
@@ -29,10 +30,15 @@ public class AccountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         binding = ActivityAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setElevation(0);
+        actionBar.setIcon(R.drawable.ic_logo_colored);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(" 唯ID");
 
         initView();
     }

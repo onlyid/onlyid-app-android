@@ -21,10 +21,6 @@
         <item name="elevation">2dp</item>
     </style>
 
-    <style name="MainActivity" parent="BaseAppTheme">
-        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
-    </style>
-
     <style name="LoadingDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:backgroundDimAmount">0.32</item>
     </style>
@@ -45,6 +41,15 @@
 
     <style name="TextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="helperTextTextAppearance">@style/TextFieldHelperText</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlayTextInputEditText</item>
+    </style>
+
+    <style name="ThemeOverlayTextInputEditText" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="textAppearanceSubtitle1">@style/TextAppearanceSubtitle1</item>
+    </style>
+
+    <style name="TextAppearanceSubtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">17sp</item>
     </style>
 
     <style name="TextFieldHelperText" parent="TextAppearance.MaterialComponents.Caption">
@@ -58,6 +63,10 @@
 
     <style name="DatePicker" parent="android:Widget.Material.DatePicker">
         <item name="android:datePickerMode">spinner</item>
+    </style>
+
+    <style name="MainActivity" parent="BaseAppTheme">
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
     </style>
 
     <style name="AvatarActivity" parent="Theme.MaterialComponents">

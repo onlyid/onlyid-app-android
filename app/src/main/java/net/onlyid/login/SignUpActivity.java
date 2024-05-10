@@ -40,6 +40,8 @@ public class SignUpActivity extends BaseActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getSupportActionBar().setElevation(0);
+
         account = getIntent().getStringExtra("account");
 
         initView();
