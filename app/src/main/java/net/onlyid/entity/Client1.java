@@ -2,11 +2,11 @@ package net.onlyid.entity;
 
 import java.time.LocalDateTime;
 
-public class Entity2 {
+public class Client1 {
     public enum Type {
         APP, WEB, OTHER;
 
-        public String toLocalizedString() {
+        public String toString() {
             switch (this) {
                 case APP:
                     return "APP";
@@ -22,8 +22,5 @@ public class Entity2 {
     public String iconUrl;
     public String name;
     public Type type;
-    public LocalDateTime firstDate;
-    public String lastIp;
-    public String lastLocation;
     public LocalDateTime lastDate;
 }

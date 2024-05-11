@@ -89,5 +89,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
-        android:text="首次登录需主动确认，下次登录本页不再出现" />
+        android:text="首次登录需主动授权，下次登录本页不再出现" />
 </LinearLayout>

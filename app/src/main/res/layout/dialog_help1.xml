@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="?attr/dialogPreferredPadding"
+    android:paddingTop="16dp"
+    android:paddingRight="?attr/dialogPreferredPadding">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="帮助"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="通过唯ID账号密码（或唯ID APP扫码）登录的应用，会出现在本页。"
+        android:textSize="@dimen/text2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="只通过验证码登录的应用，不认为是授权应用，不会出现在本页。"
+        android:textSize="@dimen/text2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="授权应用可以访问你的唯ID账号资料，包括头像、昵称和手机号等。"
+        android:textSize="@dimen/text2" />
+</LinearLayout>

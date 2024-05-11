@@ -1,14 +1,13 @@
 package net.onlyid.authorization;
 
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -17,69 +16,46 @@ import com.google.gson.reflect.TypeToken;
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
+import net.onlyid.common.MyAdapter;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
-import net.onlyid.databinding.ActivityAuthorizedAppBinding;
+import net.onlyid.databinding.ActivityAuthorizationBinding;
+import net.onlyid.databinding.DialogDisableAccessBinding;
+import net.onlyid.databinding.DialogHelp1Binding;
 import net.onlyid.databinding.ItemClientBinding;
-import net.onlyid.entity.Entity2;
+import net.onlyid.entity.Client1;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-public class AuthorizationActivity extends BaseActivity {
-    private static final String TAG = "AuthorizationActivity";
-    ActivityAuthorizedAppBinding binding;
-    List<Entity2> clientList = new ArrayList<>();
-    boolean loading = true;
+public class AuthorizationActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    static final String TAG = "AuthorizationActivity";
+    ActivityAuthorizationBinding binding;
+    List<Client1> clientList = new ArrayList<>();
 
-    BaseAdapter adapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
-            return clientList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return clientList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
+    BaseAdapter adapter = new MyAdapter(() -> clientList) {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ItemClientBinding binding;
+            ItemClientBinding binding1;
             if (convertView == null) {
-                binding = ItemClientBinding.inflate(getLayoutInflater());
-                convertView = binding.getRoot();
-                convertView.setTag(binding);
+                binding1 = ItemClientBinding.inflate(getLayoutInflater());
+                convertView = binding1.getRoot();
+                convertView.setTag(binding1);
             } else {
-                binding = (ItemClientBinding) convertView.getTag();
+                binding1 = (ItemClientBinding) convertView.getTag();
             }
 
-            Entity2 client = clientList.get(position);
+            Client1 client = clientList.get(position);
             int radius = Utils.dp2px(AuthorizationActivity.this, 5);
             Glide.with(convertView).load(client.iconUrl)
                     .transform(new RoundedCornersTransformation(radius, 0))
-                    .into(binding.imageView);
-            String type = "（" + client.type.toLocalizedString() + "）";
-            SpannableString ss = new SpannableString(client.name + type);
-            ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray, null)),
-                    client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new RelativeSizeSpan(0.88f),
-                    client.name.length(), ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            binding.nameTextView.setText(ss);
-            binding.createDateTextView.setText("首次登录时间：" + client.firstDate.format(Constants.DATE_TIME_FORMATTER_H));
-            binding.lastLoginDateTextView.setText("最近登录时间：" +
-                    (client.lastDate == null ? "-" : client.lastDate.format(Constants.DATE_TIME_FORMATTER_H)));
-            binding.lastLoginLocationTextView.setText("最近登录地点：" +
-                    (TextUtils.isEmpty(client.lastLocation) ? "-" : client.lastLocation));
-            binding.lastLoginIpTextView.setText("最近登录IP：" +
-                    (TextUtils.isEmpty(client.lastIp) ? "-" : client.lastIp));
+                    .into(binding1.imageView);
+
+            binding1.nameTextView.setText(client.name);
+            binding1.typeTextView.setText(client.type.toString());
+            binding1.lastLoginTextView.setText("最近登录：" + client.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
 
             return convertView;
         }
@@ -88,51 +64,64 @@ public class AuthorizationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAuthorizedAppBinding.inflate(getLayoutInflater());
+        binding = ActivityAuthorizationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        init();
-
+        initView();
         initData();
     }
 
-    void init() {
-        View header = View.inflate(this, R.layout.header_authorized_app, null);
-        binding.listView.addHeaderView(header);
-        binding.listView.setAdapter(adapter);
-        binding.listView.setOnItemClickListener((parent, view, position, id) -> {
-            // 要把header排除在外
-            int p = position - 1;
-            if (p < 0) return;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.help_outline, menu);
+        return true;
+    }
 
-            new MaterialAlertDialogBuilder(AuthorizationActivity.this)
-                    .setItems(new String[]{"取消授权"}, (dialog, which) -> onDialogItemClick(which, p)).show();
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.help) {
+            DialogHelp1Binding binding1 = DialogHelp1Binding.inflate(getLayoutInflater());
+            new MaterialAlertDialogBuilder(this)
+                    .setView(binding1.getRoot())
+                    .setPositiveButton("确定", null)
+                    .show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void initView() {
+        binding.listView.setAdapter(adapter);
+        binding.listView.setOnItemClickListener(this);
     }
 
     void initData() {
-        binding.listView.setVisibility(View.GONE);
-        binding.emptyView.getRoot().setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
-        loading = true;
-
         MyHttp.get("/clients/by-user", (resp) -> {
-            clientList = Utils.gson.fromJson(resp, new TypeToken<List<Entity2>>(){});
-
-            if (clientList.isEmpty()) binding.emptyView.getRoot().setVisibility(View.VISIBLE);
-            else binding.listView.setVisibility(View.VISIBLE);
-
-            binding.progressBar.setVisibility(View.GONE);
-            loading = false;
+            clientList = Utils.gson.fromJson(resp, new TypeToken<List<Client1>>() {});
+            if (clientList.isEmpty()) {
+                binding.emptyView.getRoot().setVisibility(View.VISIBLE);
+                binding.listView.setVisibility(View.INVISIBLE);
+            } else {
+                binding.emptyView.getRoot().setVisibility(View.INVISIBLE);
+                binding.listView.setVisibility(View.VISIBLE);
+            }
             adapter.notifyDataSetChanged();
         });
     }
 
-    void onDialogItemClick(int which, int position) {
-        Utils.showLoading(this);
-        MyHttp.delete("/user-client-links/" + clientList.get(position).id, (s) -> {
-            Utils.hideLoading();
-            initData();
-        });
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Client1 client = clientList.get(position);
+        DialogDisableAccessBinding binding1 = DialogDisableAccessBinding.inflate(getLayoutInflater());
+        binding1.textView.setText("\"" + client.name + "\" 将不能再访问你的账号资料。");
+
+        new MaterialAlertDialogBuilder(this).setView(binding1.getRoot())
+                .setPositiveButton("确定", (d, w) -> {
+                    MyHttp.delete("/user-client-links/" + client.id, (resp) -> {
+                        Utils.showToast("操作成功", Toast.LENGTH_SHORT);
+                        initData();
+                    });
+                }).show();
     }
 }

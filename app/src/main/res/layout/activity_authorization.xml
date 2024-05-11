@@ -7,20 +7,14 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/border2"
-        android:dividerHeight="1dp" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminateTint="@color/primary" />
+        android:divider="@drawable/list_divider"
+        android:listSelector="@drawable/bg_selectable_item" />
 
     <include
         android:id="@+id/empty_view"
         layout="@layout/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
 </RelativeLayout>

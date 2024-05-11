@@ -3,53 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingStart="20dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    android:paddingLeft="20dp"
+    android:paddingTop="15dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="15dp">
 
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="device image" />
+        android:layout_height="50dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/name_text_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text3" />
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text3" />
+
+            <TextView
+                android:id="@+id/type_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/bg_client_type"
+                android:paddingLeft="4dp"
+                android:paddingTop="1dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="1dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/last_login_date_text_view"
+            android:id="@+id/last_login_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/last_login_location_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/last_login_ip_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/create_date_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="6dp" />
     </LinearLayout>
 
     <include layout="@layout/list_arrow_right" />
-
 </LinearLayout>

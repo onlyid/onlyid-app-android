@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/save"
-        android:icon="@drawable/ic_check_save"
-        android:title="保存"
+        android:id="@+id/help"
+        android:icon="@drawable/ic_help_outline"
+        android:title="帮助"
         app:iconTint="@color/menu_icon"
         app:showAsAction="always" />
 </menu>
