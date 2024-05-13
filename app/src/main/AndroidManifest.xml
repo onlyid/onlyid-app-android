@@ -32,6 +32,10 @@
             android:value="02919836df23adaee129c306e78d83f5" />
 
         <activity
+            android:name=".login_history.LoginHistoryActivity"
+            android:label="登录历史"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".login.SignUpActivity"
             android:label="注册"
             android:screenOrientation="portrait" />

@@ -28,6 +28,7 @@ import net.onlyid.entity.Otp;
 import net.onlyid.entity.User;
 import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
+import net.onlyid.login_history.LoginHistoryActivity;
 import net.onlyid.scan_login.ScanCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.user_profile.UserProfileActivity;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         binding.userProfileLayout.setOnClickListener((v) -> userProfile());
         binding.scanLoginLayout.setOnClickListener((v) -> scanLogin());
         binding.authorizationLayout.setOnClickListener((v) -> authorization());
-        binding.loginHistoryLayout.setOnClickListener((v) -> {});
+        binding.loginHistoryLayout.setOnClickListener((v) -> loginHistory());
         binding.securityLayout.setOnClickListener((v) -> {});
         binding.switchAccountLayout.setOnClickListener((v) -> {});
     }
@@ -204,6 +205,11 @@ public class MainActivity extends AppCompatActivity {
 
     void authorization() {
         Intent intent = new Intent(this, AuthorizationActivity.class);
+        startActivity(intent);
+    }
+
+    void loginHistory() {
+        Intent intent = new Intent(this, LoginHistoryActivity.class);
         startActivity(intent);
     }
 

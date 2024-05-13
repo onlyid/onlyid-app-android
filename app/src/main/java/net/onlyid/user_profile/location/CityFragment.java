@@ -33,7 +33,6 @@ public class CityFragment extends Fragment implements AdapterView.OnItemClickLis
                 binding = (ItemLocationBinding) convertView.getTag();
             }
 
-            binding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
             binding.textView.setText(cityList.get(position));
 
             return convertView;

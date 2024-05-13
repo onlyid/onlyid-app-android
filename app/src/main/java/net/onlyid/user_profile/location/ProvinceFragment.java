@@ -116,7 +116,6 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
 
         ItemLocationBinding clearBinding = ItemLocationBinding.inflate(inflater);
         clearBinding.textView.setText("不设置");
-        clearBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
         binding.getRoot().addHeaderView(clearBinding.getRoot());
 
         locationBinding = ItemLocationBinding.inflate(inflater);
@@ -125,7 +124,6 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         locationBinding.textView.setCompoundDrawableTintList(colorStateList);
         locationBinding.textView.setCompoundDrawablePadding(Utils.dp2px(getContext(), 3));
         locationBinding.textView.setText("定位中...");
-        locationBinding.arrowRight.getRoot().setVisibility(View.INVISIBLE);
         binding.getRoot().addHeaderView(locationBinding.getRoot());
 
         binding.getRoot().setAdapter(adapter);

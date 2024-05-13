@@ -20,8 +20,8 @@ import net.onlyid.common.MyAdapter;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityAuthorizationBinding;
-import net.onlyid.databinding.DialogDisableAccessBinding;
 import net.onlyid.databinding.DialogHelp1Binding;
+import net.onlyid.databinding.DialogTitleTextBinding;
 import net.onlyid.databinding.ItemClientBinding;
 import net.onlyid.entity.Client1;
 
@@ -73,7 +73,7 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.help_outline, menu);
+        getMenuInflater().inflate(R.menu.activity_authorization, menu);
         return true;
     }
 
@@ -113,8 +113,9 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Client1 client = clientList.get(position);
-        DialogDisableAccessBinding binding1 = DialogDisableAccessBinding.inflate(getLayoutInflater());
-        binding1.textView.setText("\"" + client.name + "\" 将不能再访问你的账号资料。");
+        DialogTitleTextBinding binding1 = DialogTitleTextBinding.inflate(getLayoutInflater());
+        binding1.title.setText("解除授权");
+        binding1.text.setText("\"" + client.name + "\"将不能再访问你的账号资料。");
 
         new MaterialAlertDialogBuilder(this).setView(binding1.getRoot())
                 .setPositiveButton("确定", (d, w) -> {
@@ -122,6 +123,7 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
                         Utils.showToast("操作成功", Toast.LENGTH_SHORT);
                         initData();
                     });
-                }).show();
+                })
+                .setNegativeButton("取消", null).show();
     }
 }
