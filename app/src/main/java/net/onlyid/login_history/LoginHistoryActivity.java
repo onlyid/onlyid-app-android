@@ -3,6 +3,7 @@ package net.onlyid.login_history;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,8 +59,9 @@ public class LoginHistoryActivity extends BaseActivity implements AdapterView.On
 
             binding1.nameTextView.setText(setSpan("登录应用：" + entity.clientName));
             binding1.typeTextView.setText(entity.clientType.toString());
-            binding1.locationTextView.setText(setSpan("登录地点：" + entity.loginLocation));
-            String date = entity.loginDate.format(Constants.DATE_TIME_FORMATTER_H);
+            String location = TextUtils.isEmpty(entity.location) ? "-" : entity.location;
+            binding1.locationTextView.setText(setSpan("登录地点：" + location));
+            String date = entity.createDate.format(Constants.DATE_TIME_FORMATTER_H);
             binding1.dateTextView.setText(setSpan("登录时间：" + date));
 
             return convertView;
@@ -103,7 +105,7 @@ public class LoginHistoryActivity extends BaseActivity implements AdapterView.On
 
             new MaterialAlertDialogBuilder(this).setView(binding1.getRoot())
                     .setPositiveButton("确定", (d, w) -> {
-                        MyHttp.delete("", (resp) -> {
+                        MyHttp.delete("/user-logs", (resp) -> {
                             Utils.showToast("删除成功", Toast.LENGTH_SHORT);
                             list.clear();
                             updateView();
@@ -121,7 +123,7 @@ public class LoginHistoryActivity extends BaseActivity implements AdapterView.On
     }
 
     void initData() {
-        MyHttp.get("", (resp) -> {
+        MyHttp.get("/user-logs", (resp) -> {
             list = Utils.gson.fromJson(resp, new TypeToken<List<Entity2>>() {});
             updateView();
         });
@@ -147,7 +149,7 @@ public class LoginHistoryActivity extends BaseActivity implements AdapterView.On
 
         new MaterialAlertDialogBuilder(this).setView(binding1.getRoot())
                 .setPositiveButton("确定", (d, w) -> {
-                    MyHttp.delete("", (resp) -> {
+                    MyHttp.delete("/user-logs/" + entity.id, (resp) -> {
                         Utils.showToast("删除成功", Toast.LENGTH_SHORT);
                         list.remove(position);
                         updateView();
