@@ -97,7 +97,7 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
     }
 
     void initData() {
-        MyHttp.get("/clients/by-user", (resp) -> {
+        MyHttp.get("/user/clients", (resp) -> {
             clientList = Utils.gson.fromJson(resp, new TypeToken<List<Client1>>() {});
             if (clientList.isEmpty()) {
                 binding.emptyView.getRoot().setVisibility(View.VISIBLE);
@@ -119,7 +119,7 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
 
         new MaterialAlertDialogBuilder(this).setView(binding1.getRoot())
                 .setPositiveButton("确定", (d, w) -> {
-                    MyHttp.delete("/user-client-links/" + client.id, (resp) -> {
+                    MyHttp.delete("/user/client-links/" + client.id, (resp) -> {
                         Utils.showToast("操作成功", Toast.LENGTH_SHORT);
                         initData();
                     });

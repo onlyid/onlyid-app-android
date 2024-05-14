@@ -72,7 +72,7 @@ public class AuthorizeActivity extends BaseActivity {
     }
 
     public static void startIfNecessary(Activity activity, String clientId, CheckCallback callback) {
-        MyHttp.get("/user-client-links/" + clientId + "/check", (resp) -> {
+        MyHttp.get("/user/client-links/" + clientId + "/check", (resp) -> {
             JSONObject obj = new JSONObject(resp);
             String clientString = obj.getString("client");
             Client client = Utils.gson.fromJson(clientString, Client.class);
