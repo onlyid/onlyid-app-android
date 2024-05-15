@@ -8,27 +8,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.onlyid.authorization.AuthorizeActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
-import net.onlyid.databinding.ActivityOauthBinding;
-import net.onlyid.entity.OAuthConfig;
 import net.onlyid.login.AccountActivity;
 
 import org.json.JSONObject;
 
 public class OAuthActivity extends AppCompatActivity {
     static final String TAG = "OAuthActivity";
-    static final int LOGIN = 2, AUTHORIZE = 3;
+    static final int LOGIN = 2;
     static final String EXTRA_CODE = "extraCode";
     static final String EXTRA_STATE = "extraState";
-    ActivityOauthBinding binding;
-    OAuthConfig config;
+    String clientId, state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityOauthBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_oauth);
 
-        init();
+        getSupportActionBar().hide();
+
+        Utils.showLoading(this);
+        Utils.loadingDialog.setOnDismissListener(d -> finish());
+
+        handleIntent();
     }
 
     @Override
@@ -41,41 +42,28 @@ public class OAuthActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        MyApplication.currentActivity = this;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        MyApplication.currentActivity = null;
-    }
-
-    void init() {
-        String configString = getIntent().getStringExtra("oauthConfig");
-        config = Utils.gson.fromJson(configString, OAuthConfig.class);
+    void handleIntent() {
+        Intent intent = getIntent();
+        clientId = intent.getStringExtra("clientId");
+        state = intent.getStringExtra("state");
 
         // 首先判断当前是否已经登录
         MyHttp.get("/user", (resp) -> afterLogin());
     }
 
     void afterLogin() {
-        AuthorizeActivity.startIfNecessary(this, config.clientId, () -> handleAuthorizeResult(true));
+        AuthorizeActivity.startIfNecessary(this, clientId, () -> handleAuthorizeResult(true));
     }
 
     void handleAuthorizeResult(boolean result) {
         if (result) {
-            MyHttp.post("/authorize-client/" + config.clientId, new JSONObject(), (resp) -> {
+            MyHttp.post("/authorize-client/" + clientId, new JSONObject(), (resp) -> {
                 JSONObject respBody = new JSONObject(resp);
                 String code = respBody.getString("authorizationCode");
 
                 Intent data = new Intent();
                 data.putExtra(EXTRA_CODE, code);
-                data.putExtra(EXTRA_STATE, config.state);
+                data.putExtra(EXTRA_STATE, state);
                 setResult(RESULT_OK, data);
                 finish();
             });
@@ -96,8 +84,20 @@ public class OAuthActivity extends AppCompatActivity {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-        } else if (requestCode == AUTHORIZE) {
+        } else if (requestCode == AuthorizeActivity.AUTHORIZE) {
             handleAuthorizeResult(resultCode == RESULT_OK);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApplication.currentActivity = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MyApplication.currentActivity = null;
     }
 }

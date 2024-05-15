@@ -111,10 +111,9 @@
         <activity
             android:name=".OAuthActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/OAuthActivity">
+            android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="net.onlyid.OAUTH_ACTIVITY" />
+                <action android:name="net.onlyid.OAUTH" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
