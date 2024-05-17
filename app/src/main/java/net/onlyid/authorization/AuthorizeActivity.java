@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import androidx.appcompat.app.ActionBar;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import net.onlyid.MyApplication;
 import net.onlyid.R;
@@ -81,6 +82,15 @@ public class AuthorizeActivity extends BaseActivity {
             JSONObject obj = new JSONObject(resp);
             String clientString = obj.getString("client");
             Client client = Utils.gson.fromJson(clientString, Client.class);
+
+            if (client == null) {
+                new MaterialAlertDialogBuilder(activity)
+                        .setMessage("应用不存在或应用ID错误，请检查")
+                        .setPositiveButton("确定", (d, w) -> activity.finish())
+                        .show();
+                return;
+            }
+
             if (obj.getBoolean("linked")) {
                 callback.authorized();
             } else {
