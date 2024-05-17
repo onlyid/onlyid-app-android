@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import androidx.appcompat.app.ActionBar;
+
 import com.bumptech.glide.Glide;
 
 import net.onlyid.MyApplication;
+import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
@@ -31,7 +34,9 @@ public class AuthorizeActivity extends BaseActivity {
         binding = ActivityAuthorizeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getSupportActionBar().setElevation(0);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setElevation(0);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
 
         initView();
     }
