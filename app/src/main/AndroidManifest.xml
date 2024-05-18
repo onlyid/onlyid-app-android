@@ -54,8 +54,8 @@
             android:label="选择地区"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".trusted_device.CustomNameActivity"
-            android:label="自定义名称"
+            android:name=".security.LoginDeviceActivity"
+            android:label="登录设备"
             android:screenOrientation="portrait" />
         <activity
             android:name=".authorization.AuthorizeActivity"
@@ -86,8 +86,8 @@
             android:label="授权应用"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".trusted_device.TrustedDeviceActivity"
-            android:label="可信设备"
+            android:name=".security.SecurityActivity"
+            android:label="安全设置"
             android:screenOrientation="portrait" />
         <activity
             android:name=".scan_login.ScanLoginActivity"

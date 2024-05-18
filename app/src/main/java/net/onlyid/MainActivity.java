@@ -31,6 +31,7 @@ import net.onlyid.login.AccountActivity;
 import net.onlyid.login_history.LoginHistoryActivity;
 import net.onlyid.scan_login.ScanCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
+import net.onlyid.security.SecurityActivity;
 import net.onlyid.user_profile.UserProfileActivity;
 
 import java.time.Duration;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         binding.scanLoginLayout.setOnClickListener((v) -> scanLogin());
         binding.authorizationLayout.setOnClickListener((v) -> authorization());
         binding.loginHistoryLayout.setOnClickListener((v) -> loginHistory());
-        binding.securityLayout.setOnClickListener((v) -> {});
+        binding.securityLayout.setOnClickListener((v) -> security());
         binding.switchAccountLayout.setOnClickListener((v) -> {});
     }
 
@@ -210,6 +211,11 @@ public class MainActivity extends AppCompatActivity {
 
     void loginHistory() {
         Intent intent = new Intent(this, LoginHistoryActivity.class);
+        startActivity(intent);
+    }
+
+    void security() {
+        Intent intent = new Intent(this, SecurityActivity.class);
         startActivity(intent);
     }
 
