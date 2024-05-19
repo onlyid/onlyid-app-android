@@ -50,8 +50,8 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user_profile.location.EditLocationActivity"
-            android:label="选择地区"
+            android:name=".security.ChangePasswordActivity"
+            android:label="修改密码"
             android:screenOrientation="portrait" />
         <activity
             android:name=".security.LoginDeviceActivity"
@@ -60,6 +60,10 @@
         <activity
             android:name=".authorization.AuthorizeActivity"
             android:label="登录授权"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user_profile.location.EditLocationActivity"
+            android:label="选择地区"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user_profile.EditBirthDateActivity"

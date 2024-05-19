@@ -63,7 +63,8 @@ public class SecurityActivity extends BaseActivity {
     }
 
     void password() {
-
+        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        startActivity(intent);
     }
 
     void loginDevice() {

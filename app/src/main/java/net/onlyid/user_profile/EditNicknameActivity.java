@@ -13,6 +13,7 @@ import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityEditNicknameBinding;
 import net.onlyid.entity.User;
+import net.onlyid.login.SignUpActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,25 +58,13 @@ public class EditNicknameActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(nickname))
             errMsg = "昵称不能为空";
-        else if (getLength(nickname) > 20)
+        else if (SignUpActivity.getLength(nickname) > 20)
             errMsg = "昵称不能超10字（英文字母算半个字）";
 
         if (TextUtils.isEmpty(errMsg))
             submit();
         else
             Utils.showAlert(this, errMsg);
-    }
-
-    /**
-     * 一个英文算1个字，一个中文算2个字
-     */
-    int getLength(String s) {
-        int count = 0;
-        for (char c : s.toCharArray()) {
-            if (c < 128) count++;
-            else count += 2;
-        }
-        return count;
     }
 
     void submit() {

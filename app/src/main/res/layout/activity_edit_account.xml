@@ -24,8 +24,7 @@
             android:id="@+id/account_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="50"
-            android:textSize="@dimen/text3" />
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <RelativeLayout
@@ -43,8 +42,7 @@
                 android:id="@+id/otp_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textSize="@dimen/text3" />
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <net.onlyid.common.SendOtpButton

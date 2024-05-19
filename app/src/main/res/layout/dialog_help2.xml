@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="登录地点是根据IP推测的模糊位置，不会使用用户的精确位置。"
+        android:text="登录地点是根据IP推测的模糊位置，不会记录用户的精确位置。"
         android:textSize="@dimen/text2" />
 
     <TextView

@@ -54,4 +54,11 @@
             android:layout_marginTop="3dp"
             android:textSize="@dimen/text1" />
     </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <include layout="@layout/list_arrow_right" />
 </LinearLayout>

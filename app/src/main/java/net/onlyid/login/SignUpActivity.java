@@ -1,5 +1,6 @@
 package net.onlyid.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -70,38 +71,51 @@ public class SignUpActivity extends BaseActivity {
             errMsg = "昵称不能超10字（英文字母算半个字）";
         else if (TextUtils.isEmpty(otp))
             errMsg = "请输入验证码";
-        else if (TextUtils.isEmpty(password) || password.length() < 6)
-            errMsg = "密码最少要6位";
-        else if (password.length() > 50)
-            errMsg = "密码不能超50位";
-        else {
-            int upper = 0, lower = 0, num = 0;
-            for (char c : password.toCharArray()) {
-                if ('0' <= c && c <= '9') num = 1;
-                else if ('a' <= c && c <= 'z') lower = 1;
-                else if ('A' <= c && c <= 'Z') upper = 1;
-            }
-            if (upper + lower + num < 2)
-                errMsg = "密码至少包含数字、小写字母、大写字母中的两种";
+        else if (TextUtils.isEmpty(password))
+            errMsg = "请输入密码";
+
+        if (!TextUtils.isEmpty(errMsg)) {
+            Utils.showAlert(this, errMsg);
+            return;
         }
 
-        if (TextUtils.isEmpty(errMsg)) {
-            submit();
-        } else {
-            Utils.showAlert(this, errMsg);
-        }
+        if (validatePassword(this, password)) submit();
     }
 
     /**
      * 一个英文算1个字，一个中文算2个字
      */
-    int getLength(String s) {
+    public static int getLength(String s) {
         int count = 0;
         for (char c : s.toCharArray()) {
             if (c < 128) count++;
             else count += 2;
         }
         return count;
+    }
+
+    public static boolean validatePassword(Activity activity, String password) {
+        if (password.length() < 6) {
+            Utils.showAlert(activity, "密码最少要6位");
+            return false;
+        }
+        if (password.length() > 50) {
+            Utils.showAlert(activity, "密码不能超50位");
+            return false;
+        }
+
+        int upper = 0, lower = 0, num = 0;
+        for (char c : password.toCharArray()) {
+            if ('0' <= c && c <= '9') num = 1;
+            else if ('a' <= c && c <= 'z') lower = 1;
+            else if ('A' <= c && c <= 'Z') upper = 1;
+        }
+        if (upper + lower + num < 2) {
+            Utils.showAlert(activity, "密码至少包含数字、小写字母、大写字母中的两种");
+            return false;
+        }
+
+        return true;
     }
 
     void submit() {
