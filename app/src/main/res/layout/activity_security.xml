@@ -1,7 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="手机和邮箱可以用来重设登录密码，请注意妥善保管。" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/list_divider"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:id="@+id/mobile_layout"
+            style="@style/UserProfileActivity_ItemLayout">
+
+            <TextView
+                style="@style/UserProfileActivity_ItemLabel"
+                android:text="手机号" />
+
+            <TextView
+                android:id="@+id/mobile_text_view"
+                style="@style/UserProfileActivity_ItemText" />
+
+            <include layout="@layout/list_arrow_right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/email_layout"
+            style="@style/UserProfileActivity_ItemLayout">
+
+            <TextView
+                style="@style/UserProfileActivity_ItemLabel"
+                android:text="邮箱" />
+
+            <TextView
+                android:id="@+id/email_text_view"
+                style="@style/UserProfileActivity_ItemText" />
+
+            <include layout="@layout/list_arrow_right" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/divider_thick" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/list_divider"
+        android:orientation="vertical"
+        android:showDividers="middle|end">
+
+        <LinearLayout
+            android:id="@+id/password_layout"
+            style="@style/UserProfileActivity_ItemLayout">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_password" />
+
+            <TextView
+                style="@style/UserProfileActivity_ItemLabel"
+                android:layout_marginLeft="12dp"
+                android:text="修改密码" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <include layout="@layout/list_arrow_right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/device_layout"
+            style="@style/UserProfileActivity_ItemLayout">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_smartphone" />
+
+            <TextView
+                style="@style/UserProfileActivity_ItemLabel"
+                android:layout_marginLeft="12dp"
+                android:text="登录设备" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <include layout="@layout/list_arrow_right" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
