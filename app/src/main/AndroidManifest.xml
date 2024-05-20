@@ -50,6 +50,10 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".switch_account.SwitchAccountActivity"
+            android:label="切换账号"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".security.ChangePasswordActivity"
             android:label="修改密码"
             android:screenOrientation="portrait" />

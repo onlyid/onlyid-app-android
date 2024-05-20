@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="14dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="14dp">
+
+    <ImageView
+        android:id="@+id/avatar_image_view"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nickname_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/account_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/using_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_current_account"
+        android:drawablePadding="5dp"
+        android:text="使用中"
+        android:textColor="@color/text_primary"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/arrow_right"
+        layout="@layout/list_arrow_right" />
+</LinearLayout>
