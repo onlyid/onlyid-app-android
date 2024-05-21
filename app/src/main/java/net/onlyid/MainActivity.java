@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.reflect.TypeToken;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -25,6 +26,7 @@ import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.entity.Otp;
+import net.onlyid.entity.Session;
 import net.onlyid.entity.User;
 import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
@@ -37,6 +39,7 @@ import net.onlyid.user_profile.UserProfileActivity;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     static final String PUSH_TAG = "Push";
     static final String PUSH_APP_ID = "2882303761520030422";
     static final String PUSH_APP_KEY = "5222003035422";
-    static final int LOGIN = 1, SCAN_CODE = 2;
+    static final int LOGIN = 1, SCAN_CODE = 2, SWITCH_ACCOUNT = 3;
 
     ActivityMainBinding binding;
 
@@ -110,17 +113,44 @@ public class MainActivity extends AppCompatActivity {
 
         MyHttp.get("/user", (resp) -> {
             Utils.pref.edit().putString(Constants.USER, resp).apply();
+            loadAvatar();
+            updateSession();
 
             // 到时再看一下，首页的api怎么组织
             initPush();
             getOtp();
+        });
+    }
 
-            User user = MyApplication.getCurrentUser();
+    void loadAvatar() {
+        User user = MyApplication.getCurrentUser();
+        if (user != null) {
             int radius = Utils.dp2px(this, 5);
             Glide.with(this).load(user.avatar)
                     .transform(new RoundedCornersTransformation(radius, 0))
                     .into(binding.avatarImageView);
-        });
+        }
+    }
+
+    void updateSession() {
+        String sessionListString = Utils.pref.getString(Constants.SESSION_LIST, null);
+        if (TextUtils.isEmpty(sessionListString)) return;
+
+        User user = MyApplication.getCurrentUser();
+        // MyHttp在返回401后，会清除currentUser，再回来首页发起登录
+        if (user == null) return;
+
+        List<Session> sessionList = Utils.gson.fromJson(sessionListString, new TypeToken<List<Session>>() {});
+        String token = Utils.pref.getString(Constants.TOKEN, null);
+
+        for (int i = 0; i < sessionList.size(); i++) {
+            Session session = sessionList.get(i);
+            if (session.token.equals(token)) {
+                session.user = user;
+                session.expireDate = LocalDateTime.now().plusDays(90);
+            }
+        }
+        Utils.pref.edit().putString(Constants.SESSION_LIST, Utils.gson.toJson(sessionList)).apply();
     }
 
     void initPush() {
@@ -222,7 +252,8 @@ public class MainActivity extends AppCompatActivity {
 
     void switchAccount() {
         Intent intent = new Intent(this, SwitchAccountActivity.class);
-        startActivity(intent);
+        //noinspection deprecation
+        startActivityForResult(intent, SWITCH_ACCOUNT);
     }
 
     @Override
@@ -238,6 +269,16 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         MyApplication.currentActivity = null;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // 不要放到onCreate，因为可能是从修改头像页回来的
+        loadAvatar();
+        // 修改用户资料回来，同步到sessionList
+        updateSession();
     }
 
     @Override
@@ -261,6 +302,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("scanResult", data.getStringExtra("scanResult"));
                 startActivity(intent);
             }
+        } else if (requestCode == SWITCH_ACCOUNT) {
+            // 从切换账号页回来，就好像用另一个用户打开了app
+            // 这里不要判断RESULT_OK，因为如果用户删了当前账号，返回的时候是RESULT_CANCEL，也一样要调这个方法
+            this.syncUserInfo();
         }
     }
 }

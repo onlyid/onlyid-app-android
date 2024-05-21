@@ -9,16 +9,24 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.reflect.TypeToken;
 
+import net.onlyid.MyApplication;
 import net.onlyid.common.BaseActivity;
 import net.onlyid.common.Constants;
 import net.onlyid.common.MyHttp;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityLoginBinding;
 import net.onlyid.entity.Entity1;
+import net.onlyid.entity.Session;
+import net.onlyid.entity.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -111,12 +119,36 @@ public class LoginActivity extends BaseActivity {
 
     static void completeLogin(Activity activity, String resp) throws JSONException {
         JSONObject respBody = new JSONObject(resp);
-        Utils.pref.edit()
-                .putString("token", respBody.getString("token"))
-                .putString("user", respBody.getString(Constants.USER))
-                .apply();
+        String token = respBody.getString(Constants.TOKEN);
+        String userString = respBody.getString(Constants.USER);
+        Utils.pref.edit().putString(Constants.TOKEN, token).putString("user", userString).apply();
+
+        updateSession(token);
 
         activity.setResult(RESULT_OK);
         activity.finish();
+    }
+
+    static void updateSession(String token) {
+        List<Session> sessionList;
+        String sessionListString = Utils.pref.getString(Constants.SESSION_LIST, null);
+
+        if (TextUtils.isEmpty(sessionListString)) sessionList = new ArrayList<>();
+        else sessionList = Utils.gson.fromJson(sessionListString, new TypeToken<List<Session>>() {});
+
+        User user = MyApplication.getCurrentUser();
+        Session session = new Session();
+        session.token = token;
+        session.user = user;
+        session.expireDate = LocalDateTime.now().plusDays(90);
+
+        // 在列表有这个用户的情况下，用户仍然新增了同一个账号，那就删掉原来的
+        sessionList.removeIf((session1 -> session1.user.id.equals(user.id)));
+
+        sessionList.add(session);
+
+        if (sessionList.size() > 3) sessionList.remove(0);
+
+        Utils.pref.edit().putString(Constants.SESSION_LIST, Utils.gson.toJson(sessionList)).apply();
     }
 }

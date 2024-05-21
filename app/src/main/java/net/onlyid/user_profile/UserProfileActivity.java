@@ -166,6 +166,7 @@ public class UserProfileActivity extends BaseActivity {
                     MyHttp.put("/user/avatar", new JSONObject(resp),  (resp1) -> {
                             Utils.hideLoading();
                             Utils.showToast("保存成功", Toast.LENGTH_SHORT);
+                            refresh();
                     }));
         } catch (FileNotFoundException e) {
             e.printStackTrace();

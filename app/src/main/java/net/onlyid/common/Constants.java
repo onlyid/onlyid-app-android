@@ -4,6 +4,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Constants {
     public static final String USER = "user";
+    public static final String TOKEN = "token";
+    public static final String SESSION_LIST = "sessionList";
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     // 给人看的，数据序列化不要用

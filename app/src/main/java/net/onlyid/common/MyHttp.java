@@ -38,7 +38,7 @@ public class MyHttp {
 
     static Interceptor loginInterceptor = chain -> {
         Request original = chain.request();
-        String token = Utils.pref.getString("token", "x");
+        String token = Utils.pref.getString(Constants.TOKEN, "x");
         //noinspection ConstantConditions
         Request request = original.newBuilder().header("Auth", token).build();
         return chain.proceed(request);
