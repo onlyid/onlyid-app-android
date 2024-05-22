@@ -114,6 +114,8 @@ public class MyHttp {
                                 if (current instanceof OAuthActivity) target = OAuthActivity.class;
 
                                 Intent intent = new Intent(current, target);
+                                // 两个flag都要设置，这样不管target是在栈顶还是在栈下面，都会调起onNewIntent
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 intent.putExtra("login", true);
                                 current.startActivity(intent);
                             }
