@@ -3,6 +3,7 @@ package net.onlyid.switch_account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -129,8 +130,8 @@ public class SwitchAccountActivity extends BaseActivity
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        PopupMenu popupMenu = new PopupMenu(this, view.findViewById(R.id.anchor));
-        popupMenu.getMenuInflater().inflate(R.menu.popup_switch_account, popupMenu.getMenu());
+        PopupMenu popupMenu = new PopupMenu(this, view.findViewById(R.id.anchor), Gravity.RIGHT);
+        popupMenu.getMenuInflater().inflate(R.menu.activity_switch_account, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             Session session = list.get(position);
