@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="72dp"
-            android:background="@drawable/bg_account_big"
             android:gravity="center_vertical"
             android:padding="12dp">
 
@@ -38,13 +37,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_primary"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/account_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
+                    android:layout_marginTop="10dp"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
