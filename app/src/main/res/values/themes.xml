@@ -12,6 +12,7 @@
 
     <style name="AppTheme" parent="BaseAppTheme">
         <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="actionBarTheme">@style/ActionBarTheme</item>
         <item name="android:statusBarColor">#fff</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
@@ -19,6 +20,10 @@
     <style name="ActionBar" parent="Widget.MaterialComponents.Light.ActionBar.Solid">
         <item name="background">@android:color/white</item>
         <item name="elevation">2dp</item>
+    </style>
+
+    <style name="ActionBarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:textColorPrimary">#333</item>
     </style>
 
     <style name="LoadingDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
