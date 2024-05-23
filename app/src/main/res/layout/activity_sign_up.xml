@@ -108,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="注 册" />
+            android:letterSpacing="0.2"
+            android:text="注册" />
     </LinearLayout>
 </ScrollView>

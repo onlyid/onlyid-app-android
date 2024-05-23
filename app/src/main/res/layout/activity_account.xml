@@ -54,7 +54,8 @@
             style="@style/LargeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="下 一 步" />
+            android:letterSpacing="0.2"
+            android:text="下一步" />
     </LinearLayout>
 
     <TextView
