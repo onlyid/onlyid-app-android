@@ -121,7 +121,7 @@ public class LoginActivity extends BaseActivity {
         JSONObject respBody = new JSONObject(resp);
         String token = respBody.getString(Constants.TOKEN);
         String userString = respBody.getString(Constants.USER);
-        Utils.pref.edit().putString(Constants.TOKEN, token).putString("user", userString).apply();
+        Utils.pref.edit().putString(Constants.TOKEN, token).putString(Constants.USER, userString).apply();
 
         updateSession(token);
 

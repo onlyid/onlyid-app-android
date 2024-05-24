@@ -62,6 +62,10 @@
             android:label="登录设备"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".push_otp.OtpModalActivity"
+            android:label="验证码"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".authorization.AuthorizeActivity"
             android:label="登录授权"
             android:screenOrientation="portrait" />
