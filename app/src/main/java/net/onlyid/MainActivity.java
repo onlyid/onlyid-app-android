@@ -230,7 +230,8 @@ public class MainActivity extends AppCompatActivity {
         updateSession();
 
         // 只有从停止状态恢复，才调这个方法，如果是newly created的，在onCreate会调
-        if (stopped) {
+        // 如果从切换账号页回来，退出了当前账号，也不用调
+        if (stopped && MyApplication.getCurrentUser() != null) {
             OtpModalActivity.startIfNecessary(this);
             stopped = false;
         }
