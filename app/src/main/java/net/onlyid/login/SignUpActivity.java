@@ -129,8 +129,8 @@ public class SignUpActivity extends BaseActivity {
             obj.put("filename", filename);
             obj.put("nickname", nicknameEditText.getText().toString());
             obj.put("deviceId", deviceId);
-            obj.put("deviceName", Build.MANUFACTURER + " " + Build.MODEL);
-            obj.put("deviceType", "android");
+            obj.put("deviceName", Build.MODEL);
+            obj.put("deviceBrand", Build.BRAND.toLowerCase());
         } catch (JSONException e) {
             e.printStackTrace();
         }

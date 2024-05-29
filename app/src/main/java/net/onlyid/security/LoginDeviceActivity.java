@@ -45,20 +45,20 @@ public class LoginDeviceActivity extends BaseActivity implements AdapterView.OnI
                 binding1 = (ItemLoginDeviceBinding) convertView.getTag();
             }
 
-            Entity3 entity3 = list.get(position);
+            Entity3 entity = list.get(position);
 
             int drawable;
-            if (entity3.type.equals(Entity3.Type.android)) drawable = R.drawable.device_android;
-            else drawable = R.drawable.device_apple;
+            if ("apple".equals(entity.brand)) drawable = R.drawable.device_apple;
+            else drawable = R.drawable.device_android;
             binding1.deviceImageView.setImageResource(drawable);
 
             //noinspection HardwareIds
             String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            int labelVisible = deviceId.equals(entity3.deviceId) ? View.VISIBLE : View.INVISIBLE;
+            int labelVisible = deviceId.equals(entity.deviceId) ? View.VISIBLE : View.INVISIBLE;
             binding1.thisDeviceLabel.setVisibility(labelVisible);
 
-            binding1.deviceTextView.setText(entity3.name);
-            binding1.lastActiveTextView.setText("最近活跃：" + entity3.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
+            binding1.deviceTextView.setText(entity.brand + " " + entity.name);
+            binding1.lastActiveTextView.setText("最近活跃：" + entity.lastDate.format(Constants.DATE_TIME_FORMATTER_H));
 
             return convertView;
         }
