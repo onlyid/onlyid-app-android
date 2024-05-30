@@ -6,8 +6,8 @@ android {
         applicationId "net.onlyid"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 18
-        versionName "1.18"
+        versionCode 19
+        versionName "1.19"
         archivesBaseName = "onlyid"
     }
     buildTypes {
@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation project(':ucrop')
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
