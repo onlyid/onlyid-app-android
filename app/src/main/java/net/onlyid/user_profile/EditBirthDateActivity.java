@@ -1,6 +1,7 @@
 package net.onlyid.user_profile;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,8 +30,10 @@ public class EditBirthDateActivity extends BaseActivity {
         initData();
         initView();
     }
+
     void initData() {
-        birthDate = MyApplication.getCurrentUser().birthDate;
+        if (!TextUtils.isEmpty(MyApplication.getCurrentUser().birthDate))
+            birthDate = LocalDate.parse(MyApplication.getCurrentUser().birthDate);
     }
 
     void initView() {
@@ -45,13 +48,13 @@ public class EditBirthDateActivity extends BaseActivity {
 
         if (birthDate == null) {
             binding.clearCheck.setVisibility(View.VISIBLE);
-        } else if (birthDate.isBefore(y1960.plusYears(10))) {
+        } else if (birthDate.equals(y1960)) {
             binding.p60sCheck.setVisibility(View.VISIBLE);
-        } else if (birthDate.isBefore(y1960.plusYears(20))) {
+        } else if (birthDate.equals(y1960.plusYears(10))) {
             binding.p70sCheck.setVisibility(View.VISIBLE);
-        } else if (birthDate.isBefore(y1960.plusYears(30))) {
+        } else if (birthDate.equals(y1960.plusYears(20))) {
             binding.p80sCheck.setVisibility(View.VISIBLE);
-        }  else if (birthDate.isBefore(y1960.plusYears(40))) {
+        } else if (birthDate.equals(y1960.plusYears(30))) {
             binding.p90sCheck.setVisibility(View.VISIBLE);
         } else {
             binding.p00sCheck.setVisibility(View.VISIBLE);
@@ -70,7 +73,7 @@ public class EditBirthDateActivity extends BaseActivity {
         initView();
 
         User user = MyApplication.getCurrentUser();
-        user.birthDate = localDate;
+        user.birthDate = localDate == null ? null : localDate.toString();
         try {
             JSONObject obj = new JSONObject(Utils.gson.toJson(user));
             MyHttp.put("/user", obj, (resp) -> {

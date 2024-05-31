@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,6 +140,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
         this.location = location;
 
         if (location == null || location.getErrorCode() != 0 || TextUtils.isEmpty(location.getProvince())) {
+            Log.w(TAG, "定位失败: " + (location == null ? null : location.getErrorInfo()));
             locationBinding.textView.setText("定位失败");
         } else {
             if (location.getProvince().equals(location.getCity()))
