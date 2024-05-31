@@ -39,14 +39,14 @@ public class EditGenderActivity extends BaseActivity {
 
         if (gender == null) {
             binding.clearCheck.setVisibility(View.VISIBLE);
-        } else if (gender.equals(User.Gender.MALE)) {
+        } else if (gender.equals(User.Gender.male)) {
             binding.maleCheck.setVisibility(View.VISIBLE);
         } else {
             binding.femaleCheck.setVisibility(View.VISIBLE);
         }
 
-        binding.maleLayout.setOnClickListener((v) -> submit(User.Gender.MALE));
-        binding.femaleLayout.setOnClickListener((v) -> submit(User.Gender.FEMALE));
+        binding.maleLayout.setOnClickListener((v) -> submit(User.Gender.male));
+        binding.femaleLayout.setOnClickListener((v) -> submit(User.Gender.female));
         binding.clearLayout.setOnClickListener((v) -> submit(null));
     }
 

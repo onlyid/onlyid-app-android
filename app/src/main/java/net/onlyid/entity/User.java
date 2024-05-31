@@ -4,17 +4,11 @@ import java.time.LocalDate;
 
 public class User {
     public enum Gender {
-        MALE, FEMALE, OTHER;
+        male, female;
 
         public String toLocalizedString() {
-            switch (this) {
-                case MALE:
-                    return "男";
-                case FEMALE:
-                    return "女";
-                default:
-                    return "其他";
-            }
+            if (this.equals(male)) return "男";
+            else return "女";
         }
     }
 
