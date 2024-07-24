@@ -18,7 +18,7 @@ public class TermsActivity extends BaseActivity {
 
         String type = getIntent().getStringExtra("type");
         String title;
-        String url = "https://www.onlyid.net/static/";
+        String url = "https://onlyid.net/static/";
         if ("terms".equals(type)) {
             title = "服务协议";
             url += "terms.html";
