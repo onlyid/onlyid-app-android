@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="?attr/dialogPreferredPadding"
+    android:paddingTop="16dp"
+    android:paddingRight="?attr/dialogPreferredPadding"
+    android:paddingBottom="1dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="欢迎使用"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text3" />
+
+    <TextView
+        android:id="@+id/text_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="1. 作为账号管理类型应用，唯ID会收集、使用你的手机号、邮箱等必要个人信息。" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="2. 为了提供扫码登录功能，唯ID需要获取手机相机权限，你可以拒绝或者撤销授权。" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="3. 我们会使用符合业界规范的方式妥善保存个人信息，未经同意不会和第三方共享。" />
+</LinearLayout>
