@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -83,6 +85,32 @@ public class SwitchAccountActivity extends BaseActivity
         initView();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_switch_account, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
+            for (int i = 0; i < list.size(); i++) {
+                Session session  = list.get(i);
+                if (session.token.equals(token)) {
+                    logout(token, i);
+                    break;
+                }
+            }
+            return true;
+        } else if (item.getItemId() == R.id.delete_account) {
+            Intent intent = new Intent(this, WarnDeleteActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     void initData() {
         String sessionListString = Utils.pref.getString(Constants.SESSION_LIST, null);
         list = Utils.gson.fromJson(sessionListString, new TypeToken<List<Session>>() {});
@@ -131,7 +159,7 @@ public class SwitchAccountActivity extends BaseActivity
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         PopupMenu popupMenu = new PopupMenu(this, view.findViewById(R.id.anchor), Gravity.RIGHT);
-        popupMenu.getMenuInflater().inflate(R.menu.activity_switch_account, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.account_logout, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             Session session = list.get(position);
@@ -159,7 +187,7 @@ public class SwitchAccountActivity extends BaseActivity
 
             // 退出了当前账号
             if (token.equals(this.token))
-                Utils.pref.edit().remove(Constants.TOKEN).remove("user").apply();
+                Utils.pref.edit().remove(Constants.TOKEN).remove(Constants.USER).apply();
 
             // 如果sessionList已经空了，用户没有切换账号的可能，那就finish
             if (list.isEmpty()) {

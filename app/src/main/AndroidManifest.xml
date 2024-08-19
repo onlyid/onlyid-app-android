@@ -42,6 +42,13 @@
             android:label="登录"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".switch_account.DeleteAccountActivity"
+            android:label="注销账号"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".switch_account.WarnDeleteActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".switch_account.SwitchAccountActivity"
             android:label="切换账号"
             android:screenOrientation="portrait" />

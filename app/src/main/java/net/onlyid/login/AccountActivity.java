@@ -90,12 +90,9 @@ public class AccountActivity extends BaseActivity {
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setView(binding1.getRoot())
-                .setPositiveButton("同意，开始使用", (d, w) -> {
-                    Utils.pref.edit().putBoolean("showPrivacy", false).apply();
-                })
-                .setNeutralButton("不同意，退出", (d, w) -> {
-                    finish();
-                })
+                .setPositiveButton("同意，开始使用", (d, w) ->
+                        Utils.pref.edit().putBoolean("showPrivacy", false).apply())
+                .setNeutralButton("不同意，退出", (d, w) -> finish())
                 .show();
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setLetterSpacing(0);
@@ -125,7 +122,7 @@ public class AccountActivity extends BaseActivity {
         }
 
         if (!binding.checkBox.isChecked()) {
-            Animation animation = AnimationUtils.loadAnimation(this, R.anim.checkbox_uncheck);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.checkbox_required);
             ((View) binding.checkBox.getParent()).startAnimation(animation);
             return;
         }
