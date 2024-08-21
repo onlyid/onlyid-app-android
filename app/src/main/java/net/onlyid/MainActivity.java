@@ -24,6 +24,7 @@ import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityMainBinding;
 import net.onlyid.entity.Session;
 import net.onlyid.entity.User;
+import net.onlyid.home.AboutActivity;
 import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
 import net.onlyid.login_history.LoginHistoryActivity;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.a_main, menu);
         return true;
     }
 
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.support) {
             startActivity(new Intent(this, SupportActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.about) {
+            startActivity(new Intent(this, AboutActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

@@ -116,6 +116,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/UCropActivity" />
         <activity
+            android:name=".home.AboutActivity"
+            android:label="关于唯ID"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".home.SupportActivity"
             android:label="获取帮助"
             android:screenOrientation="portrait" />

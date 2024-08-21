@@ -73,7 +73,7 @@ public class AuthorizationActivity extends BaseActivity implements AdapterView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_authorization, menu);
+        getMenuInflater().inflate(R.menu.a_authorization, menu);
         return true;
     }
 

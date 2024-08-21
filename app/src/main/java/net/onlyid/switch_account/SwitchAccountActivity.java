@@ -87,7 +87,7 @@ public class SwitchAccountActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_switch_account, menu);
+        getMenuInflater().inflate(R.menu.a_switch_account, menu);
         return true;
     }
 

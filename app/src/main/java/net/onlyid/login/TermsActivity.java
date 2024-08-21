@@ -30,7 +30,7 @@ public class TermsActivity extends BaseActivity {
         binding.webView.loadUrl(url);
     }
 
-    static void start(Context context, String type) {
+    public static void start(Context context, String type) {
         Intent intent = new Intent(context, TermsActivity.class);
         intent.putExtra("type", type);
         context.startActivity(intent);

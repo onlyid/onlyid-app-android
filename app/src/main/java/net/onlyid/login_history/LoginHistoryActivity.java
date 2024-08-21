@@ -87,7 +87,7 @@ public class LoginHistoryActivity extends BaseActivity implements AdapterView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_login_history, menu);
+        getMenuInflater().inflate(R.menu.a_login_history, menu);
         return true;
     }
 

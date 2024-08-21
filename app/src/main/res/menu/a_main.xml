@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/support"
-        android:title="需要帮助？"
+        android:title="获取帮助"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:title="关于唯ID"
         app:showAsAction="never" />
 </menu>
