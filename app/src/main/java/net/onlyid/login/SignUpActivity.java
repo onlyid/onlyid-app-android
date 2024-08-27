@@ -57,6 +57,8 @@ public class SignUpActivity extends BaseActivity {
         accountEditText.setText(account);
         binding.submitButton.setOnClickListener((v) -> validateFields());
         binding.avatarImageView.setOnClickListener((v) -> pickImage());
+
+        binding.sendOtpButton.recipientCallback = () -> account;
     }
 
     void validateFields() {
