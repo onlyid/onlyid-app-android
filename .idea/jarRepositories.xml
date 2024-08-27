@@ -16,5 +16,15 @@
       <option name="name" value="central" />
       <option name="url" value="https://maven.aliyun.com/repository/central" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="huawei" />
+      <option name="name" value="huawei" />
+      <option name="url" value="https://developer.huawei.com/repo/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="honor" />
+      <option name="name" value="honor" />
+      <option name="url" value="https://developer.hihonor.com/repo" />
+    </remote-repository>
   </component>
 </project>

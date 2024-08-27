@@ -98,9 +98,10 @@ public class SwitchAccountActivity extends BaseActivity
                 Session session  = list.get(i);
                 if (session.token.equals(token)) {
                     logout(token, i);
-                    break;
+                    return true;
                 }
             }
+            Utils.showToast("已经退出当前账号", Toast.LENGTH_LONG);
             return true;
         } else if (item.getItemId() == R.id.delete_account) {
             Intent intent = new Intent(this, WarnDeleteActivity.class);
@@ -152,6 +153,7 @@ public class SwitchAccountActivity extends BaseActivity
                     .putString("user", Utils.gson.toJson(session.user))
                     .apply();
             Utils.showToast("切换成功", Toast.LENGTH_SHORT);
+            setResult(RESULT_OK);
         }
         finish();
     }

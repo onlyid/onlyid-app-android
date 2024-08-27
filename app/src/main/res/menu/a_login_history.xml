@@ -12,5 +12,5 @@
         android:icon="@drawable/ic_delete"
         android:title="清空记录"
         app:iconTint="@color/menu_icon"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

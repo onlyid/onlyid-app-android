@@ -16,6 +16,13 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
+    <!-- honor push -->
+    <queries>
+        <intent>
+            <action android:name="com.hihonor.push.action.BIND_PUSH_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -160,16 +167,24 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- 高德定位 start -->
+        <!-- 高德定位 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="02919836df23adaee129c306e78d83f5" />
         <service android:name="com.amap.api.location.APSService" />
-        <!-- 高德定位 end -->
 
-        <!-- xiaomi push start -->
+        <!-- huawei push -->
+        <service
+            android:name=".push_otp.huawei.MyHmsMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!-- xiaomi push -->
         <receiver
-            android:name=".PushReceiver"
+            android:name=".push_otp.xiaomi.MyPushMessageReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -182,7 +197,48 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
-        <!-- xiaomi push end -->
+
+        <!-- oppo push -->
+        <service
+            android:name="com.heytap.msp.push.service.DataMessageCallbackService"
+            android:exported="true"
+            android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE">
+            <intent-filter>
+                <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
+                <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
+            </intent-filter>
+        </service>
+
+        <!-- vivo push -->
+        <meta-data
+            android:name="api_key"
+            android:value="887c4a09ed6054a390f8c2267fef0e69" />
+        <meta-data
+            android:name="app_id"
+            android:value="105763700" />
+        <receiver
+            android:name=".push_otp.vivo.MyOpenClientPushMessageReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true"
+            android:permission="com.push.permission.UPSTAGESERVICE" />
+
+        <!-- honor push -->
+        <meta-data
+            android:name="com.hihonor.push.app_id"
+            android:value="104449360" />
+        <service
+            android:name=".push_otp.honor.MyHonorMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.hihonor.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

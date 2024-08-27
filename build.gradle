@@ -3,9 +3,17 @@ buildscript {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
+        // huawei push
+        maven { url 'https://developer.huawei.com/repo/' }
+        // honor push
+        maven { url 'https://developer.hihonor.com/repo' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
+        // huawei push
+        classpath 'com.huawei.agconnect:agcp:1.6.1.300'
+        // honor push
+        classpath 'com.hihonor.mcs:asplugin:2.0.1.300'
     }
 }
 
@@ -14,6 +22,10 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url "https://jitpack.io" }
+        // huawei push
+        maven { url 'https://developer.huawei.com/repo/' }
+        // honor push
+        maven { url 'https://developer.hihonor.com/repo' }
     }
 }
 

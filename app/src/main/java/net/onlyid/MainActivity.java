@@ -3,7 +3,6 @@ package net.onlyid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,9 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
-import com.xiaomi.channel.commonutils.logger.LoggerInterface;
-import com.xiaomi.mipush.sdk.Logger;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import net.onlyid.authorization.AuthorizationActivity;
 import net.onlyid.common.CheckUpdate;
@@ -29,6 +25,7 @@ import net.onlyid.home.SupportActivity;
 import net.onlyid.login.AccountActivity;
 import net.onlyid.login_history.LoginHistoryActivity;
 import net.onlyid.push_otp.OtpModalActivity;
+import net.onlyid.push_otp.Push;
 import net.onlyid.scan_login.ScanCodeActivity;
 import net.onlyid.scan_login.ScanLoginActivity;
 import net.onlyid.security.SecurityActivity;
@@ -42,9 +39,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
-    static final String PUSH_TAG = "Push";
-    static final String PUSH_APP_ID = "2882303761520030422";
-    static final String PUSH_APP_KEY = "5222003035422";
     static final int LOGIN = 1, SCAN_CODE = 2, SWITCH_ACCOUNT = 3;
 
     ActivityMainBinding binding;
@@ -67,12 +61,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initView() {
-        binding.userProfileLayout.setOnClickListener((v) -> userProfile());
-        binding.scanLoginLayout.setOnClickListener((v) -> scanLogin());
-        binding.authorizationLayout.setOnClickListener((v) -> authorization());
-        binding.loginHistoryLayout.setOnClickListener((v) -> loginHistory());
-        binding.securityLayout.setOnClickListener((v) -> security());
-        binding.switchAccountLayout.setOnClickListener((v) -> switchAccount());
+        binding.userProfileLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, UserProfileActivity.class);
+            startActivity(intent);
+        });
+        binding.scanLoginLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, ScanCodeActivity.class);
+            //noinspection deprecation
+            startActivityForResult(intent, SCAN_CODE);
+        });
+        binding.authorizationLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, AuthorizationActivity.class);
+            startActivity(intent);
+        });
+        binding.loginHistoryLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, LoginHistoryActivity.class);
+            startActivity(intent);
+        });
+        binding.securityLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, SecurityActivity.class);
+            startActivity(intent);
+        });
+        binding.switchAccountLayout.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, SwitchAccountActivity.class);
+            //noinspection deprecation
+            startActivityForResult(intent, SWITCH_ACCOUNT);
+        });
     }
 
     @Override
@@ -116,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             loadAvatar();
             updateSession();
             OtpModalActivity.startIfNecessary(this);
-            initPush();
+            Push.init(this);
         });
     }
 
@@ -146,67 +160,16 @@ public class MainActivity extends AppCompatActivity {
             if (session.token.equals(token)) {
                 session.user = user;
                 session.expireDate = LocalDateTime.now().plusDays(90);
+                break;
             }
         }
+
         Utils.pref.edit().putString(Constants.SESSION_LIST, Utils.gson.toJson(sessionList)).apply();
-    }
-
-    void initPush() {
-        Logger.setLogger(this, new LoggerInterface() {
-            @Override
-            public void setTag(String tag) {
-                // ignore
-            }
-
-            @Override
-            public void log(String content, Throwable t) {
-                Log.d(PUSH_TAG, content, t);
-            }
-
-            @Override
-            public void log(String content) {
-                Log.d(PUSH_TAG, content);
-            }
-        });
-
-        MiPushClient.registerPush(this, PUSH_APP_ID, PUSH_APP_KEY);
     }
 
     void login() {
         //noinspection deprecation
         startActivityForResult(new Intent(this, AccountActivity.class), LOGIN);
-    }
-
-    void userProfile() {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
-    }
-
-    void scanLogin() {
-        Intent intent = new Intent(this, ScanCodeActivity.class);
-        //noinspection deprecation
-        startActivityForResult(intent, SCAN_CODE);
-    }
-
-    void authorization() {
-        Intent intent = new Intent(this, AuthorizationActivity.class);
-        startActivity(intent);
-    }
-
-    void loginHistory() {
-        Intent intent = new Intent(this, LoginHistoryActivity.class);
-        startActivity(intent);
-    }
-
-    void security() {
-        Intent intent = new Intent(this, SecurityActivity.class);
-        startActivity(intent);
-    }
-
-    void switchAccount() {
-        Intent intent = new Intent(this, SwitchAccountActivity.class);
-        //noinspection deprecation
-        startActivityForResult(intent, SWITCH_ACCOUNT);
     }
 
     @Override
@@ -230,12 +193,11 @@ public class MainActivity extends AppCompatActivity {
 
         // 不要放到onCreate，因为可能是从修改头像页回来的
         loadAvatar();
-        // 修改用户资料回来，同步到sessionList
-        updateSession();
 
         // 只有从停止状态恢复，才调这个方法，如果是newly created的，在onCreate会调
         // 如果从切换账号页回来，退出了当前账号，也不用调
         if (stopped && MyApplication.getCurrentUser() != null) {
+            updateSession(); // 修改用户资料回来，同步到sessionList
             OtpModalActivity.startIfNecessary(this);
             stopped = false;
         }
@@ -260,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == LOGIN) {
             if (resultCode == RESULT_OK) {
-                // todo 这里应该要init push的
+                Push.init(this);
             } else {
                 finish();
             }
@@ -271,9 +233,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         } else if (requestCode == SWITCH_ACCOUNT) {
-            // 从切换账号页回来，就好像用另一个用户打开了app
-            // 这里不要判断RESULT_OK，因为如果用户删了当前账号，返回的时候是RESULT_CANCEL，也一样要调这个方法
-            this.syncUserInfo();
+            // 切换账号成功，就好像用另一个用户打开了app
+            if (resultCode == RESULT_OK) {
+                this.syncUserInfo();
+            }
+            // 如果退出（或者注销）当前账号，重新打开登录页
+            else if (MyApplication.getCurrentUser() == null) {
+                this.login();
+            }
         }
     }
 }
