@@ -1,6 +1,7 @@
 package net.onlyid.scan_login;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -29,6 +30,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import net.onlyid.R;
 import net.onlyid.common.BaseActivity;
+import net.onlyid.common.PermissionDialog;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.ActivityScanCodeBinding;
 
@@ -49,6 +51,7 @@ public class ScanCodeActivity extends BaseActivity {
     MultiFormatReader multiFormatReader;
     ExecutorService executorService;
     ProcessCameraProvider cameraProvider;
+    Dialog permissionDialog;
 
     {
         multiFormatReader = new MultiFormatReader();
@@ -71,6 +74,10 @@ public class ScanCodeActivity extends BaseActivity {
         for (String permission : PERMISSIONS) {
             if (PackageManager.PERMISSION_GRANTED != checkSelfPermission(permission)) {
                 requestPermissions(PERMISSIONS, 1);
+
+                permissionDialog = new PermissionDialog(this, "相机权限使用说明", "用于实现扫描二维码功能");
+                permissionDialog.show();
+
                 return;
             }
         }
@@ -82,6 +89,8 @@ public class ScanCodeActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode != 1) return;
+
+        permissionDialog.dismiss();
 
         for (int result : grantResults) {
             if (PackageManager.PERMISSION_GRANTED != result) {

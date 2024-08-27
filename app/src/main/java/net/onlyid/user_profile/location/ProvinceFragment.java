@@ -1,6 +1,7 @@
 package net.onlyid.user_profile.location;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.amap.api.location.AMapLocationListener;
 
 import net.onlyid.R;
 import net.onlyid.common.MyAdapter;
+import net.onlyid.common.PermissionDialog;
 import net.onlyid.common.Utils;
 import net.onlyid.databinding.FragmentProvinceBinding;
 import net.onlyid.databinding.ItemLocationBinding;
@@ -40,6 +42,7 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     AMapLocation location; // 当前位置
     List<String> provinceList;
     Parcelable listViewState; // 保存滚动位置
+    Dialog permissionDialog;
 
     MyAdapter adapter = new MyAdapter(() -> provinceList) {
         @Override
@@ -76,6 +79,10 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
             if (PackageManager.PERMISSION_GRANTED != getContext().checkSelfPermission(permission)) {
                 //noinspection deprecation
                 requestPermissions(PERMISSIONS, 1);
+
+                permissionDialog = new PermissionDialog(getContext(), "位置权限使用说明", "用于获取用户所在的城市");
+                permissionDialog.show();
+
                 return;
             }
         }
@@ -86,6 +93,8 @@ public class ProvinceFragment extends Fragment implements AMapLocationListener, 
     @Override
     @SuppressWarnings("deprecation")
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        permissionDialog.dismiss();
+
         int count = 0;
         for (int result : grantResults) {
             if (PackageManager.PERMISSION_GRANTED == result) count++;
